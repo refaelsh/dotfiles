@@ -1,0 +1,1701 @@
+#+PROPERTY: header-args :dir :tangle configuration.nix 
+
+* Boilerplate
+#+BEGIN_SRC nix
+{ config, pkgs, lib, ... }:
+let
+  nixvim = import (builtins.fetchGit { 
+    url = "https://github.com/nix-community/nixvim"; 
+  });
+in
+{
+#+END_SRC
+* Imports
+#+BEGIN_SRC nix
+imports = [
+  ./hardware-configuration.nix
+  <home-manager/nixos>
+  nixvim.nixosModules.nixvim
+];
+#+END_SRC
+* Bootloader
+#+BEGIN_SRC nix
+boot.loader = {
+  systemd-boot.enable = true;
+  efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot";
+  };
+};
+#+END_SRC
+* System settings
+#+BEGIN_SRC nix
+system = {
+  stateVersion = "24.05";
+  copySystemConfiguration = true;
+};
+#+END_SRC
+* Hardware
+#+BEGIN_SRC nix
+hardware = {
+  enableRedistributableFirmware = true;
+  bluetooth = {
+    enable = false;
+    powerOnBoot = false;
+  };
+  # keyboard.zsa.enable = true;
+};
+#+END_SRC
+* Power management
+#+BEGIN_SRC nix
+powerManagement = {
+  enable = true;
+  cpuFreqGovernor = "performance";
+};
+#+END_SRC
+* Systemd
+** Numlock
+#+BEGIN_SRC nix
+# systemd.services.numlock = {
+#   description = "Enable NumLock at startup";
+#   wantedBy = [ "multi-user.target" ]; 
+#   serviceConfig = {
+#     TTYPath = "/dev/tty1";
+#     StandardInput = "tty";
+#     StandardOutput = "tty";
+#     Type = "oneshot";
+#     RemainAfterExit = "yes";
+#     ExecStart = "${pkgs.kbd}/bin/setleds -D +num";  
+#   };
+# };
+#+END_SRC
+* Security
+#+BEGIN_SRC nix
+security = {
+  rtkit.enable = true;
+  sudo = {
+    extraConfig = "Defaults env_keep += \"HOME\"";
+    extraRules = [{
+      users = [ "refaelsh" ];
+      commands = [{
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      }];
+    }];
+  };
+};
+#+END_SRC
+* Miscellaneous one liners
+#+BEGIN_SRC nix
+documentation.dev.enable = true;
+nixpkgs.config.allowUnfree = true;
+nix.settings.auto-optimise-store = true;
+time.timeZone = "Asia/Jerusalem";
+i18n.defaultLocale = "en_US.UTF-8";
+#+END_SRC
+* Networking
+#+BEGIN_SRC nix
+networking = {
+  hostName = "nixos";
+  networkmanager = {
+    enable = true;
+    wifi.powersave = false;
+  };
+};
+#+END_SRC
+* User definition
+#+BEGIN_SRC nix
+users = {
+  defaultUserShell = pkgs.zsh;
+  users.refaelsh = {
+    isNormalUser = true;
+    description = "Refael Sheinker";
+    extraGroups = [ "networkmanager" "wheel" "storage"];
+    useDefaultShell = true;
+  };
+};
+#+END_SRC
+* Services
+** One liner services
+#+begin_src nix
+services = {
+  libinput.enable = true;
+  thermald.enable = true;
+  gvfs.enable = true;
+  udisks2.enable = true;
+  devmon.enable = true;
+};
+#+end_src
+** Pipewire
+#+begin_src nix
+services.pipewire = {
+  enable = true;
+  alsa = {
+    enable = true;
+    support32Bit = true;
+  };
+  pulse.enable = true;
+  jack.enable = true;
+};
+#+end_src
+** Display manager
+#+begin_src nix
+services.displayManager = {
+  autoLogin = {
+    enable = true;
+    user = "refaelsh";
+  };
+  defaultSession = "none+xmonad";
+};
+#+end_src
+** Picom
+#+begin_src nix
+services.picom = {
+  enable = true;
+  backend = "glx";
+};
+#+end_src
+** X Server
+#+BEGIN_SRC nix
+services.xserver = {
+  enable = true;
+  resolutions = [{
+      x = 1920;
+      y = 1080;
+  }];
+  xkb = {
+    variant = "";
+    layout = "us";
+  };
+  displayManager.lightdm.enable = true;
+  windowManager.xmonad = {
+    enable = true;
+    enableConfiguredRecompile = true;
+    enableContribAndExtras = true;
+    extraPackages = haskellPackages: [
+        haskellPackages.xmonad-contrib
+        haskellPackages.xmobar
+    ];
+    config = /*haskell*/''
+      import XMonad
+      import XMonad.Actions.Navigation2D
+      import XMonad.Actions.SpawnOn
+      import XMonad.Hooks.DynamicLog
+      import XMonad.Hooks.EwmhDesktops
+      import XMonad.Hooks.InsertPosition
+      import XMonad.Hooks.ManageDocks
+      import XMonad.Hooks.StatusBar
+      import XMonad.Hooks.StatusBar.PP
+      import XMonad.Hooks.WindowSwallowing
+      import XMonad.Layout.NoBorders
+      import XMonad.Layout.OneBig
+      import XMonad.Layout.ToggleLayouts
+      import qualified XMonad.StackSet as W
+      import XMonad.Util.EZConfig
+      import XMonad.Util.SpawnOnce
+      import XMonad.Util.Loggers
+      import qualified XMonad.Util.Hacks as Hacks
+      import XMonad.Prompt
+      import XMonad.Prompt.Shell
+      
+      myTerminal :: String
+      myTerminal = "wezterm"
+      
+      myStartupHook :: X ()
+      myStartupHook = do
+        spawn "killall picom; picom &"
+        spawn "keyctl link @u @s"
+        spawnOnce "killall trayer; trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282a36"
+        spawnOnce "clipmenud"
+        spawnOnce "numlockx on"
+        spawnOnce "setxkbmap -layout us,il -option grp:alt_shift_toggle"
+        spawnOnce "kbdd"
+        spawn "amixer set Master 5%-"
+        spawn "amixer set Master 5%+"
+        spawnOnOnce "1" "librewolf"
+        spawnOnOnce "9" "signal-desktop"
+        spawnOnOnce "0" "neovide ~/repos/dotfiles/configuration.org"
+      
+      myXmobarPP :: PP
+      myXmobarPP = def { 
+         ppCurrent = xmobarColor "#ff79c6" ""
+        , ppVisible = xmobarColor "#ff79c6" "" -- . clickable
+        , ppHidden = xmobarColor "#bd93f9" "" -- . wrap
+        , ppTitle = xmobarColor "#e6e6e6" "" . shorten 60
+        , ppSep =  "<fc=" ++ "#4d4d4d" ++ "> <fn=1>|</fn> </fc>"
+        , ppUrgent = xmobarColor "#ff5555" "" . wrap "!" "!"
+        , ppOrder  = \(ws:l:t:ex) -> [ws]
+      }        where
+      
+      main :: IO ()
+      main =
+        xmonad
+          . ewmhFullscreen
+          . ewmh
+          . docks
+          . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
+          $ myConfig
+      
+      myLayoutHook = avoidStruts $ smartBorders $ toggleLayouts Full (Tall 1 (3 / 100) (1 / 2))
+      
+      myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+      
+      myConfig =
+        def
+          { modMask = mod4Mask,
+            workspaces = myWorkspaces,
+            terminal = myTerminal,
+            startupHook = myStartupHook,
+            manageHook = insertPosition End Newer <> (manageSpawn <+> manageHook def),
+            layoutHook = myLayoutHook,
+            handleEventHook = swallowEventHook (className =? "neovide") (return True) <> Hacks.trayerPaddingXmobarEventHook,
+            borderWidth = 2,
+            focusedBorderColor = "#bd93f9",
+            normalBorderColor = "#44475a"
+          }
+          `additionalKeysP` [ ("M-<Return>", spawn myTerminal),
+                              ("M-d", shellPrompt def {alwaysHighlight = True, height = 30, borderColor = "#BD93F9", fgColor = "#F8F8F2", bgColor = "#282A36", fgHLight = "#F8F8F2", bgHLight = "#6272A4" }),  
+                              ("M-S-q", kill),
+                              ("M-f", sendMessage (Toggle "Full") <> sendMessage ToggleStruts),
+                              ("M-0", windows $ W.greedyView "0"),
+                              ("M-S-0", windows $ W.shift "0"),
+                              ("M-<Left>", windowGo L False),
+                              ("M-<Right>", windowGo R False),
+                              ("M-<Up>", windowGo U False),
+                              ("M-<Down>", windowGo D False),
+                              ("M-S-<Left>", windowSwap L False),
+                              ("M-S-<Right>", windowSwap R False),
+                              ("M-S-<Up>", windowSwap U False),
+                              ("M-S-<Down>", windowSwap D False),
+                              ("<Print>", spawn "flameshot gui"),
+                              ("M1-c", spawn "clipmenu -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10'"),
+                              ("M-<F11>", spawn "amixer set Master 5%-"),
+                              ("M-<F12>", spawn "amixer set Master 5%+")
+                            ]
+          `removeKeysP` ["M-S-<Return>"]
+          `removeKeysP` ["M-p"]
+          `removeKeysP` ["M-S-c"]
+          `removeKeysP` ["M-<Tab>"]
+          `removeKeysP` ["M-S-<Tab>"]
+          `removeKeysP` ["M-j"]
+          `removeKeysP` ["M-k"]
+          `removeKeysP` ["M-m"]
+          `removeKeysP` ["M-l"]
+    '';
+  };
+};
+#+END_SRC
+* Default programs
+#+BEGIN_SRC nix
+xdg.mime.defaultApplications = {
+  "text/html" = "librewolf.desktop";
+  "x-scheme-handler/http" = "librewolf.desktop";
+  "x-scheme-handler/https" = "librewolf.desktop";
+  "x-scheme-handler/about" = "librewolf.desktop";
+  "x-scheme-handler/unknown" = "librewolf.desktop";
+};
+#+END_SRC
+* Environment
+** One liners
+#+BEGIN_SRC nix
+environment = {
+  # Don't forget to add the below to your system configuration to get completion for system packages (e.g. systemd).
+  pathsToLink = ["/share/zsh"];
+};
+#+END_SRC
+** Variables
+#+BEGIN_SRC nix
+environment.variables = {
+  EDITOR = "nvim";
+  TERM = "wezterm";
+  TERMINAL = "wezterm";
+};
+#+END_SRC
+** System packages
+#+BEGIN_SRC nix
+environment = {
+  systemPackages = with pkgs; [
+    kbd
+    neovide
+    dmenu
+    clipmenu
+    nixd
+    clang
+    clang-tools
+    cmake-language-server
+    lua-language-server
+    nodePackages.yaml-language-server
+    nodePackages.bash-language-server
+    taplo-lsp
+    wget
+    firefox
+    google-chrome
+    glib
+    nnn
+    bat
+    eza
+    wget
+    go
+    xclip
+    notepadqq
+    git
+    kdiff3
+    bitwarden
+    bitwarden-cli
+    alacritty
+    dracula-theme
+    gnumake
+    cmake
+    tree-sitter
+    nodejs
+    zip
+    unzip
+    openssh
+    shutter
+    flameshot
+    signal-desktop
+    kbdd
+    xorg.setxkbmap
+    glow
+    jq
+    nvd
+    pandoc
+    gcc
+    python3
+    pkg-config
+    htop
+    ripgrep
+    coreutils
+    fd
+    networkmanagerapplet
+    gdb
+    lm_sensors
+    python310Packages.psutil
+    xorg.xmessage
+    haskellPackages.cabal-fmt
+    cabal-install
+    haskellPackages.fourmolu
+    ghcid
+    gmp
+    ncurses
+    xz
+    graphviz
+    xdotool
+    # polybarFull
+    killall
+    nitrogen
+    nix-index
+    acpi
+    wally-cli
+    asciidoctor-with-extensions
+    rPackages.revealjs
+    xvkbd
+    gitui
+    lazygit
+    ruby
+    nodePackages.prettier
+    gimp
+    tig
+    marksman
+    zk
+    pkgs.man-pages
+    pkgs.man-pages-posix
+    xorg.xdpyinfo
+    haskellPackages.hoogle
+    proselint
+    aspell
+    aspellDicts.en
+    aspellDicts.he
+    languagetool
+    silver-searcher
+    nil
+    pciutils
+    steam-run
+    nixpkgs-fmt
+    microcodeIntel
+    lshw
+    openra
+    transmission_4
+    transmission_4-gtk
+    vlc
+    imagemagick
+    bc
+    baobab
+    python310Packages.adblock
+    python311Packages.adblock
+    keyutils
+    rofi
+    doublecmd
+    shotcut
+    usbutils
+    discord
+    prismlauncher
+    dysk
+    rclone
+    netflix
+    iw
+    usbutils
+    udiskie
+    udisks
+    udisks2
+    alsa-utils
+    popcorntime
+    trayer
+    nawk
+    lxappearance
+    git-extras
+    nixfmt-rfc-style
+    ghc
+    speedtest-cli
+    numlockx
+    (writeShellApplication {
+      name = "before.sh";
+      text = /*bash*/''
+        echo ---------------Running the before script------------------
+        echo "Tangling ~/repos/dotfiles/configuration.org"
+        nvim ~/repos/dotfiles/configuration.org --headless -c ':lua require("orgmode").action("org_mappings.org_babel_tangle")' +qa
+        echo ""
+        echo "Copying configuration.nix to /etc/nixos/configuration.nix"
+        sudo cp ~/repos/dotfiles/configuration.nix /etc/nixos/configuration.nix
+        echo ---------------The end------------------------------------
+      '';
+    })
+    (writeShellApplication {
+      name = "after.sh";
+      text = /*bash*/''
+        echo ---------------Running the after script------------------
+        git -C ~/repos/dotfiles add . && git -C ~/repos/dotfiles commit -m "WIP" && git -C ~/repos/dotfiles push
+        echo ---------------The end------------------------------------
+      '';
+    })
+    (writeShellApplication {
+      name = "update.sh";
+      text = /*bash*/''
+        before.sh
+        # sudo -i nix-store --gc
+        # sudo -i nix-channel --update
+        sudo -i nixos-rebuild switch --upgrade
+        # sudo -i nix-collect-garbage
+        # This one is the best :-)
+        # sudo -i nix-collect-garbage -d
+        # rm -rf ~/.local/share/Trash/*
+        # sudo -i nix-store --optimise
+        cabal update
+        # nvim --headless "+Lazy! sync" +qa
+        after.sh
+      '';
+    })
+    (writeShellApplication {
+      name = "supdate.sh";
+      text = /*bash*/''
+        before.sh
+        sudo -i nixos-rebuild switch
+        after.sh
+      '';
+    })
+    # (writeShellScriptBin "supdate-custom-home-manager.sh" ''  
+    #   before.sh
+    #   sudo -i nixos-rebuild switch -I home-manager=/home/refaelsh/repos/home-manager
+    #   after.sh
+    # '')
+  ];
+};
+#+END_SRC
+* Packages via NixOS module
+** One liners
+#+BEGIN_SRC nix
+programs = {
+  zsh.enable = true;
+  nm-applet.enable = true;
+  dconf.enable = true;
+};
+#+END_SRC
+** Neovim
+*** Various miscellaneous settings
+#+BEGIN_SRC nix
+programs.nixvim = {
+  enable = true;
+  enableMan = true;
+  defaultEditor = true;
+  vimAlias = true;
+  viAlias = true;
+  colorschemes.dracula-nvim.enable = true;
+#+END_SRC
+*** Performance
+#+BEGIN_SRC nix
+performance.byteCompileLua = {
+  enable = true;
+  configs = true;
+  initLua = true;
+  nvimRuntime = true;
+  plugins = true;
+};
+#+END_SRC
+*** Globals
+#+BEGIN_SRC nix
+globals = {
+  mapleader = " ";
+  maplocalleader = " ";
+  have_nerd_font = true;
+};
+#+END_SRC
+*** One liners via `opts`
+#+BEGIN_SRC nix
+opts = {
+  guifont = "FiraCode Nerd Font:h8.1";
+  autoread = true;
+  cursorline = true;
+  mouse = "a";
+  undofile = true;
+  undodir = "/home/refaelsh/.config/nvim";
+  swapfile = false;
+  foldmethod = "marker";
+  hlsearch = true;
+  ignorecase = true;
+  completeopt = "menuone,noselect";
+  smartcase = true;
+  incsearch = true;
+  showmatch = true;
+  gdefault = true;
+  termguicolors = true;
+  clipboard = "unnamedplus";
+  tabstop = 4;
+  shiftwidth = 4;
+  expandtab = true;
+  number = true;
+  relativenumber = true;
+  hidden = true;
+  spell = true;
+  spelllang = "en_us";
+  spellcapcheck = "=";
+  spellsuggest = "10";
+  spelloptions = "camel";
+  splitright = true;
+  confirm = true;
+  wrap = false;
+  path.__raw = ''vim.opt.path + "**"'';
+  wildmenu = true;
+  conceallevel = 2;
+  concealcursor = "nc";
+};
+#+END_SRC
+*** Mappings
+**** Boilerplate
+#+BEGIN_SRC nix
+keymaps = [
+#+END_SRC
+**** Remap ~:~ to ~;~
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = ":";
+  action = ";";
+}
+{
+  mode = "n";
+  key = ";";
+  action = ":";
+}
+#+END_SRC
+**** Prevents yanking when pasting in visual mode
+#+BEGIN_SRC nix
+{
+  mode = "v";
+  key = "p";
+  action = "P";
+}
+#+END_SRC
+**** Turn off highlighting
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "<leader><space>";
+  action = ":noh<cr>";
+}
+#+END_SRC
+**** Remap commenting
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "<leader>c";
+  action = "gcc";
+  options.remap = true;
+}
+{
+  mode = "v";
+  key = "<leader>c";
+  action = "gc";
+  options.remap = true;
+}
+#+END_SRC
+**** Better line wrapping
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "j";
+  action = "gj";
+}
+{
+  mode = "n";
+  key = "k";
+  action = "gk";
+}
+#+END_SRC
+**** New line using <Enter>
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "<Enter>";
+  action = "o<ESC>";
+}
+{
+  mode = "n";
+  key = "<S-Enter>";
+  action = "O<ESC>";
+}
+#+END_SRC
+**** Snippets
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = ",t";
+  action = "i#[test]<CR>fn () {<CR>}<ESC>kwi";
+}
+{
+  mode = "n";
+  key = ",tm";
+  action = "i#[cfg(test)]<CR>mod tests {<CR>use super::*;<CR><CR>#[test]<CR>fn () {<CR>}<CR><ESC>xxxxi}<ESC>kkwwi";
+}
+#+END_SRC
+**** Screen centering
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "<C-d>";
+  action = "<C-d>zz";
+}
+{
+  mode = "n";
+  key = "<C-u>";
+  action = "<C-u>zz";
+}
+{
+  mode = "n";
+  key = "n";
+  action = "nzzzv";
+}
+{
+  mode = "n";
+  key = "N";
+  action = "Nzzzv";
+}
+#+END_SRC
+**** Boilerplate
+#+BEGIN_SRC nix
+];
+#+END_SRC
+*** Auto commands
+**** Boilerplate
+#+BEGIN_SRC nix
+autoCmd = [
+#+END_SRC
+**** File change detection
+~ The first one I don't really know what it does or why it is needed.
+~ Note to self: according to Neovim's roadmap, file detection will be built-in into Neovim.
+#+BEGIN_SRC nix
+{
+  event = [
+    "bufenter"
+    "cursorhold" 
+    "cursorholdi" 
+    "focusgained" 
+  ];
+  pattern = ["*.*"];
+  command = "if mode() != 'c' | checktime | endif";
+}
+{
+  event = ["FileChangedShellPost"];
+  pattern = ["*.*"];
+  command = "echohl WarningMsg | echo \"File changed on disk. Buffer reloaded.\" | echohl None";
+}
+#+END_SRC
+**** For the quick and list windows
+I don't really remember what it does.
+#+BEGIN_SRC nix
+{
+  event = ["QuickFixCmdPost"];
+  pattern = ["[^l]*"];
+  command = "cwindow";
+}
+{
+  event = ["QuickFixCmdPost"];
+  pattern = ["l*"];
+  command = "lwindow";
+}
+#+END_SRC
+**** Highlight on yank
+#+BEGIN_SRC nix
+{
+  event = ["TextYankPost"];
+  pattern = ["*"];
+  command = "silent! lua vim.highlight.on_yank{timeout=300}";
+}
+#+END_SRC
+**** For otter.nvim
+#+BEGIN_SRC nix
+{
+  event = ["BufReadPost" "BufNewFile"];
+  pattern = ["*.org"];
+  command = ":lua require(\"otter\").activate()";
+}
+#+END_SRC
+**** Format buffer before saving
+#+BEGIN_SRC nix
+{
+  event = ["BufWritePre"];
+  pattern = ["*>8"];
+  command = ":lua vim.lsp.buf.format()";
+}
+#+END_SRC
+**** Boilerplate
+#+BEGIN_SRC nix
+];
+#+END_SRC
+*** Plugins from Nixpkgs
+**** Plugins list from Nixpkgs
+#+BEGIN_SRC nix
+extraPlugins = with pkgs.vimPlugins; [
+  nvim-colorizer-lua
+  nui-nvim
+  (pkgs.vimUtils.buildVimPlugin {
+    name = "org-bullets.nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-orgmode";
+      repo = "org-bullets.nvim";
+      rev = "main";
+      sha1 = "M9oUlEa5z7CyQWYFNlW7Am5y+P0=";
+    };
+  })
+];
+#+END_SRC
+**** Boilerplate
+#+BEGIN_SRC nix
+extraConfigLua = /*lua*/''
+  require('org-bullets').setup()
+  require('colorizer').setup({
+    -- mode = 'background'
+  })
+'';
+#+END_SRC
+*** Plugins from Nixvim
+**** Boilerplate
+#+BEGIN_SRC nix
+plugins = {
+#+END_SRC
+**** Various one liner plugins
+#+BEGIN_SRC nix
+plantuml-syntax.enable = true;
+undotree.enable = true;
+surround.enable = true;
+dressing.enable = true;
+nix.enable = true;
+# No longer maintained.
+# There is a Neovim feature request: https://github.com/neovim/neovim/issues/16339.
+lastplace.enable = true;
+cursorline.enable = true;
+indent-blankline.enable = true;
+gitsigns.enable = true;
+todo-comments.enable = true;
+fidget.enable = true;
+telescope.enable = true;
+lspkind.enable = true;
+web-devicons.enable = true;
+repeat.enable = true;
+autosource.enable = true;
+numbertoggle.enable = true;
+barbecue.enable = true;
+haskell-scope-highlighting.enable = true;
+illuminate.enable = true;
+nvim-lightbulb.enable = true;
+which-key.enable = true;
+wilder.enable = true;
+otter.enable = true;
+#+END_SRC
+**** Auto-save
+#+BEGIN_SRC nix
+auto-save = {
+  enable = true;
+  settings = {
+    execution_message.cleaning_interval = 5000;
+  };
+};
+#+END_SRC
+**** Hard time
+#+BEGIN_SRC nix
+hardtime = {
+  enable = true;
+  settings = {
+    showmode = false;
+    disable_mouse = false;
+  };
+};
+#+END_SRC
+**** Orgmode
+#+BEGIN_SRC nix
+orgmode = {
+  enable = true;
+  settings = {
+    org_startup_indented = true;
+  };
+};
+#+END_SRC
+**** Lualine
+#+BEGIN_SRC nix
+lualine = {
+  enable = true;
+  settings = {
+    theme = "dracula-nvim";
+  };
+};
+#+END_SRC
+**** Nvim-tree
+#+BEGIN_SRC nix
+nvim-tree = {
+  enable = true;
+  git = {
+    enable = true;
+    ignore = false;
+  };
+  actions.openFile.resizeWindow = true;
+};
+#+END_SRC
+**** Tree-sitter
+#+BEGIN_SRC nix
+treesitter = {
+  enable = true;
+  nixvimInjections = true;
+  nixGrammars = false;
+  settings = {
+    auto_install = true;
+    ensure_installed = "all";
+    ignore_install = ["org"];
+    highlight.enable = true;
+    indent.enable = true;
+  };
+};
+#+END_SRC
+**** Nvim-cmp and sources
+Note to self: check [[https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources][here]] for more sources.
+Also, see [[https://github.com/nix-community/nixvim/discussions/928#discussioncomment-10455407][here]] for examinations why all the below individual plugins are not needed.
+#+BEGIN_SRC nix
+cmp = {
+  enable = true;
+  autoEnableSources = true;
+  settings = {
+    mapping = {
+      "<C-d>" = /*Lua*/"cmp.mapping.scroll_docs(-4)";
+      "<C-f>" = /*Lua*/"cmp.mapping.scroll_docs(4)";
+      "<C-Space>" = /*Lua*/"cmp.mapping.complete()";
+      "<C-e>" = /*Lua*/"cmp.mapping.close()";
+      "<Tab>" = /*Lua*/"cmp.mapping(cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}), {'i', 's'})";
+      "<S-Tab>" = /*Lua*/"cmp.mapping(cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}), {'i', 's'})";
+      "<CR>" = /*Lua*/"cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace })";
+    };
+    window = {
+      completion.__raw = ''cmp.config.window.bordered()'';
+      documentation.__raw = ''cmp.config.window.bordered()'';
+    };
+    snippet.expand = /*lua*/"function(args) require('luasnip').lsp_expand(args.body) end";
+    sources = [
+      {
+        name = "buffer";
+        priority = 500;
+      }
+      {
+        name = "calc";
+        priority = 150;
+      }
+      {
+        name = "conventionalcommits";
+        priority = 300;
+      }
+      {
+        name = "cmdline";
+        priority = 300;
+      }
+      {
+        name = "cmdline-history";
+        priority = 300;
+      }
+      {
+        name = "dictionary";
+        priority = 300;
+      }
+      {
+        name = "friendly-snippets";
+        priority = 750;
+      }
+      {
+        name = "fuzzy-buffer";
+        priority = 750;
+      }
+      {
+        name = "fuzzy-path";
+        priority = 750;
+      }
+      {
+        name = "git";
+        priority = 250;
+      }
+      {
+        name = "luasnip";
+        priority = 750;
+      }
+      {
+        name = "nvim_lsp";
+        priority = 1000;
+      }
+      {
+        name = "nvim_lsp_document_symbol";
+        priority = 1000;
+      }
+      {
+        name = "nvim_lsp_signature_help";
+        priority = 1000;
+      }
+      {
+        name = "orgmode";
+        priority = 250;
+      }
+      {
+        name = "path";
+        priority = 300;
+      }
+      {
+        name = "rg";
+        priority = 300;
+      }
+      {
+        name = "spell";
+        priority = 300;
+      }
+      {
+        name = "treesitter";
+        priority = 850;
+      }
+      {
+        name = "yanky";
+        priority = 250;
+      }
+      {
+        name = "zsh";
+        priority = 250;
+      }
+    ];
+  };
+};
+#+END_SRC
+**** LSP
+#+begin_src nix
+lsp = {
+  enable = true;
+  inlayHints = true;
+  keymaps.lspBuf = {
+    "<leader>d" = "definition";
+    "<leader>a" = "code_action";
+    "<leader>i" = "implementation";
+    "<leader>ic" = "incoming_calls";
+    "<leader>f" = "format";
+    "<leader>h" = "hover";
+    "<leader>r" = "rename";
+  };
+  servers = {
+    nixd.enable = true;
+    yamlls.enable = true;
+    bashls.enable = true;
+    cmake.enable = true;
+    clangd.enable = true;
+    pylsp.enable = true;
+    taplo.enable = true;
+    marksman.enable = true;
+    jsonls.enable = true;
+    hls = {
+      enable = true;
+      filetypes = ["haskell" "lhaskell" "cabal"];
+    };
+    lua-ls.enable = true;
+  };
+};
+#+end_scr
+**** Boilerplate
+#+BEGIN_SRC nix
+};
+#+END_SRC
+*** Boilerplate
+#+BEGIN_SRC nix
+};
+#+END_SRC
+** Steam
+#+BEGIN_SRC nix
+programs.steam = {
+  enable = true;
+  remotePlay.openFirewall = true;
+  dedicatedServer.openFirewall = true; 
+};
+#+END_SRC
+* Fonts
+#+BEGIN_SRC nix
+fonts = {
+  fontconfig.enable = true;
+  packages = with pkgs; [
+    hack-font
+    nerdfonts
+    cascadia-code
+    hasklig
+    fira-code-symbols
+    fira-code
+    cantarell-fonts
+    inconsolata-nerdfont
+    symbola
+    source-code-pro
+    font-awesome
+    font-awesome_5
+    font-awesome_4
+    line-awesome
+    powerline-fonts
+    ubuntu_font_family
+    mononoki
+    unifont
+    dejavu_fonts
+    symbola
+    noto-fonts
+    libertine
+  ];
+};
+#+END_SRC
+* Home manager
+** Boilerplate
+#+BEGIN_SRC nix
+home-manager = {
+  verbose = true;
+  useGlobalPkgs = true;
+  users.refaelsh = { pkgs, ... }: {
+#+END_SRC
+** Various one liners
+#+begin_src nix
+programs.home-manager.enable = true;
+home.stateVersion = "24.05";
+#+end_src
+** Xmobar
+#+begin_src nix
+programs.xmobar = {
+  enable = true;
+  extraConfig = /*haskell*/''
+    -- :w | silent !killall -s SIGKILL xmobar; xmobar &
+    Config {
+      font = "Fira Code 13",
+      additionalFonts = ["Fira Code 22"],
+      bgColor = "#282a36",
+      fgColor = "#f8f8f2",
+      textOffset = 2,
+      verbose = True,
+      allDesktops = True,
+      lowerOnStart = True,
+      overrideRedirect = True,
+      position = BottomH 26,
+      alpha = 200,
+      commands = [
+        Run XMonadLog,
+        Run DiskU [("/", "<fc=#bd93f9><fn=1>\xf0a0</fn></fc> <free>")] [] 50,
+        Run DiskIO [("/", "<read><fc=#bd93f9> R</fc> <fc=#bd93f9>W</fc> <write>")] ["-t", "", "-w", "4"] 10,
+        Run DynNetwork ["-t", "<rx>KB/s<fc=#bd93f9><fn=1>\x1F89B</fn></fc><fc=#bd93f9><fn=1>\x1F899</fn></fc><tx>KB/s", "-w", "5"] 10,
+        Run Memory ["-t", "<fc=#bd93f9><fn=1>\xE266</fn></fc><usedratio>%"] 10,
+        Run Swap ["-t", "<fc=#bd93f9>S</fc><usedratio>%"] 10,
+        Run Kbd [],
+        Run CpuFreq ["-t", "<avg>GHz"] 50,
+        Run MultiCoreTemp ["-t", "<fc=#bd93f9><fn=1>\xf2c9</fn></fc><avg>°", "-L", "60", "-H", "95", "-l", "white", "-n", "white", "-h", "red"] 50,
+        Run CatInt 0 "/sys/class/hwmon/hwmon4/fan1_input" [] 50,
+        Run MultiCpu ["-t", "<fc=#bd93f9><fn=1>\xf4bc</fn></fc> <vbar0><vbar1><vbar2><vbar3><vbar4><vbar5><vbar6><vbar7>", "-w", "99", "-L", "3", "-H", "50", "--normal", "green", "--high", "red"] 10,
+        Run BatteryP ["BAT0"] ["-t", "<fc=#bd93f9><fn=1>󱊣</fn></fc><left>%", "-L", "10", "-H", "80", "-p", "3", "--", "-O", "<fc=green>On</fc> - ", "-i", "", "-L", "-15", "-H", "-5", "-l", "red", "-m", "blue", "-h", "green", "-a", "notify-send -u critical 'Battery running out!!'", "-A", "3"] 600,
+        Run Alsa "default" "Master" ["-t", "<fc=#bd93f9><fn=1>\xf028</fn></fc> <volume>%"],
+        Run Date "%a %_d %b %H:%M:%S" "date" 10,
+        Run Load ["-t", "<fc=#bd93f9><fn=0>L</fn></fc><load1>", "-L", "1", "-H", "3", "-d", "2"] 300,
+        Run ComX "nmcli" ["-t", "-f", "SIGNAL", "dev", "wifi"] "N/A" "wifi_signal" 50,
+        Run Com "uname" ["-r"] "kernel_version" 3600,
+        Run XPropertyLog "_XMONAD_TRAYPAD"
+      ],
+      alignSep = "}{",
+      template = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc>%wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc>%cat0%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc>%kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc>%kernel_version%|%date%|%_XMONAD_TRAYPAD%"
+    }
+  '';
+  # commands = {
+  #   date = "%a %_d %b %H:%M:%S";
+  #   com = {
+  #     executable = "uname";
+  #     arguments = ["-r"];
+  #     rate = 3600;
+  #   };
+  # };
+};
+#+end_src
+** Librewolf
+#+begin_src nix
+programs.librewolf = {
+  enable = true;
+  settings = {
+    "webgl.disabled" = false;
+    "privacy.resistFingerprinting" = false;
+    "privacy.clearOnShutdown.history" = false;
+    "privacy.clearOnShutdown.downloads" = false;
+    "privacy.clearOnShutdown.cookies" = false;
+    "identity.fxaccounts.enabled" = true;
+    "font.name.serif.x-western" = "Fira Code";
+    "font.name.monospace.x-western" = "FiraCode Nerd Font Mono";
+  };
+};
+#+end_src
+** Fzf
+#+begin_src nix
+programs.fzf = {
+  enable = true;
+  enableZshIntegration = true;
+};
+#+end_src
+** Zsh
+#+begin_src nix
+programs.zsh = {
+  enable = true;
+  shellAliases = {
+    "cat" = "bat";
+    "ls" = "eza -a --icons --long --extended --git --header";
+    "bbb" = "git commit";
+  };
+  autosuggestion.enable = true;
+  defaultKeymap = "viins";
+  enableCompletion = true;
+  enableVteIntegration = true;
+  history = {
+    expireDuplicatesFirst = true;
+    extended = true;
+  };
+  syntaxHighlighting = {
+    enable = true;
+    highlighters = [
+      "main"
+      "brackets"
+      "pattern"
+      "regexp"
+      "cursor"
+      "root"
+      "line"
+    ];
+  };
+  initExtraBeforeCompInit = /*bash*/''
+    fpath+=($HOME/.zsh/plugins/zsh-completions/share/zsh/site-functions)
+  '';
+  plugins = [
+    {
+      name = "zsh-you-should-use";
+      src = pkgs.zsh-you-should-use;
+      file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
+    }
+    {
+      name = "zsh-completions";
+      src = pkgs.zsh-completions;
+    }
+  ];
+  initExtra = /*bash*/''
+    # Everything that follows below is Dracula theme for zsh-syntax-highlighting.
+    # Taken from here: https://github.com/dracula/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.sh.
+    #+begin_src bash
+    typeset -gA ZSH_HIGHLIGHT_STYLES
+    ZSH_HIGHLIGHT_STYLES[comment]='fg=#6272A4'
+    ## Constants
+    ## Entitites
+    ## Functions/methods
+    ZSH_HIGHLIGHT_STYLES[alias]='fg=#50FA7B'
+    ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#50FA7B'
+    ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#50FA7B'
+    ZSH_HIGHLIGHT_STYLES[function]='fg=#50FA7B'
+    ZSH_HIGHLIGHT_STYLES[command]='fg=#bd93f9'
+    ZSH_HIGHLIGHT_STYLES[precommand]='fg=#50FA7B,italic'
+    ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#FFB86C,italic'
+    ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#FFB86C'
+    ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#FFB86C'
+    ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#BD93F9'
+    ## Keywords
+    ## Built ins
+    ZSH_HIGHLIGHT_STYLES[builtin]='fg=#8BE9FD'
+    ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#8BE9FD'
+    ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=#8BE9FD'
+    ## Punctuation
+    ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#FF79C6'
+    ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-unquoted]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]='fg=#FF79C6'
+    ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#FF79C6'
+    ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#FF79C6'
+    ## Serializable / Configuration Languages
+    ## Storage
+    ## Strings
+    ZSH_HIGHLIGHT_STYLES[command-substitution-quoted]='fg=#F1FA8C'
+    ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-quoted]='fg=#F1FA8C'
+    ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#F1FA8C'
+    ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]='fg=#FF5555'
+    ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#F1FA8C'
+    ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]='fg=#FF5555'
+    ZSH_HIGHLIGHT_STYLES[rc-quote]='fg=#F1FA8C'
+    ## Variables
+    ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]='fg=#FF5555'
+    ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[assign]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#F8F8F2'
+    ## No category relevant in spec
+    ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#FF5555'
+    ZSH_HIGHLIGHT_STYLES[path]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#FF79C6'
+    ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#FF79C6'
+    ZSH_HIGHLIGHT_STYLES[globbing]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#BD93F9'
+    #ZSH_HIGHLIGHT_STYLES[command-substitution]='fg=?'
+    #ZSH_HIGHLIGHT_STYLES[command-substitution-unquoted]='fg=?'
+    #ZSH_HIGHLIGHT_STYLES[process-substitution]='fg=?'
+    #ZSH_HIGHLIGHT_STYLES[arithmetic-expansion]='fg=?'
+    ZSH_HIGHLIGHT_STYLES[back-quoted-argument-unclosed]='fg=#FF5555'
+    ZSH_HIGHLIGHT_STYLES[redirection]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[arg0]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[default]='fg=#F8F8F2'
+    ZSH_HIGHLIGHT_STYLES[cursor]='standout'
+  '';
+  oh-my-zsh = {
+    enable = true;
+    plugins = [
+      "sudo"
+      "git"
+      "git-extras"
+      "git-escape-magic"
+      "gitfast"
+      "zsh-interactive-cd"
+      "vi-mode"
+      "colored-man-pages"
+      "extract"
+      "cp"
+      "cabal"
+      "fzf"
+    ];
+  };
+};
+#+end_src
+** Starship
+#+BEGIN_SRC nix
+programs.starship = { 
+  enable = true;
+  enableZshIntegration = true;
+  settings = {
+    package = { disabled = true; };
+    nodejs = { disabled = true; };
+    lua = { disabled = true; };
+    python = { disabled = true; };
+    cmd_duration = { disabled = true; };
+    git_commit = { tag_disabled = false; };
+    dotnet = { disabled = true; };
+    cmake = { disabled = true; };
+    gcloud = { disabled = true; };
+    directory = {
+      home_symbol = "🏠";
+      truncation_length = 8;
+      truncation_symbol = "…/";
+    };
+    # The below is taken from: https://draculatheme.com/starship.
+    aws.style = "bold #ffb86c";
+    cmd_duration.style = "bold #f1fa8c";
+    directory.style = "bold #50fa7b";
+    hostname.style = "bold #ff5555";
+    git_branch.style = "bold #ff79c6";
+    git_status.style = "bold #ff5555";
+    username = {
+      format = "[$user]($style) on ";
+      style_user = "bold #bd93f9";
+    };
+    character = {
+      success_symbol = "[λ](bold #f8f8f2)";
+      error_symbol = "[λ](bold #ff5555)";
+    };
+    continuation_prompt = "▶▶ ";
+  };
+};
+#+END_SRC
+** Wezterm
+#+begin_src nix
+programs.wezterm = {
+  enable = true;
+  enableZshIntegration = true;
+  extraConfig = /*lua*/''
+    local wezterm = require 'wezterm'
+    local config = {}
+
+    config.font = wezterm.font 'Fira Code'
+    config.window_close_confirmation = 'NeverPrompt'
+    config.color_scheme = 'Dracula (Official)'
+    config.front_end = "WebGpu"
+    config.enable_tab_bar = false
+    config.audible_bell = "Disabled"
+    config.visual_bell = {
+      fade_in_function = 'EaseIn',
+      fade_in_duration_ms = 150,
+      fade_out_function = 'EaseOut',
+      fade_out_duration_ms = 150,
+    }
+    config.colors = {
+      visual_bell = '#bd93f9',
+    }
+
+    return config
+  '';
+};
+#+end_src
+** Kitty
+#+BEGIN_SRC nix
+programs.kitty = {
+  enable = true;
+  theme = "Dracula";
+  settings = {
+    confirm_os_window_close = 0;
+  };
+  font = {
+    name = "FiraCode Nerd Font";
+    size = 12;
+  };
+  keybindings = {
+    "ctrl+c" = "copy_to_clipboard";
+    "ctrl+v" = "paste_from_clipboard";
+  };
+};
+#+END_SRC
+** Alacritty
+#+BEGIN_SRC nix
+programs.alacritty = {
+  enable = true;
+  settings = {
+    key_bindings = [
+      {
+        key = "V";
+        mods = "Control";
+        action = "Paste";
+      }
+      {
+        key = "C";
+        mods = "Control";
+        action = "Copy";
+      }
+    ];
+    font.normal = { family = "FiraCode Nerd Font Mono"; };
+  }; 
+};
+#+END_SRC
+** Polybar
+#    #+BEGIN_SRC nix
+#      services.polybar.enable = true;
+#      services.polybar.script = "";
+#      services.polybar.package = pkgs.polybarFull;
+#      services.polybar.settings = {
+#        "colors" = {
+#          background = "#282a36";
+#          foreground = "#f8f8f2";
+#          primary = "#f1fa8c";
+#          secondary = "#8be9fd";
+#          disabled = "#6272a4";
+#          current_line = "#44475a";
+#          comment = "#6272a4";
+#          green = "#50fa7b";
+#          purple = "#bd93f9";
+#          red = "#ff5555";
+#          yellow = "#f1fa8c";
+#        };
+#        "settings" = {
+#          screenchange-reload = "true";
+#          pseudo-transparency = "true";
+#        };
+#        "bar/mybar" = {
+#          width = "100%";
+#          height = "30px";
+#          bottom = "true";
+#          dpi = "0";
+#          background = "\${colors.background}";
+#          foreground = "\${colors.foreground}";
+#          module-margin = "1";
+#          separator = "|";
+#          separator-foreground = "\${colors.disabled}";
+#          font-0 = "FiraCode Nerd Font;4";
+#          modules-left = "xworkspaces";
+#          modules-right = "filesystem network memory cpu xkeyboard battery date";
+#          cursor-click = "pointer";
+#          cursor-scroll = "ns-resize";
+#          enable-ipc = "true";
+#          tray-position = "right";
+#          wm-restack = "generic";
+#        };
+#        "module/xworkspaces" = {
+#          type = "internal/xworkspaces";
+#          enable-scroll = "false";
+#          label-active = "%name%";
+#          label-active-background = "\${colors.current_line}";
+#          label-active-padding = "1";
+#          label-occupied = "%name%";
+#          label-occupied-padding = "1";
+#          label-urgent = "%name%";
+#          label-urgent-background = "\${colors.red}";
+#          label-urgent-padding = "1";
+#          label-empty = "";
+#          label-empty-padding = "1";
+#        };
+#        "module/filesystem" = {
+#          type = "internal/fs";
+#          mount-0 = "/";
+#          label-mounted = "%{F#bd93f9}%{F-} %free%";
+#        };
+#        "module/network" = {
+#          type = "internal/network";
+#          interface = "enp0s3";
+#          speed-unit = "";
+#          label-connected = "%{F#bd93f9}%{F-} %downspeed:5% %{F#bd93f9}%{F-} %upspeed:5%";
+#        };
+#        "module/memory" = {
+#          type = "internal/memory";
+#          label = "%{F#bd93f9}%{F-} %percentage_used:2%% %{F#bd93f9}S%{F-} %percentage_swap_used%%";
+#        };
+#        "module/cpu" = {
+#          type = "internal/cpu";
+#          interval = 0.5;
+#          format = "%{F#bd93f9}🖥%{F-} <label> <ramp-coreload>";
+#          label = "%percentage:2%%";
+#          ramp-coreload-spacing = "1";
+#          ramp-coreload-0 = "";
+#          ramp-coreload-0-foreground = "\${colors.green}";
+#          ramp-coreload-1 = "▁";
+#          ramp-coreload-1-foreground = "\${colors.green}";
+#          ramp-coreload-2 = "▃";
+#          ramp-coreload-2-foreground = "\${colors.green}";
+#          ramp-coreload-3 = "▄";
+#          ramp-coreload-3-foreground = "\${colors.yellow}";
+#          ramp-coreload-4 = "▅";
+#          ramp-coreload-4-foreground = "\${colors.yellow}";
+#          ramp-coreload-5 = "▆";
+#          ramp-coreload-5-foreground = "\${colors.red}";
+#          ramp-coreload-6 = "▇";
+#          ramp-coreload-6-foreground = "\${colors.red}";
+#          ramp-coreload-7 = "█";
+#          ramp-coreload-7-foreground = "\${colors.red}";
+#        };
+#        "module/battery" = {
+#          type = "internal/battery";
+#          battery = "BAT0";
+#          adapter = "AC";
+#          label-full = "%{F#50fa7b}%{F-} ";
+#          format-full = "<label-full>";
+#          label-charging = "%percentage%% %time%";
+#          format-charging = " <ramp-capacity> <label-discharging>";
+#          label-discharging = " %percentage%% %time%";
+#          format-discharging = "<ramp-capacity> <label-discharging>";
+#          ramp-capacity-0 = "%{F#ff5555}%{F-}";
+#          ramp-capacity-1 = "%{F#f1fa8c}%{F-}";
+#          ramp-capacity-2 = "%{F#f1fa8c}%{F-}";
+#          ramp-capacity-3 = "%{F#f1fa8c}%{F-}";
+#          ramp-capacity-4 = "%{F#50fa7b}%{F-}";
+#        };
+#        "module/xkeyboard" = {
+#          type = "internal/xkeyboard";
+#          label-layout = "%{F#bd93f9}%{F-}  %layout%";
+#        };
+#        "module/date" = {
+#          type = "internal/date";
+#          date = "%{F#bd93f9}%{F-} %H:%M:%S";
+#        };
+#        # "module/volume" = {
+#        #   type = "internal/pulseaudio";
+#        #   format.volume = "<ramp-volume> <label-volume>";
+#        #   label.muted.text = "🔇";
+#        #   label.muted.foreground = "#666";
+#        #   ramp.volume = ["🔈" "🔉" "🔊"];
+#        #   click.right = "pavucontrol &";
+#        # };
+#        # "module/volume" = {
+#        #   type = "internal/alsa";
+#        #   format.volume = "<ramp-volume> <label-volume>";
+#        #   label.muted.text = "🔇";
+#        #   label.muted.foreground = "#666";
+#        #   ramp.volume = ["🔈" "🔉" "🔊"];
+#        #   # click.right = "pavucontrol &";
+#        # };
+#      };
+#    #+END_SRC
+** Git
+#+BEGIN_SRC nix
+programs.git = {
+  enable = true;
+  userEmail = "refaelsh@pm.me";
+  userName = "refaelsh";
+  aliases = {
+    lg = "log --date-order --color-moved --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all";
+    st = "status";
+    diff = "diff --color-moved --submodule";
+    show = "show --color-moved";
+    ch = "checkout";
+  };
+  extraConfig = {
+    safe = { directory = "*"; };
+    color = {
+      ui = "always";
+    };
+    init = {
+      defaultBranch = "master";
+    };
+    color.branch = {
+      current = "cyan bold reverse";
+      local = "white";
+      plain = "";
+      remote = "cyan";
+    };
+    color.diff = {
+      commit = "";
+      func = "cyan";
+      plain = "";
+      whitespace = "magenta reverse";
+      meta = "white";
+      frag = "cyan bold reverse";
+      old = "red";
+      new = "green";
+    };
+    color.grep = {
+      context = "";
+      filename = "";
+      function = "";
+      linenumber = "white";
+      match = "";
+      selected = "";
+      separator = "";
+    };
+    color.interactive = {
+      error = "";
+      header = "";
+      help = "";
+      prompt = "";
+    };
+    color.status = {
+      added = "green";
+      changed = "yellow";
+      header = "";
+      localBranch = "";
+      nobranch = "";
+      remoteBranch = "cyan bold";
+      unmerged = "magenta bold reverse";
+      untracked = "red";
+      updated = "green bold";
+    };
+    merge = {
+      ff = "no";
+      tool = "kdiff3";
+    };
+    pull = {
+      rebase = "true";
+    };
+  };
+};
+#+END_SRC 
+** Termonad
+#+BEGIN_SRC nix
+xdg.configFile."termonad/termonad.hs" = { 
+text = /*haskell*/''
+  {-# LANGUAGE OverloadedStrings #-}  
+
+  module Main where
+
+  import Data.Maybe (fromMaybe)
+  import Termonad
+  import Termonad.Config.Colour
+
+  main :: IO ()
+  main = do
+  -- First, create the colour extension based on either PaperColor modules.
+  myColourExt <- createColourExtension dracula
+
+  -- Update 'myTMConfig' with our colour extension.
+  let newTMConfig = addColourExtension myTMConfig myColourExt
+
+  -- Start Termonad with our updated 'TMConfig'.
+  start newTMConfig
+
+  -- This is our Dracula 'ColourConfig'.
+  dracula :: ColourConfig (AlphaColour Double)
+  dracula =
+  defaultColourConfig
+  { -- Set the default background & foreground colour of text of the terminal.
+  backgroundColour = Set (createColour 40 42 54), -- black.0
+  foregroundColour = Set (createColour 248 248 242), -- white.7
+  -- Set the extended palette that has 2 Vecs of 8 Dracula palette colours
+  palette = ExtendedPalette draculaNormal draculaBright
+  }
+  where
+  draculaNormal :: List8 (AlphaColour Double)
+  draculaNormal =
+  fromMaybe defaultStandardColours $
+  mkList8
+  [ createColour 40 42 54, -- black.0
+  createColour 255 85 85, -- red.1
+  createColour 80 250 123, -- green.2
+  createColour 241 250 140, -- yellow.3
+  createColour 189 147 249, -- blue.4
+  createColour 255 121 198, -- magenta.5
+  createColour 139 233 253, -- cyan.6
+  createColour 191 191 191 -- white.7
+  ]
+
+  draculaBright :: List8 (AlphaColour Double)
+  draculaBright =
+  fromMaybe defaultStandardColours $
+  mkList8
+  [ createColour 77 77 77, -- black.8
+  createColour 255 110 103, -- red.9
+  createColour 90 247 142, -- green.10
+  createColour 244 249 157, -- yellow.11
+  createColour 202 169 250, -- blue.12
+  createColour 255 146 208, -- magenta.13
+  createColour 154 237 254, -- cyan.14
+  createColour 230 230 230 -- white.15
+  ]
+
+  -- This is our main 'TMConfig'.  It holds all of the non-colour settings
+  -- for Termonad.
+  --
+  -- This shows how a few settings can be changed.
+  myTMConfig :: TMConfig
+  myTMConfig =
+  defaultTMConfig
+  { options =
+  defaultConfigOptions
+  { showScrollbar = ShowScrollbarNever,
+  confirmExit = False,
+  showMenu = False,
+  cursorBlinkMode = CursorBlinkModeOn,
+  fontConfig =
+  defaultFontConfig
+  { fontFamily = "FiraCode Nerd Font",
+  fontSize = FontSizePoints 12
+  }
+  }
+  }
+'';};
+#+END_SRC
+** Boilerplate
+#+BEGIN_SRC nix
+  };
+};
+#+END_SRC
+* Boilerplate
+#+BEGIN_SRC nix
+}
+#+END_SRC
