@@ -15,9 +15,7 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    # <home-manager/nixos>
     inputs.home-manager.nixosModules.home-manager
-    # inputs.nixvim.nixosModules.nixvim
   ];
 
   boot.loader = {
@@ -64,7 +62,7 @@ in
   security = {
     rtkit.enable = true;
     sudo = {
-      extraConfig = "Defaults env_keep += \"HOME\"";
+      # extraConfig = "Defaults env_keep += \"HOME\"";
       extraRules = [
         {
           users = [ "refaelsh" ];
@@ -453,9 +451,7 @@ in
         name = "git.sh";
         text = # bash
           ''
-            echo ---------------Running the after script------------------
             git -C ~/repos/dotfiles add . && git -C ~/repos/dotfiles commit -m "WIP" && git -C ~/repos/dotfiles push
-            echo ---------------The end------------------------------------
           '';
       })
       (writeShellApplication {
@@ -463,7 +459,7 @@ in
         text = # bash
           ''
             git.sh
-            nix flake update
+            nix flake update ~/repos/dotfiles
             sudo nixos-rebuild switch --flake ~/repos/dotfiles/#myNixos --option eval-cache false
             cabal update
             git.sh
@@ -536,12 +532,4 @@ in
       libertine
     ];
   };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs;
-    };
-    users.refaelsh = import ./home.nix;
-  };
-
 }

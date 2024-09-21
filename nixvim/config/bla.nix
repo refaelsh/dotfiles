@@ -188,15 +188,6 @@
     }
 
     {
-      event = [
-        "BufReadPost"
-        "BufNewFile"
-      ];
-      pattern = [ "*.org" ];
-      command = ":lua require(\"otter\").activate()";
-    }
-
-    {
       event = [ "BufWritePre" ];
       pattern = [ "*>8" ];
       command = ":lua vim.lsp.buf.format()";

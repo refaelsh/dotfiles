@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "NixOS flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -14,9 +14,6 @@
     { self, nixpkgs, ... }@inputs:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-      };
     in
     {
       nixosConfigurations = {
@@ -28,9 +25,13 @@
           modules = [
             ./configuration.nix
             {
-              environment.systemPackages =[
+              environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
               ];
+
+              home-manager = {
+                users.refaelsh = import ./home-manager/home.nix;
+              };
             }
           ];
         };
