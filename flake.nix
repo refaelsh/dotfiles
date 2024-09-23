@@ -33,7 +33,7 @@
                 inputs.nixvim.packages.${system}.default
                 # inputs.home-manager.package.${system}.default
                 # inputs.home-manager.homeConfigurations.default
-                inputs.home-manager.default
+                inputs.home-manager.default.x86_64-linux
               ];
 
               # home-manager = {
