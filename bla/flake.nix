@@ -26,8 +26,6 @@
         ];
       };
 
-      homeManagerModules = {
-        bbb = import ./home.nix;
-      };
+      default.x86_64-linux = self.homeConfigurations.standalone.activationPackage;
     };
 }
