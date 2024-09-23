@@ -1,0 +1,1107 @@
+@document.meta
+tangle: init.lua
+@end
+
+* Leader key
+  Set <space> as the leader key.
+  Must happen before Lazy.nvim plugins are required (otherwise wrong leader will be used).
+  @code lua
+  vim.g.mapleader = ' '
+  vim.g.maplocalleader = ' '
+  @end
+
+* Key mapping function
+  @code lua
+  local function map(mode, lhs, rhs)
+      local options = { noremap = true, silent = false }
+      vim.keymap.set(mode, lhs, rhs, options)
+  end
+  @end
+
+* One-liner settings
+** Various little things
+   @code lua
+   vim.o.guifont = "FiraCode Nerd Font:h8.1"
+   vim.o.autoread = true
+   vim.o.cursorline = true
+   vim.o.mouse = "a"
+   vim.o.undofile = true
+   vim.o.undodir = "/home/refaelsh/.config/nvim"
+   vim.cmd [[set noswapfile]]
+   -- vim.opt.noswapfile = true
+   vim.o.foldmethod = "marker"
+   vim.o.hlsearch = true
+   vim.o.ignorecase = true
+   vim.o.completeopt = 'menuone,noselect'
+   vim.o.smartcase = true
+   vim.o.incsearch = true
+   vim.o.showmatch = true
+   vim.o.gdefault = true
+   vim.o.termguicolors = true
+   vim.o.clipboard = "unnamedplus"
+   vim.o.tabstop = 4
+   vim.o.shiftwidth = 4
+   vim.o.expandtab = true
+   vim.o.number = true
+   vim.o.relativenumber = true
+   vim.o.hidden = true
+   vim.opt.spell = true
+   vim.opt.spelllang = { 'en_us' }
+   vim.o.spellcapcheck = "="
+   vim.o.spellsuggest = "10"
+   vim.opt.spelloptions = "camel"
+   vim.o.splitright = true;
+   vim.o.confirm = true
+   vim.o.wrap = false
+   vim.o.clipboard = 'unnamedplus'
+   vim.opt.path = vim.opt.path + "**"
+   vim.opt.wildmenu = true
+   vim.cmd('au TermOpen * setlocal nospell')
+   vim.cmd [[
+      if &shell =~# 'fish$'
+      set shell=bash
+      endif
+      ]]
+   @end
+
+** Miscellaneous key bindings
+   @code lua
+   map("n", "<leader><space>", ":noh<cr>")
+   map("n", "<C-s>", ":wa<CR>")
+   @end
+
+** Disable arrow keys
+   @code lua
+   map("n", "<Up>", "<Nop>")
+   map("n", "<Down>", "<Nop>")
+   map("n", "<Left>", "<Nop>")
+   map("n", "<Right>", "<Nop>")
+   map("i", "<Up>", "<Nop>")
+   map("i", "<Down>", "<Nop>")
+   map("i", "<Left>", "<Nop>")
+   map("i", "<Right>", "<Nop>")
+   map("v", "<Up>", "<Nop>")
+   map("v", "<Down>", "<Nop>")
+   map("v", "<Left>", "<Nop>")
+   map("v", "<Right>", "<Nop>")
+   @end
+
+** Remap for better line wrap handling
+   @code lua
+   map("n", "j", "gj")
+   map("n", "k", "gk")
+   @end
+
+** Remap : and ;
+   @code lua
+   map("n", ":", ";")
+   map("n", ";", ":")
+   @end
+
+** Remap enter to be new line
+   @code lua
+   map("n", "<Enter>", "o<ESC>")
+   map("n", "<S-Enter>", "O<ESC>")
+   @end
+
+@code lua
+
+-- This is a snip it example without plugins :-)
+--     map("n", ",t", "i#[test]<CR>fn () {<CR>}<ESC>kwi")
+--     map("n", ",tm",
+--         "i#[cfg(test)]<CR>mod tests {<CR>use super::*;<CR><CR>#[test]<CR>fn () {<CR>}<CR><ESC>xxxxi}<ESC>kkwwi")
+
+
+vim.api.nvim_create_autocmd({ "bufenter", "cursorhold", "cursorholdi", "focusgained" },
+    { pattern = "*.*", command = "if mode() != 'c' | checktime | endif", })
+vim.api.nvim_create_autocmd("FileChangedShellPost",
+    {
+        pattern = "*.*",
+        command =
+        "echohl WarningMsg | echo \"File changed on disk. Buffer reloaded.\" | echohl None",
+    })
+
+
+map("n", "<C-d>", "<C-d>zz")
+map("n", "<C-u>", "<C-u>zz")
+map("n", "n", "nzzzv")
+map("n", "N", "Nzzzv")
+
+vim.api.nvim_create_autocmd("QuickFixCmdPost", { pattern = "[^l]*", command = "cwindow", })
+vim.api.nvim_create_autocmd("QuickFixCmdPost", { pattern = "l*", command = "lwindow", })
+-- vim.cmd([[
+-- au FileType qf call AdjustWindowHeight(3, 10)
+-- function! AdjustWindowHeight(minheight, maxheight)
+-- exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+-- endfunction "
+-- ]])
+vim.api.nvim_create_autocmd("FocusLost", { pattern = "*.*", command = ":wa" })
+vim.api.nvim_create_autocmd({ "FocusLost", "BufWritePost" },
+    {
+        pattern = "*/home/refaelsh/repos/dotfiles/*",
+        callback = function()
+            vim.cmd("!sudo cp ~/repos/dotfiles/configuration.nix /etc/nixos/configuration.nix")
+            vim.cmd("!git add . && git commit -m \"WIP\" && git push")
+        end
+    })
+vim.api.nvim_create_autocmd({ "FocusLost", "BufWritePost" },
+    {
+        pattern = "*.norg",
+        callback = function()
+            vim.cmd("Neorg tangle current-file")
+        end
+    })
+
+
+
+
+-- The bootstraper of lazy.nvim.
+local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system {
+        'git',
+        'clone',
+        '--filter=blob:none',
+        'https://github.com/folke/lazy.nvim.git',
+        '--branch=stable', -- latest stable release
+        lazypath,
+    }
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- [[ Configure plugins ]]
+-- NOTE: Here is where you install your plugins.
+--  You can configure plugins using the `config` key.
+--
+--  You can also configure plugins after the setup call,
+--    as they will be available in your neovim runtime.
+require('lazy').setup({
+    {
+        "Mofiqul/dracula.nvim",
+        lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+        priority = 1000, -- make sure to load this before all the other start plugins
+        config = function()
+            -- load the colorscheme here
+            vim.cmd([[colorscheme dracula]])
+        end
+    },
+
+    'machakann/vim-highlightedyank',
+    'aklt/plantuml-syntax',
+    'mbbill/undotree',
+    'tpope/vim-repeat',
+    'tpope/vim-surround',
+    'habamax/vim-asciidoctor',
+    -- There is a bug. I've opened an issue.
+    -- use 'tigion/nvim-asciidoc-preview'
+    -- There is a bug. I've opened an issue.
+    -- use { 'shuntaka9576/preview-asciidoc.nvim', run = 'yarn install' }
+
+    -- A prerequisite of many plugins. For exampleL Neorg.
+    "nvim-lua/plenary.nvim",
+
+    'dag/vim-fish',
+    'dstein64/vim-startuptime',
+
+    'stevearc/dressing.nvim',
+    {
+        'RRethy/vim-hexokinase',
+        build = 'make hexokinase',
+    },
+
+    {
+        'ethanholz/nvim-lastplace',
+        opts = {
+            lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
+            lastplace_ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
+            lastplace_open_folds = true
+        }
+    },
+
+    {
+        'numToStr/Comment.nvim',
+        opts = {},
+        config = function()
+            local opt = { expr = true, remap = true, replace_keycodes = false }
+            vim.keymap.set('n', '<leader>c', "v:count == 0 ? '<Plug>(comment_toggle_linewise_current)' : '<Plug>(comment_toggle_linewise_count)'", opt)
+            vim.keymap.set('x', '<leader>c', '<Plug>(comment_toggle_linewise_visual)')
+        end
+    },
+
+    {
+        'yamatsum/nvim-cursorline',
+        opts = {
+            cursorline = {
+                enable = true,
+                timeout = 1000,
+                number = false,
+            },
+            cursorword = {
+                enable = true,
+                min_length = 3,
+                hl = { underline = true },
+            }
+        }
+    },
+
+    'lnl7/vim-nix',
+
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        config = function()
+            vim.cmd("let g:indent_blankline_filetype_exclude = ['norg']")
+        end
+    },
+
+
+    {
+        'lewis6991/gitsigns.nvim',
+        opts = {}
+    },
+
+    'kamykn/spelunker.vim',
+
+    {
+        'kyazdani42/nvim-tree.lua',
+        opts = {
+            git = {
+                ignore = false,
+            },
+            actions = {
+                open_file = {
+                    resize_window = true
+                }
+            }
+        }
+    },
+
+    {
+        'folke/todo-comments.nvim',
+        opts = {}
+    },
+
+    'jeffkreeftmeijer/vim-numbertoggle',
+
+    -- A prerequisite of many plugins. For exampleL lualine.nvim.
+    'nvim-tree/nvim-web-devicons',
+
+    {
+        'nvim-lualine/lualine.nvim',
+        opts = { { options = { theme = 'dracula' } } }
+    },
+
+    {
+        'nvim-treesitter/nvim-treesitter',
+        build = ':TSUpdate',
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = "all",
+                auto_install = true,
+                highlight = { enable = true },
+                indent = { enable = true },
+            })
+        end
+    },
+
+    -- Useful status updates for LSP
+    { "j-hui/fidget.nvim", opts = {} },
+
+    -- Additional lua configuration, makes nvim stuff amazing!
+    -- Neovim setup for init.lua and plugin development with full signature help, docs and completion for the nvim lua API.
+    {
+        'folke/neodev.nvim',
+        opts = {}
+    },
+
+    {
+        "nvim-neorg/neorg",
+        config = function()
+            require("neorg").setup {
+                load = {
+                    ["core.defaults"] = {},
+                    ["core.concealer"] = {},
+                    ["core.completion"] = {
+                        config = {
+                            engine = "nvim-cmp"
+                        }
+                    },
+                },
+            }
+            map("n", "<F11>", ":Neorg keybind all core.looking-glass.magnify-code-block<CR>")
+        end,
+        build = ":Neorg sync-parsers",
+        tag = "*",
+    },
+
+    {
+        "hrsh7th/nvim-cmp",
+        lazy = false,
+        -- these dependencies will only be loaded when cmp loads
+        -- dependencies are always lazy-loaded unless specified otherwise
+        dependencies = {
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            'f3fora/cmp-spell',
+            'hrsh7th/cmp-path',
+            'hrsh7th/cmp-cmdline',
+            'hrsh7th/cmp-git',
+            'L3MON4D3/LuaSnip',
+            'saadparwaiz1/cmp_luasnip',
+            'rafamadriz/friendly-snippets',
+        },
+        config = function()
+            local cmp = require 'cmp'
+            cmp.setup({
+                snippet = {
+                    -- REQUIRED - you must specify a snippet engine
+                    expand = function(args)
+                        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+                        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+                        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+                    end,
+                },
+                window = {
+                    -- completion = cmp.config.window.bordered(),
+                    -- documentation = cmp.config.window.bordered(),
+                },
+                mapping = cmp.mapping.preset.insert({
+                    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                    ['<C-Space>'] = cmp.mapping.complete(),
+                    ['<C-e>'] = cmp.mapping.abort(),
+                    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                }),
+                sources = cmp.config.sources({
+                    {
+                        name = 'spell',
+                        option = {
+                            keep_all_entries = false,
+                            enable_in_context = function()
+                                return true
+                            end,
+                        },
+                    },
+                    {
+                        name = "dictionary",
+                        keyword_length = 2,
+                    },
+                    { name = 'nvim_lsp' },
+                    { name = 'spell' },
+                    { name = 'neorg' },
+                    -- { name = 'vsnip' }, -- For vsnip users.
+                    { name = 'luasnip' }, -- For luasnip users.
+                    -- { name = 'ultisnips' }, -- For ultisnips users.
+                    -- { name = 'snippy' }, -- For snippy users.
+                }, {
+                    { name = 'buffer' },
+                })
+            })
+
+            -- Set configuration for specific filetype.
+            cmp.setup.filetype('gitcommit', {
+                sources = cmp.config.sources({
+                    { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+                }, {
+                    { name = 'buffer' },
+                })
+            })
+
+            -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+            cmp.setup.cmdline({ '/', '?' }, {
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = {
+                    { name = 'buffer' }
+                }
+            })
+
+            -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+            cmp.setup.cmdline(':', {
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = cmp.config.sources({
+                    { name = 'path' }
+                }, {
+                    { name = 'cmdline' }
+                })
+            })
+        end,
+    },
+
+    --local servers = {"lua_ls", "hls"}
+    {
+        'neovim/nvim-lspconfig',
+        config = function()
+            map("n", "<leader>d", ":lua vim.lsp.buf.definition()<CR>");
+            map("n", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>");
+            map("v", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>");
+            map("n", "<leader>i", ":lua vim.lsp.buf.implementation()<CR>");
+            map("n", "<leader>ic", ":lua vim.lsp.buf.incoming_calls()<CR>");
+            map("n", "<leader>f", ":lua vim.lsp.buf.format()<CR>");
+            map("n", "<leader>h", ":lua vim.lsp.buf.hover()<CR>");
+            map("n", "<leader>r", ":lua vim.lsp.buf.rename()<CR>");
+            vim.api.nvim_create_autocmd("BufWritePre", { pattern = "*.*", command = ":lua vim.lsp.buf.format()" })
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
+            require 'lspconfig'.nixd.setup{ capabilities = capabilities }
+            require 'lspconfig'.lua_ls.setup {
+                capabilities = capabilities,
+                on_init = function(client)
+                    local path = client.workspace_folders[1].name
+                    if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+                        client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+                            Lua = {
+                                runtime = {
+                                    -- Tell the language server which version of Lua you're using
+                                    -- (most likely LuaJIT in the case of Neovim)
+                                    version = 'LuaJIT'
+                                },
+                                diagnostics = {
+                                    -- Get the language server to recognize the `vim` global
+                                    -- Now, you don't get error/warning "Undefined global `vim`".
+                                    globals = { 'vim' },
+                                },
+                                -- Make the server aware of Neovim runtime files
+                                workspace = {
+                                    checkThirdParty = false,
+                                    library = {
+                                        vim.env.VIMRUNTIME
+                                        -- "${3rd}/luv/library"
+                                        -- "${3rd}/busted/library",
+                                    }
+                                    -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+                                    -- library = vim.api.nvim_get_runtime_file("", true)
+                                }
+                            }
+                        })
+                        client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+                    end
+                    return true
+                end
+            }
+        end
+    },
+}, {})
+
+
+
+
+
+-- local function map(mode, lhs, rhs, opts)
+--     local options = { noremap = true, silent = false }
+--     if opts then
+--         options = vim.tbl_extend("force", options, opts)
+--     end
+--     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+-- end
+--
+-- vim.g.mapleader = " "
+--
+-- local fn = vim.fn
+-- local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+-- if fn.empty(fn.glob(install_path)) > 0 then
+--     packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
+--         install_path })
+--     vim.cmd [[packadd packer.nvim]]
+-- end
+--
+-- require('packer').startup(function(use)
+--     use {
+--         "nvim-neorg/neorg",
+--         config = function()
+--             require('neorg').setup {
+--                 load = {
+--                     ["core.defaults"] = {},  -- Loads default behaviour
+--                     ["core.concealer"] = {}, -- Adds pretty icons to your documents
+--                     -- ["core.dirman"] = {      -- Manages Neorg workspaces
+--                     --     config = {
+--                     --         workspaces = {
+--                     --             notes = "~/notes",
+--                     --         },
+--                     --     },
+--                     -- },
+--                     ["core.completion"] = {
+--                         config = {
+--                             engine = "nvim-cmp"
+--                         }
+--                     },
+--                 },
+--             }
+--         end,
+--         run = ":Neorg sync-parsers",
+--         tag = "*",
+--         requires = "nvim-lua/plenary.nvim",
+--     }
+--     use { "wbthomason/packer.nvim" }
+--
+--     use 'machakann/vim-highlightedyank'
+--     use 'aklt/plantuml-syntax'
+--     use 'mbbill/undotree'
+--     use 'tpope/vim-repeat'
+--     use 'tpope/vim-surround'
+--     use 'habamax/vim-asciidoctor'
+--     -- There is a bug. I've opened an issue.
+--     -- use 'tigion/nvim-asciidoc-preview'
+--     -- There is a bug. I've opened an issue.
+--     -- use { 'shuntaka9576/preview-asciidoc.nvim', run = 'yarn install' }
+--     use 'dag/vim-fish'
+--     use 'dstein64/vim-startuptime'
+--     -- use 'lordm/vim-browser-reload-linux'
+--     use 'stevearc/dressing.nvim'
+--     use {
+--         'RRethy/vim-hexokinase',
+--         run = 'make hexokinase',
+--     }
+--     -- use 'voldikss/vim-floaterm'
+--
+--     use 'numToStr/Comment.nvim'
+--     require('Comment').setup({})
+--     local opt = { expr = true, remap = true, replace_keycodes = false }
+--     vim.keymap.set('n', '<leader>c',
+--         "v:count == 0 ? '<Plug>(comment_toggle_linewise_current)' : '<Plug>(comment_toggle_linewise_count)'", opt)
+--     vim.keymap.set('x', '<leader>c', '<Plug>(comment_toggle_linewise_visual)')
+--
+--     use 'ethanholz/nvim-lastplace'
+--
+--     require 'nvim-lastplace'.setup {
+--         lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
+--         lastplace_ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
+--         lastplace_open_folds = true
+--     }
+--
+--     use 'Mofiqul/dracula.nvim'
+--     vim.cmd [[colorscheme dracula]]
+--
+--     use 'neovim/nvim-lspconfig'
+--
+--     -- This is for borders. Taken from here: https://github.com/neovim/nvim-lspconfig/wiki/UI-customization.
+--     local border = {
+--         { "🭽", "FloatBorder" },
+--         { "▔", "FloatBorder" },
+--         { "🭾", "FloatBorder" },
+--         { "▕", "FloatBorder" },
+--         { "🭿", "FloatBorder" },
+--         { "▁", "FloatBorder" },
+--         { "🭼", "FloatBorder" },
+--         { "▏", "FloatBorder" },
+--     }
+--     vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1f2335]]
+--     vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
+--     local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+--     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+--         opts = opts or {}
+--         opts.border = opts.border or border
+--         return orig_util_open_floating_preview(contents, syntax, opts, ...)
+--     end
+--
+--     vim.opt.completeopt = { "menu", "menuone", "noselect" }
+--
+--     use 'hrsh7th/nvim-cmp'
+--     use 'hrsh7th/cmp-nvim-lsp'
+--     use 'f3fora/cmp-spell'
+--     use 'hrsh7th/cmp-buffer'
+--     use 'hrsh7th/cmp-path'
+--     use 'hrsh7th/cmp-cmdline'
+--     use 'hrsh7th/cmp-git'
+--     -- use 'hrsh7th/cmp-vsnip'
+--     -- use 'hrsh7th/vim-vsnip'
+--     -- use 'hrsh7th/vim-vsnip-integ'
+--     -- use 'rafamadriz/friendly-snippets'
+--
+--     local cmp = require 'cmp'
+--     cmp.setup({
+--         snippet = {
+--             -- REQUIRED - you must specify a snippet engine
+--             expand = function(args)
+--                 vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+--                 -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+--                 -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+--                 -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+--             end,
+--         },
+--         window = {
+--             -- completion = cmp.config.window.bordered(),
+--             -- documentation = cmp.config.window.bordered(),
+--         },
+--         mapping = cmp.mapping.preset.insert({
+--             ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+--             ['<C-f>'] = cmp.mapping.scroll_docs(4),
+--             ['<C-Space>'] = cmp.mapping.complete(),
+--             ['<C-e>'] = cmp.mapping.abort(),
+--             ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+--         }),
+--         sources = cmp.config.sources({
+--             {
+--                 name = 'spell',
+--                 option = {
+--                     keep_all_entries = false,
+--                     enable_in_context = function()
+--                         return true
+--                     end,
+--                 },
+--             },
+--             {
+--                 name = "dictionary",
+--                 keyword_length = 2,
+--             },
+--             { name = 'nvim_lsp' },
+--             { name = 'orgmode' },
+--             { name = 'spell' },
+--             { name = 'neorg' },
+--             -- { name = 'vsnip' }, -- For vsnip users.
+--             -- { name = 'luasnip' }, -- For luasnip users.
+--             -- { name = 'ultisnips' }, -- For ultisnips users.
+--             -- { name = 'snippy' }, -- For snippy users.
+--         }, {
+--             { name = 'buffer' },
+--         })
+--     })
+--
+--     -- Set configuration for specific filetype.
+--     cmp.setup.filetype('gitcommit', {
+--         sources = cmp.config.sources({
+--             { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+--         }, {
+--             { name = 'buffer' },
+--         })
+--     })
+--
+--     -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+--     cmp.setup.cmdline({ '/', '?' }, {
+--         mapping = cmp.mapping.preset.cmdline(),
+--         sources = {
+--             { name = 'buffer' }
+--         }
+--     })
+--
+--     -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+--     cmp.setup.cmdline(':', {
+--         mapping = cmp.mapping.preset.cmdline(),
+--         sources = cmp.config.sources({
+--             { name = 'path' }
+--         }, {
+--             { name = 'cmdline' }
+--         })
+--     })
+--
+--     local capabilities = require('cmp_nvim_lsp').default_capabilities()
+--
+--     use 'rust-lang/rust.vim'
+--     use 'simrat39/rust-tools.nvim'
+--     require 'rust-tools'.setup()
+--     require 'lspconfig'.rust_analyzer.setup { capabilities = capabilities }
+--     require 'lspconfig'.rnix.setup { capabilities = capabilities }
+--     require 'lspconfig'.vimls.setup { capabilities = capabilities }
+--     require 'lspconfig'.yamlls.setup { capabilities = capabilities }
+--     require 'lspconfig'.bashls.setup { capabilities = capabilities }
+--     require 'lspconfig'.dockerls.setup { capabilities = capabilities }
+--     require 'lspconfig'.eslint.setup { capabilities = capabilities }
+--     require 'lspconfig'.cmake.setup { capabilities = capabilities }
+--     require 'lspconfig'.clangd.setup { capabilities = capabilities }
+--     require 'lspconfig'.pylsp.setup { capabilities = capabilities }
+--     require 'lspconfig'.taplo.setup { capabilities = capabilities }
+--     require 'lspconfig'.marksman.setup { capabilities = capabilities }
+--     require 'lspconfig'.jsonls.setup {
+--         capabilities = capabilities
+--     }
+--     require 'lspconfig'.lua_ls.setup {
+--         capabilities = capabilities,
+--         on_init = function(client)
+--             local path = client.workspace_folders[1].name
+--             if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+--                 client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+--                     Lua = {
+--                         runtime = {
+--                             -- Tell the language server which version of Lua you're using
+--                             -- (most likely LuaJIT in the case of Neovim)
+--                             version = 'LuaJIT'
+--                         },
+--                         diagnostics = {
+--                             -- Get the language server to recognize the `vim` global
+--                             -- Now, you don't get error/warning "Undefined global `vim`".
+--                             globals = { 'vim' },
+--                         },
+--                         -- Make the server aware of Neovim runtime files
+--                         workspace = {
+--                             checkThirdParty = false,
+--                             library = {
+--                                 vim.env.VIMRUNTIME
+--                                 -- "${3rd}/luv/library"
+--                                 -- "${3rd}/busted/library",
+--                             }
+--                             -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+--                             -- library = vim.api.nvim_get_runtime_file("", true)
+--                         }
+--                     }
+--                 })
+--                 client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+--             end
+--             return true
+--         end
+--     }
+--     require 'lspconfig'.hls.setup {
+--         capabilities = capabilities,
+--         filetypes = { 'haskell', 'lhaskell', 'cabal' },
+--         -- on_attach = my_on_attach,
+--         -- cmd = { "sdfsdfd", "--lsp" },
+--         -- settings = {
+--         --     haskell = {
+--         --         formattingProvider = "fourmolu"
+--         --     }
+--         -- }
+--     }
+--
+--     map("n", "<leader>d", ":lua vim.lsp.buf.definition()<CR>");
+--     map("n", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>");
+--     map("v", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>");
+--     map("n", "<leader>i", ":lua vim.lsp.buf.implementation()<CR>");
+--     map("n", "<leader>ic", ":lua vim.lsp.buf.incoming_calls()<CR>");
+--     map("n", "<leader>f", ":lua vim.lsp.buf.format()<CR>");
+--     map("n", "<leader>h", ":lua vim.lsp.buf.hover()<CR>");
+--     map("n", "<leader>r", ":lua vim.lsp.buf.rename()<CR>");
+--
+--     -- vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" },
+--     --     { pattern = "*.*", command = ":lua vim.lsp.codelens.refresh()" })
+--
+--     vim.api.nvim_create_autocmd("BufWritePre", { pattern = "*.*", command = ":lua vim.lsp.buf.format()" })
+--
+--     use {
+--         "mrshmllow/orgmode-babel.nvim",
+--         requires = {
+--             "nvim-orgmode/orgmode",
+--             "nvim-treesitter/nvim-treesitter"
+--         },
+--         cmd = { "OrgExecute", "OrgTangle" },
+--         opt = true,
+--         config = function()
+--             require("orgmode-babel").setup({
+--                 -- by default, none are enabled
+--                 langs = { "python", "lua", "nix" },
+--
+--                 -- paths to emacs packages to additionally load
+--                 load_paths = {}
+--             })
+--         end
+--     }
+--
+--     use 'yamatsum/nvim-cursorline'
+--
+--     require('nvim-cursorline').setup {
+--         cursorline = {
+--             enable = true,
+--             timeout = 1000,
+--             number = false,
+--         },
+--         cursorword = {
+--             enable = true,
+--             min_length = 3,
+--             hl = { underline = true },
+--         }
+--     }
+--
+--     use 'lnl7/vim-nix'
+--
+--     use "lukas-reineke/indent-blankline.nvim"
+--
+--     vim.cmd("let g:indent_blankline_filetype_exclude = ['org']")
+--
+--     -- use "tpope/vim-sleuth"
+--
+--     use 'lewis6991/gitsigns.nvim'
+--
+--     require('gitsigns').setup()
+--
+--     use {
+--         "folke/trouble.nvim",
+--         requires = "kyazdani42/nvim-web-devicons",
+--         config = function()
+--             require("trouble").setup {}
+--         end
+--     }
+--
+--     use { 'nvim-lualine/lualine.nvim',
+--         requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
+--
+--     require 'nvim-web-devicons'.setup {
+--         default = true,
+--     }
+--     require('lualine').setup {
+--         options = {
+--             theme = 'dracula'
+--         }
+--     }
+--
+--     use 'derekwyatt/vim-fswitch'
+--
+--     map("n", "<Leader>s", ":FSHere<CR>")
+--
+--     use 'nvim-telescope/telescope.nvim'
+--     use 'nvim-lua/plenary.nvim'
+--
+--     use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+--     require('telescope').load_extension('fzf')
+--
+--     use {
+--         'nvim-treesitter/nvim-treesitter',
+--         run = function()
+--             local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+--             ts_update()
+--         end,
+--     }
+--     require 'nvim-treesitter.configs'.setup {
+--         ensure_installed = {
+--             "all"
+--         },
+--         auto_install = true,
+--         highlight = {
+--             enable = true,
+--             additional_vim_regex_highlighting = { 'org' },
+--         }
+--     }
+--     vim.api.nvim_create_autocmd({ 'BufEnter', 'BufAdd', 'BufNew', 'BufNewFile', 'BufWinEnter' }, {
+--         group = vim.api.nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
+--         callback = function()
+--             vim.opt.foldmethod = 'expr'
+--             vim.opt.foldexpr   = 'nvim_treesitter#foldexpr()'
+--         end
+--     })
+--
+--     use 'nvim-orgmode/orgmode'
+--     -- use {
+--     -- 	'lukas-reineke/headlines.nvim',
+--     -- 	config = function()
+--     -- 		require('headlines').setup()
+--     -- 	end,
+--     -- }
+--     use 'dhruvasagar/vim-table-mode'
+--     use {
+--         'michaelb/sniprun',
+--         run = 'bash install.sh',
+--     }
+--     use 'rcarriga/nvim-notify'
+--
+--     require('orgmode').setup_ts_grammar()
+--     require('orgmode').setup({
+--         -- org_agenda_files = { '~/Dropbox/org/*', '~/my-orgs/**/*' },
+--         -- org_default_notes_file = '~/Dropbox/org/refile.org',
+--     })
+--
+--     -- for i = 1, 40, 1 do
+--     --     vim.cmd(string.format("highlight OrgHeadlineLevel%d guibg=NONE", i))
+--     -- end
+--
+--     use {
+--         'akinsho/org-bullets.nvim', config = function()
+--         require('org-bullets').setup()
+--     end
+--     }
+--
+--     vim.opt.conceallevel = 2
+--     vim.opt.concealcursor = 'nc'
+--
+--     -- vim.api.nvim_create_autocmd("BufWritePost", { pattern = "*.org", command = "!~/tangle.py %" })
+--     -- vim.api.nvim_create_autocmd("BufWritePost",
+--     --     { pattern = "configuration.org", command =
+--     --     "!sudo cp ~/repos/dotfiles/configuration.nix /etc/nixos/configuration.nix" })
+--     -- vim.api.nvim_create_autocmd("BufWritePost",
+--     --     {
+--     --         pattern = "configuration.org",
+--     --         command = "!git add . && git commit -m \"Automatic configuration.nix back up\" && git push"
+--     --     })
+--     -- vim.api.nvim_create_autocmd("BufWritePost",
+--     --     {
+--     --         pattern = "configuration.org",
+--     --         command = "!git add . && git commit -m \"Automatic configuration.nix back up\" && git push"
+--     --     })
+--
+--     vim.api.nvim_create_autocmd("FocusLost", { pattern = "*.*", command = ":wa" })
+--     vim.api.nvim_create_autocmd({ "FocusLost", "BufWritePost" },
+--         {
+--             pattern = "*/home/refaelsh/repos/dotfiles/*",
+--             callback = function()
+--                 vim.cmd("silent !sudo cp ~/repos/dotfiles/configuration.nix /etc/nixos/configuration.nix")
+--                 vim.cmd("silent !git add . && git commit -m \"WIP\" && git push")
+--             end
+--         })
+--     vim.api.nvim_create_autocmd({ "FocusLost", "BufWritePost" },
+--         {
+--             pattern = "*.norg",
+--             callback = function()
+--                 vim.cmd("Neorg tangle current-file")
+--             end
+--         })
+--
+--     use { 'kamykn/spelunker.vim' }
+--     use { 'kamykn/popup-menu.nvim' }
+--
+--     use {
+--         'kyazdani42/nvim-tree.lua',
+--         requires = {
+--             'kyazdani42/nvim-web-devicons'
+--         }
+--     }
+--
+--     require 'nvim-web-devicons'.setup {
+--         default = true,
+--     }
+--
+--     require("nvim-tree").setup({
+--         git = {
+--             ignore = false,
+--         },
+--         actions = {
+--             open_file = {
+--                 resize_window = true
+--             }
+--         }
+--     })
+--
+--     vim.o.splitright = true;
+--
+--     use {
+--         'folke/todo-comments.nvim',
+--         requires = "nvim-lua/plenary.nvim",
+--         config = function()
+--             require("todo-comments").setup {
+--                 -- your configuration comes here
+--                 -- or leave it empty to use the default settings
+--                 -- refer to the configuration section below
+--             }
+--         end
+--     }
+--
+--     -- use 'nvim-treesitter/nvim-treesitter-textobjects'
+--
+--     use 'jeffkreeftmeijer/vim-numbertoggle'
+--
+--     use 'tpope/vim-fugitive'
+--
+--     use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
+--
+--     map("n", ",t", "i#[test]<CR>fn () {<CR>}<ESC>kwi")
+--     map("n", ",tm",
+--         "i#[cfg(test)]<CR>mod tests {<CR>use super::*;<CR><CR>#[test]<CR>fn () {<CR>}<CR><ESC>xxxxi}<ESC>kkwwi")
+--
+--     map("n", "<Up>", "<Nop>")
+--     map("n", "<Down>", "<Nop>")
+--     map("n", "<Left>", "<Nop>")
+--     map("n", "<Right>", "<Nop>")
+--     map("i", "<Up>", "<Nop>")
+--     map("i", "<Down>", "<Nop>")
+--     map("i", "<Left>", "<Nop>")
+--     map("i", "<Right>", "<Nop>")
+--     map("v", "<Up>", "<Nop>")
+--     map("v", "<Down>", "<Nop>")
+--     map("v", "<Left>", "<Nop>")
+--     map("v", "<Right>", "<Nop>")
+--
+--     map("n", "j", "gj")
+--     map("n", "k", "gk")
+--
+--     map("n", "<leader><space>", ":noh<cr>")
+--
+--     map("n", ":", ";")
+--     map("n", ";", ":")
+--
+--     map("n", "<C-s>", ":wa<CR>")
+--
+--     map("n", "<Enter>", "o<ESC>")
+--     map("n", "<S-Enter>", "O<ESC>")
+--
+--
+--     vim.o.autoread = true
+--
+--     vim.api.nvim_create_autocmd({ "bufenter", "cursorhold", "cursorholdi", "focusgained" },
+--         { pattern = "*.*", command = "if mode() != 'c' | checktime | endif", })
+--     vim.api.nvim_create_autocmd("FileChangedShellPost",
+--         {
+--             pattern = "*.*",
+--             command =
+--             "echohl WarningMsg | echo \"File changed on disk. Buffer reloaded.\" | echohl None",
+--         })
+--
+--     vim.o.cursorline = true
+--
+--     map("n", "<C-d>", "<C-d>zz")
+--     map("n", "<C-u>", "<C-u>zz")
+--     map("n", "n", "nzzzv")
+--     map("n", "N", "Nzzzv")
+--
+--     vim.o.mouse = "a"
+--     vim.o.undofile = true
+--     vim.o.undodir = "/home/refaelsh/.config/nvim"
+--     vim.cmd [[set noswapfile]]
+--     -- vim.opt.noswapfile = true
+--     vim.o.foldmethod = "marker"
+--     vim.o.hlsearch = true
+--     vim.o.ignorecase = true
+--     vim.o.smartcase = true
+--     vim.o.incsearch = true
+--     vim.o.showmatch = true
+--     vim.o.gdefault = true
+--     vim.o.termguicolors = true
+--     vim.o.clipboard = "unnamedplus"
+--     vim.o.tabstop = 4
+--     vim.o.shiftwidth = 4
+--     vim.o.expandtab = true
+--     vim.o.number = true
+--     vim.o.relativenumber = true
+--     vim.o.hidden = true
+--     vim.opt.spell = true
+--     vim.opt.spelllang = { 'en_us' }
+--     vim.o.spellcapcheck = "="
+--     vim.o.spellsuggest = "10"
+--     vim.opt.spelloptions = "camel"
+--     vim.o.confirm = true
+--     vim.o.wrap = false
+--     vim.opt.path = vim.opt.path + "**"
+--     vim.opt.wildmenu = true
+--     vim.o.guifont = "FiraCode Nerd Font:h8.1"
+--
+--     vim.cmd('au TermOpen * setlocal nospell')
+--
+--     vim.cmd [[
+-- if &shell =~# 'fish$'
+-- set shell=bash
+-- endif
+-- ]]
+--
+--     -- autocmd QuickFixCmdPost [^l]* nested cwindow
+--     -- autocmd QuickFixCmdPost    l* nested lwindow
+--     vim.api.nvim_create_autocmd("QuickFixCmdPost", { pattern = "[^l]*", command = "cwindow", })
+--     vim.api.nvim_create_autocmd("QuickFixCmdPost", { pattern = "l*", command = "lwindow", })
+--
+--     -- au FileType qf call AdjustWindowHeight(3, 10)
+--     -- function! AdjustWindowHeight(minheight, maxheight)
+--     --   exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+--     -- endfunction "
+--     vim.cmd([[
+-- au FileType qf call AdjustWindowHeight(3, 10)
+-- function! AdjustWindowHeight(minheight, maxheight)
+-- exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+-- endfunction "
+-- ]])
+--
+--     local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
+--     vim.api.nvim_create_autocmd('BufWritePost', {
+--         command = 'source <afile> | PackerCompile',
+--         group = packer_group,
+--         pattern = vim.fn.expand '$MYVIMRC',
+--     })
+--
+--     vim.api.nvim_create_autocmd("VimEnter",
+--         { pattern = "*/home/refaelsh/repos/*", command = "so .nvimrc", })
+--
+--     if packer_bootstrap then
+--         require('packer').sync()
+--     end
+-- end)
+--
+-- if packer_bootstrap then
+--     print '=================================='
+--     print '    Plugins are being installed'
+--     print '    Wait until Packer completes,'
+--     print '       then restart nvim'
+--     print '=================================='
+--     return
+-- end
+@end
+

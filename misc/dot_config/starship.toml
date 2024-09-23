@@ -1,0 +1,35 @@
+[package]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[rust]
+disabled = true
+
+[cmd_duration]
+disabled = true
+
+[git_commit]
+tag_disabled = false
+
+[dotnet]
+disabled = true
+
+[cmake]
+disabled = true
+
+[gcloud]
+disabled = true
+
+# [status]
+# style = "bg:blue"
+# symbol = "🔴"
+# format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
+# map_symbol = true
+# disabled = false
+
+[directory]
+home_symbol = "🏠"
+truncation_length = 8
+truncation_symbol = "…/"

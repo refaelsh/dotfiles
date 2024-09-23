@@ -1,6 +1,8 @@
 {
   programs.home-manager.enable = true;
   home.stateVersion = "24.05";
+  home.username = "refaelsh";
+  home.homeDirectory = "/home/refaelsh";
 
   imports = [
     ./alacritty.nix

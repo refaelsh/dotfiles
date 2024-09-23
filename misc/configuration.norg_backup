@@ -1,0 +1,1476 @@
+@document.meta
+tangle: configuration.nix
+tangle: [
+    ./configuration.nix
+    ~/.config/nvim/init.lua
+    ~/.config/xmonad/xmonad.hs
+]
+@end
+
+* Boilerplate
+@code nix
+{ config, pkgs, lib, ... }:
+{
+@end
+
+* Imports
+@code nix
+  imports = [
+    ./hardware-configuration.nix
+    <home-manager/nixos>
+  ];
+@end
+
+* Miscellaneous one liners
+  @code nix
+  system.stateVersion = "22.05";
+  system.copySystemConfiguration = true;
+  security.rtkit.enable = true;
+  documentation.dev.enable = true;
+  nixpkgs.config.allowUnfree = true;
+  nix.settings.auto-optimise-store = true;
+  hardware.keyboard.zsa.enable = true;
+  services.emacs.enable = true;
+  # environment.enableDebugInfo = true;
+  @end
+
+* Sudo
+  @code nix
+  security.sudo = {
+    extraConfig = "Defaults env_keep += \"HOME\"";
+    extraRules = [{
+      users = [ "refaelsh" ];
+      commands = [{
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      }];
+    }];
+  };
+  @end
+
+* Bootloader
+  @code nix
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  @end
+
+* Networking
+  @code nix
+  networking.hostName = "nixos";
+  networking.networkmanager.enable = true;
+  @end
+
+* Timezone stuff
+  @code nix
+  time.timeZone = "Asia/Jerusalem";
+  i18n.defaultLocale = "en_US.UTF-8";
+  @end
+
+* X Server stuff
+  @code nix
+  services.xserver = {
+      # dpi = 91 ;
+      resolutions = [{
+          x = 1920;
+          y = 1080;
+      }];
+      enable = true;
+      xkb = {
+        variant = "";
+        layout = "us";
+      };
+      # Enable touchpad support (enabled default in most desktopManager).
+      libinput.enable = true;
+      displayManager.lightdm.enable = true;
+      displayManager.autoLogin.enable = true;
+      displayManager.autoLogin.user = "refaelsh";
+      displayManager.defaultSession = "none+xmonad";
+  };
+  @end
+
+* Sound
+  @code nix
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
+  services.pipewire = {
+    enable = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
+    pulse.enable = true;
+    jack.enable = true;
+  };
+  @end
+
+* User related
+  @code nix
+  users.users.refaelsh = {
+    isNormalUser = true;
+    description = "Refael Sheinker";
+    extraGroups = [ "networkmanager" "wheel" ];
+    useDefaultShell = true;
+  };
+  @end
+
+* Packages
+** Via "environment.systemPackages"
+   @code nix
+   environment.systemPackages = with pkgs; [
+     neovide
+     # termonad
+     # widelands
+     dmenu
+     i3status-rust
+     clipmenu
+     nixd
+     rust-analyzer
+     clang
+     clang-tools
+     cmake-language-server
+     lua-language-server
+     nodePackages.yaml-language-server
+     nodePackages.bash-language-server
+     nodePackages.vim-language-server
+     haskell-language-server
+     taplo-lsp
+     nodePackages.vscode-langservers-extracted
+     wget
+     firefox
+     google-chrome
+     glib
+     nnn
+     bat
+     eza
+     wget
+     go
+     xclip
+     notepadqq
+     git
+     kdiff3
+     bitwarden
+     bitwarden-cli
+     alacritty
+     dracula-theme
+     gnumake
+     cmake
+     tree-sitter
+     nodejs
+     zip
+     unzip
+     openssh
+     shutter
+     flameshot
+     signal-desktop
+     kbdd
+     xorg.setxkbmap
+     glow
+     jq
+     nvd
+     pandoc
+     gcc
+     python3
+     pkg-config
+     htop
+     ripgrep
+     coreutils
+     fd
+     emacs
+     networkmanagerapplet
+     rustup
+     grcov
+     gdb
+     lm_sensors
+     python310Packages.psutil
+     xorg.xmessage
+     # If you want you can use `with hpkgs; [` to avoid explicitly
+     # selecting into the hpkgs set on every line
+     (haskellPackages.ghcWithPackages (hpkgs: [
+     hpkgs.xmobar
+     hpkgs.xmonad
+     hpkgs.xmonad-contrib
+     ]))
+     haskellPackages.cabal-fmt
+     cabal-install
+     haskellPackages.fourmolu
+     haskellPackages.hls-fourmolu-plugin
+     ghcid
+     gmp
+     ncurses
+     xz
+     graphviz
+     xdotool
+     polybarFull
+     killall
+     nitrogen
+     nix-index
+     acpi
+     wally-cli
+     asciidoctor-with-extensions
+     rPackages.revealjs
+     xvkbd
+     gitui
+     lazygit
+     ruby
+     nodePackages.prettier
+     gimp
+     tig
+     marksman
+     zk
+     pkgs.man-pages
+     pkgs.man-pages-posix
+     xorg.xdpyinfo
+     haskellPackages.hoogle
+     proselint
+     aspell
+     aspellDicts.en
+     aspellDicts.he
+     languagetool
+     silver-searcher
+     nil
+     pciutils
+     steam-run
+     nixpkgs-fmt
+     microcodeIntel
+     lshw
+     openra
+     transmission
+     transmission-gtk
+     vlc
+     imagemagick
+     bc
+     baobab
+     python310Packages.adblock
+     python311Packages.adblock
+     keyutils
+     rofi
+     doublecmd
+     qutebrowser
+     # openshot-qt
+     shotcut
+     # solaar
+     usbutils
+     discord
+     (writeShellScriptBin "update.sh" ''  
+       # sudo -i nix-store --gc
+       sudo -i nix-channel --update
+       sudo -i nixos-rebuild switch --upgrade
+       # sudo -i nix-collect-garbage
+       # This one is the best :-)
+       # sudo -i nix-collect-garbage -d
+       # rm -rf ~/.local/share/Trash/*
+       # sudo -i nix-store --optimise
+       cabal update
+       nvim --headless "+Lazy! sync" +qa
+     '')
+     (writeShellScriptBin "supdate.sh" ''  
+       sudo -i nixos-rebuild switch
+     '')
+   ];
+   @end
+
+** Via NixOS module
+*** Shell
+    @code nix
+    programs.fish = {
+      enable = true;
+      interactiveShellInit = "set -g fish_greeting; set -g theme_color_scheme dracula; fish_vi_key_bindings;";
+    };
+    users.defaultUserShell = pkgs.fish;
+    @end
+
+*** Neovim
+    This is just some Nix configurations for Neovim.
+    @code nix
+    programs.neovim = {
+      enable = true;
+      defaultEditor = true;
+      vimAlias = true;
+      viAlias = true;
+    };
+    @end
+
+**** Leader key
+     Set <space> as the leader key.
+     Must happen before Lazy.nvim plugins are required (otherwise wrong leader will be used).
+     @code lua
+     vim.g.mapleader = ' '
+     vim.g.maplocalleader = ' '
+     @end
+
+**** Key mapping function
+     @code lua
+     local function map(mode, lhs, rhs)
+         local options = { noremap = true, silent = false }
+         vim.keymap.set(mode, lhs, rhs, options)
+     end
+     @end
+
+**** One-liner settings
+     @code lua
+     vim.o.guifont = "FiraCode Nerd Font:h8.1"
+     vim.o.autoread = true
+     vim.o.cursorline = true
+     vim.o.mouse = "a"
+     vim.o.undofile = true
+     vim.o.undodir = "/home/refaelsh/.config/nvim"
+     vim.cmd [[set noswapfile]]
+     -- vim.opt.noswapfile = true
+     vim.o.foldmethod = "marker"
+     vim.o.hlsearch = true
+     vim.o.ignorecase = true
+     vim.o.completeopt = 'menuone,noselect'
+     vim.o.smartcase = true
+     vim.o.incsearch = true
+     vim.o.showmatch = true
+     vim.o.gdefault = true
+     vim.o.termguicolors = true
+     vim.o.clipboard = "unnamedplus"
+     vim.o.tabstop = 4
+     vim.o.shiftwidth = 4
+     vim.o.expandtab = true
+     vim.o.number = true
+     vim.o.relativenumber = true
+     vim.o.hidden = true
+     vim.opt.spell = true
+     vim.opt.spelllang = { 'en_us' }
+     vim.o.spellcapcheck = "="
+     vim.o.spellsuggest = "10"
+     vim.opt.spelloptions = "camel"
+     vim.o.splitright = true;
+     vim.o.confirm = true
+     vim.o.wrap = false
+     vim.o.clipboard = 'unnamedplus'
+     vim.opt.path = vim.opt.path + "**"
+     vim.opt.wildmenu = true
+     vim.cmd('au TermOpen * setlocal nospell')
+     vim.cmd [[
+       if &shell =~# 'fish$'
+         set shell=bash
+       endif
+     ]]
+     @end
+
+**** Miscellaneous key bindings
+     @code lua
+     map("n", "<leader><space>", ":noh<cr>")
+     map("n", "<C-s>", ":wa<CR>")
+     @end
+
+**** Disable arrow keys
+     @code lua
+     map("n", "<Up>", "<Nop>")
+     map("n", "<Down>", "<Nop>")
+     map("n", "<Left>", "<Nop>")
+     map("n", "<Right>", "<Nop>")
+     map("i", "<Up>", "<Nop>")
+     map("i", "<Down>", "<Nop>")
+     map("i", "<Left>", "<Nop>")
+     map("i", "<Right>", "<Nop>")
+     map("v", "<Up>", "<Nop>")
+     map("v", "<Down>", "<Nop>")
+     map("v", "<Left>", "<Nop>")
+     map("v", "<Right>", "<Nop>")
+     @end
+
+**** Remap for better line wrap handling
+     @code lua
+     map("n", "j", "gj")
+     map("n", "k", "gk")
+     @end
+
+**** Remap : and ;
+     @code lua
+     map("n", ":", ";")
+     map("n", ";", ":")
+     @end
+
+**** Remap enter to be new line
+     @code lua
+     map("n", "<Enter>", "o<ESC>")
+     map("n", "<S-Enter>", "O<ESC>")
+     @end
+
+**** Snippets without any plugins at all
+     @code lua
+     -- This is a snip it example without plugins :-)
+     --     map("n", ",t", "i#[test]<CR>fn () {<CR>}<ESC>kwi")
+     --     map("n", ",tm",
+     --         "i#[cfg(test)]<CR>mod tests {<CR>use super::*;<CR><CR>#[test]<CR>fn () {<CR>}<CR><ESC>xxxxi}<ESC>kkwwi")
+     @end
+
+**** File change detection
+     ~ The first one I don't really what it does or why it is needed.
+     ~ Note to self: according to Neovim's roadmap, file detection will be built-in into Neovim.
+     @code lua
+     vim.api.nvim_create_autocmd({ "bufenter", "cursorhold", "cursorholdi", "focusgained" },
+     { 
+         pattern = "*.*", 
+         command = "if mode() != 'c' | checktime | endif", 
+     })
+     vim.api.nvim_create_autocmd("FileChangedShellPost",
+     {
+         pattern = "*.*",
+         command =
+             "echohl WarningMsg | echo \"File changed on disk. Buffer reloaded.\" | echohl None",
+     })
+     @end
+
+**** Screen centering mappings
+     @code lua
+     map("n", "<C-d>", "<C-d>zz")
+     map("n", "<C-u>", "<C-u>zz")
+     map("n", "n", "nzzzv")
+     map("n", "N", "Nzzzv")
+     @end
+     
+**** Various autocmds
+***** For quick window and list window. I don't remember what it does.
+      @code lua
+      vim.api.nvim_create_autocmd("QuickFixCmdPost", { pattern = "[^l]*", command = "cwindow", })
+      vim.api.nvim_create_autocmd("QuickFixCmdPost", { pattern = "l*", command = "lwindow", })
+      @end
+
+***** Auto save on lost focus. Very useful.
+      @code lua
+      vim.api.nvim_create_autocmd("FocusLost", { pattern = "*.*", command = ":wa" })
+      @end
+
+***** Dotfiles autocmd
+      ~ If the file is in ~/repos/dotfiles, automatically commit it to the repo.
+      ~ If the file is configuration.nix, copy it to it's proper place.
+      @code lua
+      vim.api.nvim_create_autocmd({ "FocusLost", "BufWritePost" },
+          {
+              pattern = "*/home/refaelsh/repos/dotfiles/*",
+              callback = function()
+                  vim.cmd("!sudo cp ~/repos/dotfiles/configuration.nix /etc/nixos/configuration.nix")
+                  vim.cmd("!git add . && git commit -m \"WIP\" && git push")
+              end
+          })
+      @end
+
+***** Auto tangle norg files.
+      @code lua
+      vim.api.nvim_create_autocmd({ "FocusLost", "BufWritePost" },
+          {
+              pattern = "*.norg",
+              callback = function()
+                  vim.cmd("Neorg tangle current-file")
+              end
+          })
+      @end
+
+**** The bootstraper of lazy.nvim.
+     @code lua
+     local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+     if not vim.loop.fs_stat(lazypath) then
+         vim.fn.system {
+             'git',
+             'clone',
+             '--filter=blob:none',
+             'https://github.com/folke/lazy.nvim.git',
+             '--branch=stable', -- latest stable release
+             lazypath,
+         }
+     end
+     vim.opt.rtp:prepend(lazypath)
+     @end
+
+     Boilerplate.
+     @code lua
+     require('lazy').setup({
+     @end
+
+***** Dracula theme
+      @code lua
+      {
+          "Mofiqul/dracula.nvim",
+          lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+          priority = 1000, -- make sure to load this before all the other start plugins
+          config = function()
+              -- load the colorscheme here
+              vim.cmd([[colorscheme dracula]])
+          end
+      },
+      @end
+
+***** Various one liner plugins
+      @code lua
+      'machakann/vim-highlightedyank',
+      'aklt/plantuml-syntax',
+      'mbbill/undotree',
+      'tpope/vim-repeat',
+      'tpope/vim-surround',
+      'habamax/vim-asciidoctor',
+      -- There is a bug. I've opened an issue.
+      -- use 'tigion/nvim-asciidoc-preview'
+      -- There is a bug. I've opened an issue.
+      -- use { 'shuntaka9576/preview-asciidoc.nvim', run = 'yarn install' }
+      "nvim-lua/plenary.nvim",
+      'dag/vim-fish',
+      'dstein64/vim-startuptime',
+      'stevearc/dressing.nvim',
+      'lnl7/vim-nix',
+      'kamykn/spelunker.vim',
+      'jeffkreeftmeijer/vim-numbertoggle',
+      'nvim-tree/nvim-web-devicons',
+      'rust-lang/rust.vim',
+      'jenterkin/vim-autosource',
+      @end
+
+
+***** Rust-tools.nvim
+      Tools for better development in rust using Neovim's builtin lsp.
+      @codel lua
+      {
+          'simrat39/rust-tools.nvim',
+          opts = {}
+      }
+      @end
+
+***** Hexokinase
+      The repository is archived by the owner. Maybe find a replacement - tried writing the owner , did not get a satisfactory enough answer.
+      Hexokinase.vim - (Neo)Vim plugin for asynchronously displaying the colours in the file (#rrggbb, #rgb, rgb(a)? functions, hsl(a)? functions, web colours, custom patterns).
+      @code lua
+      {
+          'RRethy/vim-hexokinase',
+          build = 'make hexokinase',
+      },
+      @end
+
+***** Nvim-lastplace
+      No longer maintained.
+      There is a Neovim feature request: https://github.com/neovim/neovim/issues/16339.
+      @code lua
+      {
+          'ethanholz/nvim-lastplace',
+          opts = {
+              lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
+              lastplace_ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
+              lastplace_open_folds = true
+          }
+      },
+      @end
+
+***** Comment.nvim
+      Smart and powerful comment plugin for neovim. Supports treesitter, dot repeat, left-right/up-down motions, hooks, and more.
+      @code lua
+      {
+          'numToStr/Comment.nvim',
+          opts = {},
+          config = function()
+              local opt = { expr = true, remap = true, replace_keycodes = false }
+              vim.keymap.set('n', '<leader>c', "v:count == 0 ? '<Plug>(comment_toggle_linewise_current)' : '<Plug>(comment_toggle_linewise_count)'", opt)
+              vim.keymap.set('x', '<leader>c', '<Plug>(comment_toggle_linewise_visual)')
+          end
+      },
+      @end
+
+***** Nvim-cursorline
+      A plugin for Neovim that highlights cursor words and lines.
+      @code lua
+      {
+          'yamatsum/nvim-cursorline',
+          opts = {
+              cursorline = {
+                  enable = true,
+                  timeout = 1000,
+                  number = false,
+              },
+              cursorword = {
+                  enable = true,
+                  min_length = 3,
+                  hl = { underline = true },
+              }
+          }
+      },
+      @end
+
+***** indent-blankline.nvim
+      Indent guides for Neovim.
+      @code lua
+      {
+          "lukas-reineke/indent-blankline.nvim",
+          main = "ibl",
+          opts = {},
+          config = function()
+              vim.cmd("let g:indent_blankline_filetype_exclude = ['norg']")
+          end
+      },
+      @end 
+
+***** Gitsigns.nvim
+      Super fast git decorations implemented purely in Lua.
+      @code lua
+      {
+          'lewis6991/gitsigns.nvim',
+          opts = {}
+      },
+      @end
+
+***** Nvim-tree.lua
+      A file explorer tree for Neovim written in Lua.
+      @code lua
+      {
+          'kyazdani42/nvim-tree.lua',
+          opts = {
+              git = {
+                  ignore = false,
+              },
+              actions = {
+                  open_file = {
+                      resize_window = true
+                  }
+              }
+          }
+      },
+      @end
+
+***** Todo-comments.nvim
+      Highlight, list and search todo comments in your projects.
+      @code lua
+      {
+          'folke/todo-comments.nvim',
+          opts = {}
+      },
+      @end
+
+***** Lualine.nvim
+      A blazing fast and easy to configure Neovim status line plugin written in pure Lua. 
+      @code lua
+      {
+          'nvim-lualine/lualine.nvim',
+          opts = { { options = { theme = 'dracula' } } }
+      },
+      @end
+
+***** Nvim-treesitter
+      Nvim Treesitter configurations and abstraction layer.
+      @code lua
+      {
+          'nvim-treesitter/nvim-treesitter',
+          build = ':TSUpdate',
+          config = function()
+              require("nvim-treesitter.configs").setup({
+                  ensure_installed = "all",
+                  auto_install = true,
+                  highlight = { enable = true },
+                  indent = { enable = true },
+              })
+          end
+      },
+      @end
+
+***** fidget.nvim
+      Extensible UI for Neovim notifications and LSP progress messages. 
+      @code lua
+      { 
+          "j-hui/fidget.nvim",
+          opts = {} 
+      },
+      @end
+      
+***** Neodev.nvim
+      Neovim setup for init.lua and plugin development with full signature help, docs and completion for the nvim lua API.
+      @lua code
+      {
+          'folke/neodev.nvim',
+          opts = {}
+      },
+      @end
+
+***** Neorg
+      Modernity meets insane extensibility. The future of organizing your life in Neovim. 
+      @code lua
+      {
+          "nvim-neorg/neorg",
+          config = function()
+              require("neorg").setup {
+                  load = {
+                      ["core.defaults"] = {},
+                      ["core.concealer"] = {},
+                      ["core.completion"] = {
+                          config = {
+                              engine = "nvim-cmp"
+                          }
+                      },
+                  },
+              }
+              map("n", "<F11>", ":Neorg keybind all core.looking-glass.magnify-code-block<CR>")
+          end,
+          build = ":Neorg sync-parsers",
+          --tag = "*",
+      },
+      @end
+
+***** Nvim-cmp
+      A completion plugin for neovim coded in Lua.      
+      @code lua
+      {
+          "hrsh7th/nvim-cmp",
+          lazy = false,
+          -- these dependencies will only be loaded when cmp loads
+          -- dependencies are always lazy-loaded unless specified otherwise
+          dependencies = {
+              "hrsh7th/cmp-nvim-lsp",
+              "hrsh7th/cmp-buffer",
+              'f3fora/cmp-spell',
+              'hrsh7th/cmp-path',
+              'hrsh7th/cmp-cmdline',
+              'hrsh7th/cmp-git',
+              'L3MON4D3/LuaSnip',
+              'saadparwaiz1/cmp_luasnip',
+              'rafamadriz/friendly-snippets',
+          },
+          config = function()
+              local cmp = require 'cmp'
+              cmp.setup({
+                  snippet = {
+                      -- REQUIRED - you must specify a snippet engine
+                      expand = function(args)
+                          -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+                          require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                          -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+                          -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+                      end,
+                  },
+                  window = {
+                      -- completion = cmp.config.window.bordered(),
+                      -- documentation = cmp.config.window.bordered(),
+                  },
+                  mapping = cmp.mapping.preset.insert({
+                      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                      ['<C-Space>'] = cmp.mapping.complete(),
+                      ['<C-e>'] = cmp.mapping.abort(),
+                      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                  }),
+                  sources = cmp.config.sources({
+                      {
+                          name = 'spell',
+                          option = {
+                              keep_all_entries = false,
+                              enable_in_context = function()
+                                  return true
+                              end,
+                          },
+                      },
+                      {
+                          name = "dictionary",
+                          keyword_length = 2,
+                      },
+                      { name = 'nvim_lsp' },
+                      { name = 'spell' },
+                      { name = 'neorg' },
+                      -- { name = 'vsnip' }, -- For vsnip users.
+                      { name = 'luasnip' }, -- For luasnip users.
+                      -- { name = 'ultisnips' }, -- For ultisnips users.
+                      -- { name = 'snippy' }, -- For snippy users.
+                  }, {
+                          { name = 'buffer' },
+                      })
+              })
+      
+              -- Set configuration for specific filetype.
+              cmp.setup.filetype('gitcommit', {
+                  sources = cmp.config.sources({
+                      { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+                  }, {
+                          { name = 'buffer' },
+                      })
+              })
+      
+              -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+              cmp.setup.cmdline({ '/', '?' }, {
+                  mapping = cmp.mapping.preset.cmdline(),
+                  sources = {
+                      { name = 'buffer' }
+                  }
+              })
+      
+              -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+              cmp.setup.cmdline(':', {
+                  mapping = cmp.mapping.preset.cmdline(),
+                  sources = cmp.config.sources({
+                      { name = 'path' }
+                  }, {
+                          { name = 'cmdline' }
+                      })
+              })
+          end,
+      },
+      @end
+
+***** Nvim-lspconfig
+      Quickstart configs for Neovim LSP.
+      @code lua
+      {
+          'neovim/nvim-lspconfig',
+          config = function()
+              map("n", "<leader>d", ":lua vim.lsp.buf.definition()<CR>")
+              map("n", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>")
+              map("v", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>")
+              map("n", "<leader>i", ":lua vim.lsp.buf.implementation()<CR>")
+              map("n", "<leader>ic", ":lua vim.lsp.buf.incoming_calls()<CR>")
+              map("n", "<leader>f", ":lua vim.lsp.buf.format()<CR>")
+              map("n", "<leader>h", ":lua vim.lsp.buf.hover()<CR>")
+              map("n", "<leader>r", ":lua vim.lsp.buf.rename()<CR>")
+
+              vim.api.nvim_create_autocmd("BufWritePre", { pattern = "*.*", command = ":lua vim.lsp.buf.format()" })
+
+              local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+              require 'lspconfig'.nixd.setup{ capabilities = capabilities }
+              require 'lspconfig'.rust_analyzer.setup { capabilities = capabilities }
+              require 'lspconfig'.vimls.setup { capabilities = capabilities }
+              require 'lspconfig'.yamlls.setup { capabilities = capabilities }
+              require 'lspconfig'.bashls.setup { capabilities = capabilities }
+              require 'lspconfig'.dockerls.setup { capabilities = capabilities }
+              require 'lspconfig'.eslint.setup { capabilities = capabilities }
+              require 'lspconfig'.cmake.setup { capabilities = capabilities }
+              require 'lspconfig'.clangd.setup { capabilities = capabilities }
+              require 'lspconfig'.pylsp.setup { capabilities = capabilities }
+              require 'lspconfig'.taplo.setup { capabilities = capabilities }
+              require 'lspconfig'.marksman.setup { capabilities = capabilities }
+              require 'lspconfig'.jsonls.setup { capabilities = capabilities }
+
+              require 'lspconfig'.hls.setup {
+                  capabilities = capabilities,
+                  filetypes = { 'haskell', 'lhaskell', 'cabal' },
+                  -- on_attach = my_on_attach,
+                  -- cmd = { "sdfsdfd", "--lsp" },
+                  -- settings = {
+                  --     haskell = {
+                  --         formattingProvider = "fourmolu"
+                  --     }
+                  -- }
+              }
+
+              require 'lspconfig'.lua_ls.setup {
+                  capabilities = capabilities,
+                  on_init = function(client)
+                      local path = client.workspace_folders[1].name
+                      if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+                          client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+                              Lua = {
+                                  runtime = {
+                                      -- Tell the language server which version of Lua you're using
+                                      -- (most likely LuaJIT in the case of Neovim)
+                                      version = 'LuaJIT'
+                                  },
+                                  diagnostics = {
+                                      -- Get the language server to recognize the `vim` global
+                                      -- Now, you don't get error/warning "Undefined global `vim`".
+                                      globals = { 'vim' },
+                                  },
+                                  -- Make the server aware of Neovim runtime files
+                                  workspace = {
+                                      checkThirdParty = false,
+                                      library = {
+                                          vim.env.VIMRUNTIME
+                                          -- "${3rd}/luv/library"
+                                          -- "${3rd}/busted/library",
+                                      }
+                                      -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+                                      -- library = vim.api.nvim_get_runtime_file("", true)
+                                  }
+                              }
+                          })
+                          client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+                      end
+                      return true
+                  end
+              }
+          end
+      },
+      @end
+
+      Boilerplate.
+      @code lua
+      }, {})
+      @end
+
+*** Starship
+    @code nix
+    programs.starship = { 
+      enable = true;
+      settings = {
+        package = { disabled = true; };
+        nodejs = { disabled = true; };
+        rust = { disabled = true; };
+        lua = { disabled = true; };
+        python = { disabled = true; };
+        cmd_duration = { disabled = true; };
+        git_commit = { tag_disabled = false; };
+        dotnet = { disabled = true; };
+        cmake = { disabled = true; };
+        gcloud = { disabled = true; };
+        directory = {
+          home_symbol = "🏠";
+          truncation_length = 8;
+          truncation_symbol = "…/";
+        };
+        aws.style = "bold #ffb86c";
+        cmd_duration.style = "bold #f1fa8c";
+        directory.style = "bold #50fa7b";
+        hostname.style = "bold #ff5555";
+        git_branch.style = "bold #ff79c6";
+        git_status.style = "bold #ff5555";
+        username = {
+          format = "[$user]($style) on ";
+          style_user = "bold #bd93f9";
+        };
+        character = {
+          success_symbol = "[λ](bold #f8f8f2)";
+          error_symbol = "[λ](bold #ff5555)";
+        };
+      };
+    };
+    @end
+
+*** XMonad
+    @code nix
+    services.xserver.windowManager.xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+        extraPackages = haskellPackages: [
+            haskellPackages.xmonad-contrib
+            haskellPackages.xmobar
+        ];
+    };
+    @end
+
+    The config file.
+    @code haskell
+    import XMonad
+    import XMonad.Actions.Navigation2D
+    import XMonad.Actions.SpawnOn
+    import XMonad.Hooks.DynamicLog
+    import XMonad.Hooks.EwmhDesktops
+    import XMonad.Hooks.InsertPosition
+    import XMonad.Hooks.ManageDocks
+    import XMonad.Hooks.StatusBar
+    import XMonad.Hooks.StatusBar.PP
+    import XMonad.Hooks.WindowSwallowing
+    import XMonad.Layout.NoBorders
+    import XMonad.Layout.OneBig
+    import XMonad.Layout.ToggleLayouts
+    import qualified XMonad.StackSet as W
+    import XMonad.Util.EZConfig
+    import XMonad.Util.SpawnOnce
+    import XMonad.Util.Ungrab
+    import XMonad.Prompt
+    import XMonad.Prompt.Shell
+    
+    myTerminal :: String
+    myTerminal = "kitty"
+    
+    myStartupHook :: X ()
+    myStartupHook = do
+      spawn "keyctl link @u @s"
+      spawn "polybar-msg cmd quit; polybar"
+      spawnOnce "clipmenud"
+      spawnOnce "setxkbmap -layout us,il -option grp:alt_shift_toggle"
+      spawnOnce "kbdd"
+      spawnOnOnce "1" "firefox"
+      -- spawnOnOnce "2" $ myTerminal ++ " -d=~/repos/giter -e vim ~/repos/giter; " ++ myTerminal
+      spawnOnOnce "2" $ "neovide /home/refaelsh/repos/giter/"
+      spawnOnOnce "3" $ myTerminal ++ " -d=~/repos/giter"
+      spawnOnOnce "9" "signal-desktop"
+      -- spawnOnOnce "0" "emacs ~/repos/dotfiles/configuration.org"
+      spawnOnOnce "0" $ "cd ~/repos/dotfiles/ && neovide configuration.norg"
+      -- spawnOnOnce "0" myTerminal
+    
+    main :: IO ()
+    main =
+      xmonad
+        . ewmhFullscreen
+        . ewmh
+        . withNavigation2DConfig def
+        . docks
+        -- . withEasySB (statusBarProp "xmobar ~/.config/xmobar/xmobarrc" (pure def)) defToggleStrutsKey
+        $ myConfig
+    
+    myLayoutHook = avoidStruts $ smartBorders $ toggleLayouts Full (Tall 1 (3 / 100) (1 / 2))
+    
+    myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+    
+    myConfig =
+      def
+        { modMask = mod4Mask,
+          workspaces = myWorkspaces,
+          terminal = myTerminal,
+          startupHook = myStartupHook,
+          manageHook = insertPosition End Newer <> (manageSpawn <+> manageHook def),
+          layoutHook = myLayoutHook,
+          handleEventHook = swallowEventHook (className =? "kitty") (return True),
+          borderWidth = 2,
+          focusedBorderColor = "#bd93f9",
+          normalBorderColor = "#44475a"
+        }
+        `additionalKeysP` [ ("M-<Return>", spawn myTerminal),
+                            ("M-d", shellPrompt def {alwaysHighlight = True, height = 30, borderColor = "#BD93F9", fgColor = "#F8F8F2", bgColor = "#282A36", fgHLight = "#F8F8F2", bgHLight = "#6272A4" }),  
+                            ("M-S-q", kill),
+                            ("M-f", sendMessage (Toggle "Full") <> sendMessage ToggleStruts),
+                            ("M-0", windows $ W.greedyView "0"),
+                            ("M-S-0", windows $ W.shift "0"),
+                            ("M-<Left>", windowGo L False),
+                            ("M-<Right>", windowGo R False),
+                            ("M-<Up>", windowGo U False),
+                            ("M-<Down>", windowGo D False),
+                            ("M-S-<Left>", windowSwap L False),
+                            ("M-S-<Right>", windowSwap R False),
+                            ("M-S-<Up>", windowSwap U False),
+                            ("M-S-<Down>", windowSwap D False),
+                            ("<Print>", spawn "flameshot gui"),
+                            ("M1-c", spawn "clipmenu -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10'")
+                          ]
+        `removeKeysP` ["M-S-<Return>"]
+        `removeKeysP` ["M-p"]
+        `removeKeysP` ["M-S-c"]
+        `removeKeysP` ["M-<Tab>"]
+        `removeKeysP` ["M-S-<Tab>"]
+        `removeKeysP` ["M-j"]
+        `removeKeysP` ["M-k"]
+        `removeKeysP` ["M-m"]
+        `removeKeysP` ["M-l"]
+    @end
+
+*** Steam
+    @code nix
+    programs.steam = {
+      enable = true;
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    };
+    @end
+
+*** One liners
+    @code nix
+    programs.nm-applet.enable = true;
+    programs.dconf.enable = true;
+    @end
+
+* Shell aliases
+  @code nix
+  environment.shellAliases = {
+    # "emacs" = "emacsclient -c -a emacs";
+    "cat" = "bat";
+    "ls" = "eza -a --icons --long --extended --git --header";
+  };
+  @end
+
+* Fonts
+  @code nix
+  fonts.fontconfig.enable = true;
+  fonts.packages = with pkgs; [
+    hack-font
+    nerdfonts
+    cascadia-code
+    hasklig
+    fira-code-symbols
+    fira-code
+    cantarell-fonts
+    inconsolata-nerdfont
+    symbola
+    source-code-pro
+    font-awesome
+    font-awesome_5
+    font-awesome_4
+    line-awesome
+    powerline-fonts
+    ubuntu_font_family
+  ];
+  @end
+
+* Environment variables
+  @code nix
+  environment.variables.EDITOR = "nvim";
+  # environment.variables.TERMINAL = "termonad";
+  environment.variables.TERMINAL = "kitty";
+  # environment.variables.NEOVIDE_MULTIGRID = "NEOVIDE_MULTIGRID";
+  @end
+
+* Home manager
+** Home manager boiler plate
+   @code nix
+   home-manager.verbose = true;
+   home-manager.useGlobalPkgs = true;
+   home-manager.users.refaelsh = { pkgs, ... }: {
+     programs.home-manager.enable = true;
+     home.stateVersion = "22.05";
+   @end
+
+** Kitty
+   @code nix
+   programs.kitty = {
+     enable = true;
+     theme = "Dracula";
+     settings = {
+       confirm_os_window_close = 0;
+     };
+     font = {
+       name = "FiraCode Nerd Font";
+       size = 12;
+     };
+     keybindings = {
+       "ctrl+c" = "copy_to_clipboard";
+       "ctrl+v" = "paste_from_clipboard";
+     };
+   };
+   @end
+
+** Alacritty
+   @code nix
+   programs.alacritty.enable = true;
+   programs.alacritty.settings = {
+     key_bindings = [
+       {
+         key = "V";
+         mods = "Control";
+         action = "Paste";
+       }
+       {
+         key = "C";
+         mods = "Control";
+         action = "Copy";
+       }
+     ];
+     font.normal = { family = "FiraCode Nerd Font Mono"; };
+   }; 
+   @end
+
+** Polybar
+   @code nix
+   services.polybar.enable = true;
+   services.polybar.script = "";
+   services.polybar.package = pkgs.polybarFull;
+   services.polybar.settings = {
+     "colors" = {
+       background = "#282a36";
+       foreground = "#f8f8f2";
+       primary = "#f1fa8c";
+       secondary = "#8be9fd";
+       disabled = "#6272a4";
+       current_line = "#44475a";
+       comment = "#6272a4";
+       green = "#50fa7b";
+       purple = "#bd93f9";
+       red = "#ff5555";
+       yellow = "#f1fa8c";
+     };
+     "settings" = {
+       screenchange-reload = "true";
+       pseudo-transparency = "true";
+     };
+     "bar/mybar" = {
+       width = "100%";
+       height = "30px";
+       bottom = "true";
+       dpi = "0";
+       background = "\${colors.background}";
+       foreground = "\${colors.foreground}";
+       module-margin = "1";
+       separator = "|";
+       separator-foreground = "\${colors.disabled}";
+       font-0 = "FiraCode Nerd Font;4";
+       modules-left = "xworkspaces";
+       modules-right = "filesystem network memory cpu xkeyboard battery date";
+       cursor-click = "pointer";
+       cursor-scroll = "ns-resize";
+       enable-ipc = "true";
+       tray-position = "right";
+       wm-restack = "generic";
+     };
+     "module/xworkspaces" = {
+       type = "internal/xworkspaces";
+       enable-scroll = "false";
+       label-active = "%name%";
+       label-active-background = "\${colors.current_line}";
+       label-active-padding = "1";
+       label-occupied = "%name%";
+       label-occupied-padding = "1";
+       label-urgent = "%name%";
+       label-urgent-background = "\${colors.red}";
+       label-urgent-padding = "1";
+       label-empty = "";
+       label-empty-padding = "1";
+     };
+     "module/filesystem" = {
+       type = "internal/fs";
+       mount-0 = "/";
+       label-mounted = "%{F#bd93f9}%{F-} %free%";
+     };
+     "module/network" = {
+       type = "internal/network";
+       interface = "enp0s3";
+       speed-unit = "";
+       label-connected = "%{F#bd93f9}%{F-} %downspeed:5% %{F#bd93f9}%{F-} %upspeed:5%";
+     };
+     "module/memory" = {
+       type = "internal/memory";
+       label = "%{F#bd93f9}%{F-} %percentage_used:2%% %{F#bd93f9}S%{F-} %percentage_swap_used%%";
+     };
+     "module/cpu" = {
+       type = "internal/cpu";
+       format = "%{F#bd93f9}%{F-} <label> <ramp-coreload>";
+       label = "%percentage:2%%";
+       ramp-coreload-spacing = "1";
+       ramp-coreload-0 = "";
+       ramp-coreload-0-foreground = "\${colors.green}";
+       ramp-coreload-1 = "▁";
+       ramp-coreload-1-foreground = "\${colors.green}";
+       ramp-coreload-2 = "▃";
+       ramp-coreload-2-foreground = "\${colors.green}";
+       ramp-coreload-3 = "▄";
+       ramp-coreload-3-foreground = "\${colors.yellow}";
+       ramp-coreload-4 = "▅";
+       ramp-coreload-4-foreground = "\${colors.yellow}";
+       ramp-coreload-5 = "▆";
+       ramp-coreload-5-foreground = "\${colors.red}";
+       ramp-coreload-6 = "▇";
+       ramp-coreload-6-foreground = "\${colors.red}";
+       ramp-coreload-7 = "█";
+       ramp-coreload-7-foreground = "\${colors.red}";
+     };
+     "module/battery" = {
+       type = "internal/battery";
+       battery = "BAT0";
+       adapter = "AC";
+       label-full = "%{F#50fa7b}%{F-} ";
+       format-full = "<label-full>";
+       label-charging = "%percentage%% %time%";
+       format-charging = " <ramp-capacity> <label-discharging>";
+       label-discharging = " %percentage%% %time%";
+       format-discharging = "<ramp-capacity> <label-discharging>";
+       ramp-capacity-0 = "%{F#ff5555}%{F-}";
+       ramp-capacity-1 = "%{F#f1fa8c}%{F-}";
+       ramp-capacity-2 = "%{F#f1fa8c}%{F-}";
+       ramp-capacity-3 = "%{F#f1fa8c}%{F-}";
+       ramp-capacity-4 = "%{F#50fa7b}%{F-}";
+     };
+     "module/xkeyboard" = {
+       type = "internal/xkeyboard";
+       label-layout = "%{F#bd93f9}%{F-}  %layout%";
+     };
+     "module/date" = {
+       type = "internal/date";
+       date = "%{F#bd93f9}%{F-} %H:%M:%S";
+     };
+     # "module/volume" = {
+     #   type = "internal/pulseaudio";
+     #   format.volume = "<ramp-volume> <label-volume>";
+     #   label.muted.text = "🔇";
+     #   label.muted.foreground = "#666";
+     #   ramp.volume = ["🔈" "🔉" "🔊"];
+     #   click.right = "pavucontrol &";
+     # };
+     # "module/volume" = {
+     #   type = "internal/alsa";
+     #   format.volume = "<ramp-volume> <label-volume>";
+     #   label.muted.text = "🔇";
+     #   label.muted.foreground = "#666";
+     #   ramp.volume = ["🔈" "🔉" "🔊"];
+     #   # click.right = "pavucontrol &";
+     # };
+   };
+   @end
+
+** Git
+   @code nix
+   programs.git = {
+     enable = true;
+     userEmail = "refaelsh@pm.me";
+     userName = "refaelsh";
+     aliases = {
+       lg = "log --date-order --color-moved --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all";
+       st = "status";
+       diff = "diff --color-moved --submodule";
+       show = "show --color-moved";
+       ch = "checkout";
+     };
+     extraConfig = {
+       safe = { directory = "*"; };
+       color = {
+         ui = "always";
+         # ui = "auto"; 
+         # ui = "never"; 
+       };
+       init = {
+         defaultBranch = "master";
+       };
+       color.branch = {
+         current = "cyan bold reverse";
+         local = "white";
+         plain = "";
+         remote = "cyan";
+       };
+       color.diff = {
+         commit = "";
+         func = "cyan";
+         plain = "";
+         whitespace = "magenta reverse";
+         meta = "white";
+         frag = "cyan bold reverse";
+         old = "red";
+         new = "green";
+       };
+       color.grep = {
+         context = "";
+         filename = "";
+         function = "";
+         linenumber = "white";
+         match = "";
+         selected = "";
+         separator = "";
+       };
+       color.interactive = {
+         error = "";
+         header = "";
+         help = "";
+         prompt = "";
+       };
+       color.status = {
+         added = "green";
+         changed = "yellow";
+         header = "";
+         localBranch = "";
+         nobranch = "";
+         remoteBranch = "cyan bold";
+         unmerged = "magenta bold reverse";
+         untracked = "red";
+         updated = "green bold";
+       };
+       merge = {
+         ff = "no";
+         tool = "kdiff3";
+       };
+       pull = {
+         rebase = "false";
+       };
+     };
+   };
+   @end 
+
+** Individual dotfiles
+*** Neovim
+    @code nix
+    # xdg.configFile."nvim/init.lua".source = /home/refaelsh/repos/dotfiles/init.lua;
+    # xdg.configFile."nvim/init.lua".source = { text = ''
+    # '';};
+    @end
+
+*** Qutebrowser
+    @code nix
+    xdg.configFile."qutebrowser/config.py" = { text = ''
+      import dracula.draw
+      
+      config.load_autoconfig(False)
+      
+      c.colors.webpage.preferred_color_scheme = "dark"
+      c.colors.webpage.darkmode.enabled = True
+      dracula.draw.blood(c, {
+          'spacing': {
+              'vertical': 6,
+              'horizontal': 8
+          }
+      })
+      
+      c.url.start_pages = "www.google.com"
+      c.url.searchengines = {'DEFAULT': 'https://www.google.com/?q={}'}
+      c.content.blocking.method = "both"
+      c.auto_save.session = True
+    '';};
+    @end
+
+*** Termonad
+    @code nix
+    xdg.configFile."termonad/termonad.hs" = { text = ''
+      {-# LANGUAGE OverloadedStrings #-}  
+   
+      module Main where
+   
+      import Data.Maybe (fromMaybe)
+      import Termonad
+      import Termonad.Config.Colour
+   
+      main :: IO ()
+      main = do
+      -- First, create the colour extension based on either PaperColor modules.
+      myColourExt <- createColourExtension dracula
+   
+      -- Update 'myTMConfig' with our colour extension.
+      let newTMConfig = addColourExtension myTMConfig myColourExt
+   
+      -- Start Termonad with our updated 'TMConfig'.
+      start newTMConfig
+   
+      -- This is our Dracula 'ColourConfig'.
+      dracula :: ColourConfig (AlphaColour Double)
+      dracula =
+      defaultColourConfig
+      { -- Set the default background & foreground colour of text of the terminal.
+      backgroundColour = Set (createColour 40 42 54), -- black.0
+      foregroundColour = Set (createColour 248 248 242), -- white.7
+      -- Set the extended palette that has 2 Vecs of 8 Dracula palette colours
+      palette = ExtendedPalette draculaNormal draculaBright
+      }
+      where
+      draculaNormal :: List8 (AlphaColour Double)
+      draculaNormal =
+      fromMaybe defaultStandardColours $
+      mkList8
+      [ createColour 40 42 54, -- black.0
+      createColour 255 85 85, -- red.1
+      createColour 80 250 123, -- green.2
+      createColour 241 250 140, -- yellow.3
+      createColour 189 147 249, -- blue.4
+      createColour 255 121 198, -- magenta.5
+      createColour 139 233 253, -- cyan.6
+      createColour 191 191 191 -- white.7
+      ]
+   
+      draculaBright :: List8 (AlphaColour Double)
+      draculaBright =
+      fromMaybe defaultStandardColours $
+      mkList8
+      [ createColour 77 77 77, -- black.8
+      createColour 255 110 103, -- red.9
+      createColour 90 247 142, -- green.10
+      createColour 244 249 157, -- yellow.11
+      createColour 202 169 250, -- blue.12
+      createColour 255 146 208, -- magenta.13
+      createColour 154 237 254, -- cyan.14
+      createColour 230 230 230 -- white.15
+      ]
+   
+      -- This is our main 'TMConfig'.  It holds all of the non-colour settings
+      -- for Termonad.
+      --
+      -- This shows how a few settings can be changed.
+      myTMConfig :: TMConfig
+      myTMConfig =
+      defaultTMConfig
+      { options =
+      defaultConfigOptions
+      { showScrollbar = ShowScrollbarNever,
+      confirmExit = False,
+      showMenu = False,
+      cursorBlinkMode = CursorBlinkModeOn,
+      fontConfig =
+      defaultFontConfig
+      { fontFamily = "FiraCode Nerd Font",
+      fontSize = FontSizePoints 12
+      }
+      }
+      }
+    '';};
+    @end
+
+* Boilerplate
+  @code nix
+  };
+  }
+  @end

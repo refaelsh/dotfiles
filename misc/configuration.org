@@ -1,0 +1,1090 @@
+#+PROPERTY: header-args :dir :tangle configuration.nix 
+
+* Boilerplate
+#+BEGIN_SRC nix
+{ inputs, config, pkgs, lib, ... }:
+let
+  # nixvim = import (builtins.fetchGit { 
+  #   url = "https://github.com/nix-community/nixvim"; 
+  # });
+in
+{
+#+END_SRC
+* Imports
+#+BEGIN_SRC nix
+imports = [
+  ./hardware-configuration.nix
+  # <home-manager/nixos>
+  inputs.home-manager.nixosModules.home-manager
+  inputs.nixvim.nixosModules.nixvim
+];
+#+END_SRC
+* Bootloader
+#+BEGIN_SRC nix
+boot.loader = {
+  systemd-boot.enable = true;
+  efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot";
+  };
+};
+#+END_SRC
+* System settings
+#+BEGIN_SRC nix
+system = {
+  stateVersion = "24.05";
+  # copySystemConfiguration = true;
+};
+#+END_SRC
+* Hardware
+#+BEGIN_SRC nix
+hardware = {
+  enableRedistributableFirmware = true;
+  bluetooth = {
+    enable = false;
+    powerOnBoot = false;
+  };
+  # keyboard.zsa.enable = true;
+};
+#+END_SRC
+* Power management
+#+BEGIN_SRC nix
+powerManagement = {
+  enable = true;
+  cpuFreqGovernor = "performance";
+};
+#+END_SRC
+* Systemd
+** Numlock
+#+BEGIN_SRC nix
+# systemd.services.numlock = {
+#   description = "Enable NumLock at startup";
+#   wantedBy = [ "multi-user.target" ]; 
+#   serviceConfig = {
+#     TTYPath = "/dev/tty1";
+#     StandardInput = "tty";
+#     StandardOutput = "tty";
+#     Type = "oneshot";
+#     RemainAfterExit = "yes";
+#     ExecStart = "${pkgs.kbd}/bin/setleds -D +num";  
+#   };
+# };
+#+END_SRC
+* Security
+#+BEGIN_SRC nix
+security = {
+  rtkit.enable = true;
+  sudo = {
+    extraConfig = "Defaults env_keep += \"HOME\"";
+    extraRules = [{
+      users = [ "refaelsh" ];
+      commands = [{
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      }];
+    }];
+  };
+};
+#+END_SRC
+* Miscellaneous one liners
+#+BEGIN_SRC nix
+documentation.dev.enable = true;
+nixpkgs.config.allowUnfree = true;
+time.timeZone = "Asia/Jerusalem";
+i18n.defaultLocale = "en_US.UTF-8";
+#+END_SRC
+* Nix settings
+#+BEGIN_SRC nix
+nix.settings.auto-optimise-store = true;
+nix.settings.experimental-features = [ "nix-command" "flakes" ];
+#+END_SRC
+* Networking
+#+BEGIN_SRC nix
+networking = {
+  hostName = "nixos";
+  networkmanager = {
+    enable = true;
+    wifi.powersave = false;
+  };
+};
+#+END_SRC
+* User definition
+#+BEGIN_SRC nix
+users = {
+  defaultUserShell = pkgs.zsh;
+  users.refaelsh = {
+    isNormalUser = true;
+    extraGroups = [ "networkmanager" "wheel" "storage"];
+    useDefaultShell = true;
+  };
+};
+#+END_SRC
+* Services
+** One liner services
+#+begin_src nix
+services = {
+  libinput.enable = true;
+  thermald.enable = true;
+  gvfs.enable = true;
+  udisks2.enable = true;
+  devmon.enable = true;
+};
+#+end_src
+** Pipewire
+#+begin_src nix
+services.pipewire = {
+  enable = true;
+  alsa = {
+    enable = true;
+    support32Bit = true;
+  };
+  pulse.enable = true;
+  jack.enable = true;
+};
+#+end_src
+** Display manager
+#+begin_src nix
+services.displayManager = {
+  autoLogin = {
+    enable = true;
+    user = "refaelsh";
+  };
+  defaultSession = "none+xmonad";
+};
+#+end_src
+** Picom
+#+begin_src nix
+services.picom = {
+  enable = true;
+  backend = "glx";
+};
+#+end_src
+** X Server
+#+BEGIN_SRC nix
+services.xserver = {
+  enable = true;
+  resolutions = [{
+      x = 1920;
+      y = 1080;
+  }];
+  xkb = {
+    variant = "";
+    layout = "us";
+  };
+  displayManager.lightdm.enable = true;
+  windowManager.xmonad = {
+    enable = true;
+    enableConfiguredRecompile = true;
+    enableContribAndExtras = true;
+    extraPackages = haskellPackages: [
+        haskellPackages.xmonad-contrib
+        haskellPackages.xmobar
+    ];
+    config = /*haskell*/''
+      import XMonad
+      import XMonad.Actions.Navigation2D
+      import XMonad.Actions.SpawnOn
+      import XMonad.Hooks.DynamicLog
+      import XMonad.Hooks.EwmhDesktops
+      import XMonad.Hooks.InsertPosition
+      import XMonad.Hooks.ManageDocks
+      import XMonad.Hooks.StatusBar
+      import XMonad.Hooks.StatusBar.PP
+      import XMonad.Hooks.WindowSwallowing
+      import XMonad.Layout.NoBorders
+      import XMonad.Layout.OneBig
+      import XMonad.Layout.ToggleLayouts
+      import qualified XMonad.StackSet as W
+      import XMonad.Util.EZConfig
+      import XMonad.Util.SpawnOnce
+      import XMonad.Util.Loggers
+      import qualified XMonad.Util.Hacks as Hacks
+      import XMonad.Prompt
+      import XMonad.Prompt.Shell
+      
+      myTerminal :: String
+      myTerminal = "wezterm"
+      
+      myStartupHook :: X ()
+      myStartupHook = do
+        spawn "killall picom; picom &"
+        spawn "keyctl link @u @s"
+        spawnOnce "killall trayer; trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282a36"
+        spawnOnce "clipmenud"
+        spawnOnce "numlockx on"
+        spawnOnce "setxkbmap -layout us,il -option grp:alt_shift_toggle"
+        spawnOnce "kbdd"
+        spawn "amixer set Master 5%-"
+        spawn "amixer set Master 5%+"
+        spawnOnOnce "1" "librewolf"
+        spawnOnOnce "9" "signal-desktop"
+        spawnOnOnce "0" "neovide ~/repos/dotfiles/configuration.org"
+      
+      myXmobarPP :: PP
+      myXmobarPP = def { 
+         ppCurrent = xmobarColor "#ff79c6" ""
+        , ppVisible = xmobarColor "#ff79c6" "" -- . clickable
+        , ppHidden = xmobarColor "#bd93f9" "" -- . wrap
+        , ppTitle = xmobarColor "#e6e6e6" "" . shorten 60
+        , ppSep =  "<fc=" ++ "#4d4d4d" ++ "> <fn=1>|</fn> </fc>"
+        , ppUrgent = xmobarColor "#ff5555" "" . wrap "!" "!"
+        , ppOrder  = \(ws:l:t:ex) -> [ws]
+      }        where
+      
+      main :: IO ()
+      main =
+        xmonad
+          . ewmhFullscreen
+          . ewmh
+          . docks
+          . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
+          $ myConfig
+      
+      myLayoutHook = avoidStruts $ smartBorders $ toggleLayouts Full (Tall 1 (3 / 100) (1 / 2))
+      
+      myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+      
+      myConfig =
+        def
+          { modMask = mod4Mask,
+            workspaces = myWorkspaces,
+            terminal = myTerminal,
+            startupHook = myStartupHook,
+            manageHook = insertPosition End Newer <> (manageSpawn <+> manageHook def),
+            layoutHook = myLayoutHook,
+            handleEventHook = swallowEventHook (className =? "neovide") (return True) <> Hacks.trayerPaddingXmobarEventHook,
+            borderWidth = 2,
+            focusedBorderColor = "#bd93f9",
+            normalBorderColor = "#44475a"
+          }
+          `additionalKeysP` [ ("M-<Return>", spawn myTerminal),
+                              ("M-d", shellPrompt def {alwaysHighlight = True, height = 30, borderColor = "#BD93F9", fgColor = "#F8F8F2", bgColor = "#282A36", fgHLight = "#F8F8F2", bgHLight = "#6272A4" }),  
+                              ("M-S-q", kill),
+                              ("M-f", sendMessage (Toggle "Full") <> sendMessage ToggleStruts),
+                              ("M-0", windows $ W.greedyView "0"),
+                              ("M-S-0", windows $ W.shift "0"),
+                              ("M-<Left>", windowGo L False),
+                              ("M-<Right>", windowGo R False),
+                              ("M-<Up>", windowGo U False),
+                              ("M-<Down>", windowGo D False),
+                              ("M-S-<Left>", windowSwap L False),
+                              ("M-S-<Right>", windowSwap R False),
+                              ("M-S-<Up>", windowSwap U False),
+                              ("M-S-<Down>", windowSwap D False),
+                              ("<Print>", spawn "flameshot gui"),
+                              ("M1-c", spawn "clipmenu -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10'"),
+                              ("M-<F11>", spawn "amixer set Master 5%-"),
+                              ("M-<F12>", spawn "amixer set Master 5%+")
+                            ]
+          `removeKeysP` ["M-S-<Return>"]
+          `removeKeysP` ["M-p"]
+          `removeKeysP` ["M-S-c"]
+          `removeKeysP` ["M-<Tab>"]
+          `removeKeysP` ["M-S-<Tab>"]
+          `removeKeysP` ["M-j"]
+          `removeKeysP` ["M-k"]
+          `removeKeysP` ["M-m"]
+          `removeKeysP` ["M-l"]
+    '';
+  };
+};
+#+END_SRC
+* Default programs
+#+BEGIN_SRC nix
+xdg.mime.defaultApplications = {
+  "text/html" = "librewolf.desktop";
+  "x-scheme-handler/http" = "librewolf.desktop";
+  "x-scheme-handler/https" = "librewolf.desktop";
+  "x-scheme-handler/about" = "librewolf.desktop";
+  "x-scheme-handler/unknown" = "librewolf.desktop";
+};
+#+END_SRC
+* Environment
+** One liners
+#+BEGIN_SRC nix
+environment = {
+  # Don't forget to add the below to your system configuration to get completion for system packages (e.g. systemd).
+  pathsToLink = ["/share/zsh"];
+};
+#+END_SRC
+** Variables
+#+BEGIN_SRC nix
+environment.variables = {
+  EDITOR = "nvim";
+  TERM = "wezterm";
+  TERMINAL = "wezterm";
+};
+#+END_SRC
+** System packages
+#+BEGIN_SRC nix
+environment = {
+  systemPackages = with pkgs; [
+    kbd
+    neovide
+    dmenu
+    clipmenu
+    nixd
+    clang
+    clang-tools
+    cmake-language-server
+    lua-language-server
+    nodePackages.yaml-language-server
+    nodePackages.bash-language-server
+    taplo-lsp
+    wget
+    firefox
+    google-chrome
+    glib
+    nnn
+    bat
+    eza
+    wget
+    go
+    xclip
+    notepadqq
+    git
+    kdiff3
+    bitwarden
+    bitwarden-cli
+    alacritty
+    dracula-theme
+    gnumake
+    cmake
+    tree-sitter
+    nodejs
+    zip
+    unzip
+    openssh
+    shutter
+    flameshot
+    signal-desktop
+    kbdd
+    xorg.setxkbmap
+    glow
+    jq
+    nvd
+    pandoc
+    gcc
+    python3
+    pkg-config
+    htop
+    ripgrep
+    coreutils
+    fd
+    networkmanagerapplet
+    gdb
+    lm_sensors
+    python310Packages.psutil
+    xorg.xmessage
+    haskellPackages.cabal-fmt
+    cabal-install
+    haskellPackages.fourmolu
+    ghcid
+    gmp
+    ncurses
+    xz
+    graphviz
+    xdotool
+    # polybarFull
+    killall
+    nitrogen
+    nix-index
+    acpi
+    wally-cli
+    asciidoctor-with-extensions
+    rPackages.revealjs
+    xvkbd
+    gitui
+    lazygit
+    ruby
+    nodePackages.prettier
+    gimp
+    tig
+    marksman
+    zk
+    pkgs.man-pages
+    pkgs.man-pages-posix
+    xorg.xdpyinfo
+    haskellPackages.hoogle
+    proselint
+    aspell
+    aspellDicts.en
+    aspellDicts.he
+    languagetool
+    silver-searcher
+    nil
+    pciutils
+    steam-run
+    nixpkgs-fmt
+    microcodeIntel
+    lshw
+    openra
+    transmission_4
+    transmission_4-gtk
+    vlc
+    imagemagick
+    bc
+    baobab
+    python310Packages.adblock
+    python311Packages.adblock
+    keyutils
+    rofi
+    doublecmd
+    shotcut
+    usbutils
+    discord
+    prismlauncher
+    dysk
+    rclone
+    netflix
+    iw
+    usbutils
+    udiskie
+    udisks
+    udisks2
+    alsa-utils
+    popcorntime
+    trayer
+    nawk
+    lxappearance
+    git-extras
+    nixfmt-rfc-style
+    ghc
+    speedtest-cli
+    numlockx
+    (writeShellApplication {
+      name = "before.sh";
+      text = /*bash*/''
+        echo ---------------Running the before script------------------
+        echo "Tangling ~/repos/dotfiles/configuration.org"
+        nvim ~/repos/dotfiles/configuration.org --headless -c ':lua require("orgmode").action("org_mappings.org_babel_tangle")' +qa
+        echo ""
+        echo "Copying configuration.nix to /etc/nixos/configuration.nix"
+        sudo cp ~/repos/dotfiles/configuration.nix /etc/nixos/configuration.nix
+        echo ---------------The end------------------------------------
+      '';
+    })
+    (writeShellApplication {
+      name = "after.sh";
+      text = /*bash*/''
+        echo ---------------Running the after script------------------
+        git -C ~/repos/dotfiles add . && git -C ~/repos/dotfiles commit -m "WIP" && git -C ~/repos/dotfiles push
+        echo ---------------The end------------------------------------
+      '';
+    })
+    (writeShellApplication {
+      name = "update.sh";
+      text = /*bash*/''
+        before.sh
+        # sudo -i nix-store --gc
+        # sudo -i nix-channel --update
+        sudo -i nixos-rebuild switch --upgrade
+        # sudo -i nix-collect-garbage
+        # This one is the best :-)
+        # sudo -i nix-collect-garbage -d
+        # rm -rf ~/.local/share/Trash/*
+        # sudo -i nix-store --optimise
+        cabal update
+        # nvim --headless "+Lazy! sync" +qa
+        after.sh
+      '';
+    })
+    (writeShellApplication {
+      name = "supdate.sh";
+      text = /*bash*/''
+        before.sh
+        sudo -i nixos-rebuild switch
+        after.sh
+      '';
+    })
+    # (writeShellScriptBin "supdate-custom-home-manager.sh" ''  
+    #   before.sh
+    #   sudo -i nixos-rebuild switch -I home-manager=/home/refaelsh/repos/home-manager
+    #   after.sh
+    # '')
+  ];
+};
+#+END_SRC
+* Packages via NixOS module
+** One liners
+#+BEGIN_SRC nix
+programs = {
+  zsh.enable = true;
+  nm-applet.enable = true;
+  dconf.enable = true;
+};
+#+END_SRC
+** Neovim
+*** Various miscellaneous settings
+#+BEGIN_SRC nix
+programs.nixvim= {
+  enable = true;
+  enableMan = true;
+  defaultEditor = true;
+  vimAlias = true;
+  viAlias = true;
+  colorschemes.dracula-nvim.enable = true;
+#+END_SRC
+*** Performance
+#+BEGIN_SRC nix
+performance.byteCompileLua = {
+  enable = true;
+  configs = true;
+  initLua = true;
+  nvimRuntime = true;
+  plugins = true;
+};
+#+END_SRC
+*** Globals
+#+BEGIN_SRC nix
+globals = {
+  mapleader = " ";
+  maplocalleader = " ";
+  have_nerd_font = true;
+};
+#+END_SRC
+*** One liners via `opts`
+#+BEGIN_SRC nix
+opts = {
+  guifont = "FiraCode Nerd Font:h8.1";
+  autoread = true;
+  cursorline = true;
+  mouse = "a";
+  undofile = true;
+  undodir = "/home/refaelsh/.config/nvim";
+  swapfile = false;
+  foldmethod = "marker";
+  hlsearch = true;
+  ignorecase = true;
+  completeopt = "menuone,noselect";
+  smartcase = true;
+  incsearch = true;
+  showmatch = true;
+  gdefault = true;
+  termguicolors = true;
+  clipboard = "unnamedplus";
+  tabstop = 4;
+  shiftwidth = 4;
+  expandtab = true;
+  number = true;
+  relativenumber = true;
+  hidden = true;
+  spell = true;
+  spelllang = "en_us";
+  spellcapcheck = "=";
+  spellsuggest = "10";
+  spelloptions = "camel";
+  splitright = true;
+  confirm = true;
+  wrap = false;
+  path.__raw = ''vim.opt.path + "**"'';
+  wildmenu = true;
+  conceallevel = 2;
+  concealcursor = "nc";
+};
+#+END_SRC
+*** Mappings
+**** Boilerplate
+#+BEGIN_SRC nix
+keymaps = [
+#+END_SRC
+**** Remap ~:~ to ~;~
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = ":";
+  action = ";";
+}
+{
+  mode = "n";
+  key = ";";
+  action = ":";
+}
+#+END_SRC
+**** Prevents yanking when pasting in visual mode
+#+BEGIN_SRC nix
+{
+  mode = "v";
+  key = "p";
+  action = "P";
+}
+#+END_SRC
+**** Turn off highlighting
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "<leader><space>";
+  action = ":noh<cr>";
+}
+#+END_SRC
+**** Remap commenting
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "<leader>c";
+  action = "gcc";
+  options.remap = true;
+}
+{
+  mode = "v";
+  key = "<leader>c";
+  action = "gc";
+  options.remap = true;
+}
+#+END_SRC
+**** Better line wrapping
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "j";
+  action = "gj";
+}
+{
+  mode = "n";
+  key = "k";
+  action = "gk";
+}
+#+END_SRC
+**** New line using <Enter>
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "<Enter>";
+  action = "o<ESC>";
+}
+{
+  mode = "n";
+  key = "<S-Enter>";
+  action = "O<ESC>";
+}
+#+END_SRC
+**** Snippets
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = ",t";
+  action = "i#[test]<CR>fn () {<CR>}<ESC>kwi";
+}
+{
+  mode = "n";
+  key = ",tm";
+  action = "i#[cfg(test)]<CR>mod tests {<CR>use super::*;<CR><CR>#[test]<CR>fn () {<CR>}<CR><ESC>xxxxi}<ESC>kkwwi";
+}
+#+END_SRC
+**** Screen centering
+#+BEGIN_SRC nix
+{
+  mode = "n";
+  key = "<C-d>";
+  action = "<C-d>zz";
+}
+{
+  mode = "n";
+  key = "<C-u>";
+  action = "<C-u>zz";
+}
+{
+  mode = "n";
+  key = "n";
+  action = "nzzzv";
+}
+{
+  mode = "n";
+  key = "N";
+  action = "Nzzzv";
+}
+#+END_SRC
+**** Boilerplate
+#+BEGIN_SRC nix
+];
+#+END_SRC
+*** Auto commands
+**** Boilerplate
+#+BEGIN_SRC nix
+autoCmd = [
+#+END_SRC
+**** File change detection
+~ The first one I don't really know what it does or why it is needed.
+~ Note to self: according to Neovim's roadmap, file detection will be built-in into Neovim.
+#+BEGIN_SRC nix
+{
+  event = [
+    "bufenter"
+    "cursorhold" 
+    "cursorholdi" 
+    "focusgained" 
+  ];
+  pattern = ["*.*"];
+  command = "if mode() != 'c' | checktime | endif";
+}
+{
+  event = ["FileChangedShellPost"];
+  pattern = ["*.*"];
+  command = "echohl WarningMsg | echo \"File changed on disk. Buffer reloaded.\" | echohl None";
+}
+#+END_SRC
+**** For the quick and list windows
+I don't really remember what it does.
+#+BEGIN_SRC nix
+{
+  event = ["QuickFixCmdPost"];
+  pattern = ["[^l]*"];
+  command = "cwindow";
+}
+{
+  event = ["QuickFixCmdPost"];
+  pattern = ["l*"];
+  command = "lwindow";
+}
+#+END_SRC
+**** Highlight on yank
+#+BEGIN_SRC nix
+{
+  event = ["TextYankPost"];
+  pattern = ["*"];
+  command = "silent! lua vim.highlight.on_yank{timeout=300}";
+}
+#+END_SRC
+**** For otter.nvim
+#+BEGIN_SRC nix
+{
+  event = ["BufReadPost" "BufNewFile"];
+  pattern = ["*.org"];
+  command = ":lua require(\"otter\").activate()";
+}
+#+END_SRC
+**** Format buffer before saving
+#+BEGIN_SRC nix
+{
+  event = ["BufWritePre"];
+  pattern = ["*>8"];
+  command = ":lua vim.lsp.buf.format()";
+}
+#+END_SRC
+**** Boilerplate
+#+BEGIN_SRC nix
+];
+#+END_SRC
+*** Plugins from Nixpkgs
+**** Plugins list from Nixpkgs
+#+BEGIN_SRC nix
+extraPlugins = with pkgs.vimPlugins; [
+  nvim-colorizer-lua
+  nui-nvim
+  (pkgs.vimUtils.buildVimPlugin {
+    name = "org-bullets.nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-orgmode";
+      repo = "org-bullets.nvim";
+      rev = "main";
+      sha1 = "M9oUlEa5z7CyQWYFNlW7Am5y+P0=";
+    };
+  })
+];
+#+END_SRC
+**** Boilerplate
+#+BEGIN_SRC nix
+extraConfigLua = /*lua*/''
+  require('org-bullets').setup()
+  require('colorizer').setup({
+    -- mode = 'background'
+  })
+'';
+#+END_SRC
+*** Plugins from Nixvim
+**** Boilerplate
+#+BEGIN_SRC nix
+plugins = {
+#+END_SRC
+**** Various one liner plugins
+#+BEGIN_SRC nix
+plantuml-syntax.enable = true;
+undotree.enable = true;
+vim-surround.enable = true;
+dressing.enable = true;
+nix.enable = true;
+# No longer maintained.
+# There is a Neovim feature request: https://github.com/neovim/neovim/issues/16339.
+lastplace.enable = true;
+cursorline.enable = true;
+indent-blankline.enable = true;
+gitsigns.enable = true;
+todo-comments.enable = true;
+fidget.enable = true;
+telescope.enable = true;
+lspkind.enable = true;
+web-devicons.enable = true;
+repeat.enable = true;
+autosource.enable = true;
+numbertoggle.enable = true;
+barbecue.enable = true;
+haskell-scope-highlighting.enable = true;
+illuminate.enable = true;
+nvim-lightbulb.enable = true;
+which-key.enable = true;
+wilder.enable = true;
+otter.enable = true;
+#+END_SRC
+**** Auto-save
+#+BEGIN_SRC nix
+auto-save = {
+  enable = true;
+  settings = {
+    execution_message.cleaning_interval = 5000;
+  };
+};
+#+END_SRC
+**** Hard time
+#+BEGIN_SRC nix
+hardtime = {
+  enable = true;
+  settings = {
+    showmode = false;
+    disable_mouse = false;
+  };
+};
+#+END_SRC
+**** Orgmode
+#+BEGIN_SRC nix
+orgmode = {
+  enable = true;
+  settings = {
+    org_startup_indented = true;
+  };
+};
+#+END_SRC
+**** Lualine
+#+BEGIN_SRC nix
+lualine = {
+  enable = true;
+  settings = {
+    theme = "dracula-nvim";
+  };
+};
+#+END_SRC
+**** Nvim-tree
+#+BEGIN_SRC nix
+nvim-tree = {
+  enable = true;
+  git = {
+    enable = true;
+    ignore = false;
+  };
+  actions.openFile.resizeWindow = true;
+};
+#+END_SRC
+**** Tree-sitter
+#+BEGIN_SRC nix
+treesitter = {
+  enable = true;
+  nixvimInjections = true;
+  nixGrammars = false;
+  settings = {
+    auto_install = true;
+    ensure_installed = "all";
+    ignore_install = ["org"];
+    highlight.enable = true;
+    indent.enable = true;
+  };
+};
+#+END_SRC
+**** Nvim-cmp and sources
+Note to self: check [[https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources][here]] for more sources.
+Also, see [[https://github.com/nix-community/nixvim/discussions/928#discussioncomment-10455407][here]] for examinations why all the below individual plugins are not needed.
+#+BEGIN_SRC nix
+cmp = {
+  enable = true;
+  autoEnableSources = true;
+  settings = {
+    mapping = {
+      "<C-d>" = /*Lua*/"cmp.mapping.scroll_docs(-4)";
+      "<C-f>" = /*Lua*/"cmp.mapping.scroll_docs(4)";
+      "<C-Space>" = /*Lua*/"cmp.mapping.complete()";
+      "<C-e>" = /*Lua*/"cmp.mapping.close()";
+      "<Tab>" = /*Lua*/"cmp.mapping(cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}), {'i', 's'})";
+      "<S-Tab>" = /*Lua*/"cmp.mapping(cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}), {'i', 's'})";
+      "<CR>" = /*Lua*/"cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace })";
+    };
+    window = {
+      completion.__raw = ''cmp.config.window.bordered()'';
+      documentation.__raw = ''cmp.config.window.bordered()'';
+    };
+    snippet.expand = /*lua*/"function(args) require('luasnip').lsp_expand(args.body) end";
+    sources = [
+      {
+        name = "buffer";
+        priority = 500;
+      }
+      {
+        name = "calc";
+        priority = 150;
+      }
+      {
+        name = "conventionalcommits";
+        priority = 300;
+      }
+      {
+        name = "cmdline";
+        priority = 300;
+      }
+      {
+        name = "cmdline-history";
+        priority = 300;
+      }
+      {
+        name = "dictionary";
+        priority = 300;
+      }
+      {
+        name = "friendly-snippets";
+        priority = 750;
+      }
+      {
+        name = "fuzzy-buffer";
+        priority = 750;
+      }
+      {
+        name = "fuzzy-path";
+        priority = 750;
+      }
+      {
+        name = "git";
+        priority = 250;
+      }
+      {
+        name = "luasnip";
+        priority = 750;
+      }
+      {
+        name = "nvim_lsp";
+        priority = 1000;
+      }
+      {
+        name = "nvim_lsp_document_symbol";
+        priority = 1000;
+      }
+      {
+        name = "nvim_lsp_signature_help";
+        priority = 1000;
+      }
+      {
+        name = "orgmode";
+        priority = 250;
+      }
+      {
+        name = "path";
+        priority = 300;
+      }
+      {
+        name = "rg";
+        priority = 300;
+      }
+      {
+        name = "spell";
+        priority = 300;
+      }
+      {
+        name = "treesitter";
+        priority = 850;
+      }
+      {
+        name = "yanky";
+        priority = 250;
+      }
+      {
+        name = "zsh";
+        priority = 250;
+      }
+    ];
+  };
+};
+#+END_SRC
+**** LSP
+#+begin_src nix
+lsp = {
+  enable = true;
+  inlayHints = true;
+  keymaps.lspBuf = {
+    "<leader>d" = "definition";
+    "<leader>a" = "code_action";
+    "<leader>i" = "implementation";
+    "<leader>ic" = "incoming_calls";
+    "<leader>f" = "format";
+    "<leader>h" = "hover";
+    "<leader>r" = "rename";
+  };
+  servers = {
+    nixd.enable = true;
+    yamlls.enable = true;
+    bashls.enable = true;
+    cmake.enable = true;
+    clangd.enable = true;
+    pylsp.enable = true;
+    taplo.enable = true;
+    marksman.enable = true;
+    jsonls.enable = true;
+    hls = {
+      enable = true;
+      filetypes = ["haskell" "lhaskell" "cabal"];
+    };
+    lua-ls.enable = true;
+  };
+};
+#+end_scr
+**** Boilerplate
+#+BEGIN_SRC nix
+};
+#+END_SRC
+*** Boilerplate
+#+BEGIN_SRC nix
+};
+#+END_SRC
+** Steam
+#+BEGIN_SRC nix
+programs.steam = {
+  enable = true;
+  remotePlay.openFirewall = true;
+  dedicatedServer.openFirewall = true; 
+};
+#+END_SRC
+* Fonts
+#+BEGIN_SRC nix
+fonts = {
+  fontconfig.enable = true;
+  packages = with pkgs; [
+    hack-font
+    nerdfonts
+    cascadia-code
+    hasklig
+    fira-code-symbols
+    fira-code
+    cantarell-fonts
+    inconsolata-nerdfont
+    symbola
+    source-code-pro
+    font-awesome
+    font-awesome_5
+    font-awesome_4
+    line-awesome
+    powerline-fonts
+    ubuntu_font_family
+    mononoki
+    unifont
+    dejavu_fonts
+    symbola
+    noto-fonts
+    libertine
+  ];
+};
+#+END_SRC
+* Home manager
+#+BEGIN_SRC nix
+home-manager = {
+  extraSpecialArgs = { inherit inputs; };
+  users.refaelsh = import ./home.nix;
+};
+#+END_SRC
+* Boilerplate
+#+BEGIN_SRC nix
+}
+#+END_SRC
