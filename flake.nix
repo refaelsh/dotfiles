@@ -33,8 +33,7 @@
                 inputs.nixvim.packages.${system}.default
                 # inputs.home-manager.package.${system}.default
                 # inputs.home-manager.homeConfigurations.default
-                inputs.home-manager.packages.default.x86_64-linux
-              ];
+                inputs.home-manager.packages.${system}.default              ];
 
               # home-manager = {
               #   users.refaelsh = import ./home-manager/home.nix;
