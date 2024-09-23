@@ -27,7 +27,7 @@
       };
 
       packages = {
-        default.x86_64-linux = self.homeConfigurations.standalone.activationPackage;
+        x86_64-linux.default = self.homeConfigurations.standalone.activationPackage;
       };
     };
 }
