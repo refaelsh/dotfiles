@@ -26,7 +26,7 @@
           modules = [
             ./nixos/configuration.nix
             # inputs.home-manager.nixosModules.home-manager
-            inputs.home-manager.homeConfigurations.bbb
+            inputs.home-manager.homeManagerConfigurations.x86_64-linux.bbb
             # inputs.home-manager.nixosModules.home-manager
             # inputs.home-manager.nixosModules.home-manager
             # inputs.home-manager.homeConfigurations.refaelsh
