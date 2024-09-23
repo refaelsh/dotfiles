@@ -32,8 +32,8 @@
   outputs =
     { nixpkgs, home-manager, ... }@inputs:
     {
-      homeConfigurations = {
-        refaelsh = home-manager.lib.homeManagerConfiguration {
+      homeManagerConfigurations.x86_64-linux = {
+        bbb = home-manager.lib.homeManagerConfiguration {
           # pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
           modules = [
