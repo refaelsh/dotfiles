@@ -26,8 +26,7 @@
         ];
       };
 
-      packages = {
-        x86_64-linux.default = self.homeConfigurations.standalone.activationPackage;
-      };
+      packages.x86_64-linux.myPackage =
+        self.homeConfigurations."refaelsh".config.home.packages.myPackage;
     };
 }
