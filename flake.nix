@@ -31,7 +31,8 @@
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
-                inputs.home-manager.package.${system}.default
+                # inputs.home-manager.package.${system}.default
+                inputs.home-manager.default
               ];
 
               # home-manager = {
