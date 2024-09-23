@@ -8,6 +8,7 @@ in
     ./default-applications.nix
     ./enviornment-system-package.nix
     ./environment-variables.nix
+    ./fonts.nix
     ./hardware.nix
     ./networking.nix
     ./nix.nix
