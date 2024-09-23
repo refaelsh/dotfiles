@@ -25,7 +25,7 @@
 
           modules = [
             ./nixos/configuration.nix
-            inputs.home-manager.homeConfigurations.bbb
+            inputs.home-manager.bbb
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
