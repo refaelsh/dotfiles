@@ -27,7 +27,7 @@
       };
 
       homeManagerModules = {
-        bbb = import ./path-to-your-module.nix;
+        bbb = import ./home.nix;
       };
     };
 }
