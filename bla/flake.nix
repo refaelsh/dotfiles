@@ -26,7 +26,7 @@
         ];
       };
 
-      packages.x86_64-linux.myPackage =
+      packages.x86_64-linux.default =
         self.homeConfigurations."refaelsh".config.home.packages.myPackage;
     };
 }
