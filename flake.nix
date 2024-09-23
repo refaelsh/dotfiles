@@ -9,6 +9,7 @@
     };
     # home-manager.url = "github:refaelsh/dotfiles?dir=bla";
     nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
+    scriptology.url = "github:refaelsh/dotfiles?dir=scriptology";
   };
 
   outputs =
@@ -25,6 +26,7 @@
 
           modules = [
             ./nixos/configuration.nix
+            inputs.scriptology.nixosModules.default
             # inputs.home-manager.nixosModules.home-manager
             # inputs.home-manager.homeConfigurations.refaelsh
             # inputs.home-manager.nixosModules.home-manager
