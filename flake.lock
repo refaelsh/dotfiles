@@ -282,11 +282,11 @@
       },
       "locked": {
         "dir": "nixvim",
-        "lastModified": 1727113346,
-        "narHash": "sha256-lJe/ODhvgDENS+I+s9PF2CoPp1l6GDWQ39gaaTTBOpc=",
+        "lastModified": 1727113430,
+        "narHash": "sha256-4tSOKB+phWNNivsb/IzwFanVfxmh22vMGSqOw6Hj5eY=",
         "owner": "refaelsh",
         "repo": "dotfiles",
-        "rev": "492bcf513efbc928ed0c4790c690b99b1e581732",
+        "rev": "9a7664c836adf54ee92090ad971acf1e65329d29",
         "type": "github"
       },
       "original": {
