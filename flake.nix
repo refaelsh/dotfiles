@@ -25,15 +25,16 @@
 
           modules = [
             ./nixos/configuration.nix
+            inputs.home-manager.nixosModules.home-manager
             # inputs.home-manager.homeConfigurations.bbb
             # inputs.home-manager.homeConfigurations.homeManagerModules.bbb
             # inputs.home-manager.homeManagerModules.bbb
             {
               environment.systemPackages = [
-                inputs.nixvim.packages.${system}.default
+                # inputs.nixvim.packages.${system}.default
                 # inputs.home-manager.package.${system}.default
                 # inputs.home-manager.homeConfigurations.default
-                inputs.home-manager.packages.${system}.default              ];
+                # inputs.home-manager.packages.${system}.default              ];
 
               # home-manager = {
               #   users.refaelsh = import ./home-manager/home.nix;
