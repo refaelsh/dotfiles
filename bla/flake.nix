@@ -17,7 +17,7 @@
       ...
     }:
     {
-      homeConfigurations.refaelsh = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."refaelsh" = home-manager.lib.homeManagerConfiguration {
 
         # Your home-manager modules go here
         modules = [
