@@ -9,17 +9,25 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager }: {
-    homeConfigurations = {
-      standalone = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;  # Adjust the system if necessary
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }:
+    {
+      homeConfigurations."username" = home-manager.lib.homeManagerConfiguration {
+
+        # Your home-manager modules go here
         modules = [
-          ./home.nix  # Your home-manager configuration file
+          ./home.nix # Assuming your configuration is in home.nix
+          # Add other modules here
         ];
       };
-    };
 
-    # If you want to make the home-manager module directly accessible:
-    defaultPackage.x86_64-linux = self.homeConfigurations.standalone.activationPackage;
-  };
+      homeManagerModules = {
+        bbb = import ./path-to-your-module.nix;
+      };
+    };
 }
