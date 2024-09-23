@@ -9,7 +9,7 @@
     };
     # home-manager.url = "github:refaelsh/dotfiles?dir=bla";
     nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
-    # scriptology.url = "github:refaelsh/dotfiles?dir=scriptology";
+    scriptology.url = "github:refaelsh/dotfiles?dir=scriptology";
   };
 
   outputs =
