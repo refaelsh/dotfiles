@@ -29,6 +29,10 @@
         };
       };
 
+      specialArgs = {
+        inherit inputs;
+      };
+
       packages.x86_64-linux.default = self.homeConfigurations.standalone.activationPackage;
     };
 }
