@@ -12,11 +12,8 @@
         ...
       }:
       {
-        imports = [ ];
-
         config = {
           environment.systemPackages = with pkgs; [
-
             (writeShellApplication {
               name = "git.sh";
               text = # bash
@@ -78,12 +75,3 @@
     #   };
   };
 }
-# (writeShellApplication {
-#   name = "git.sh";
-#   text = # bash
-#     ''
-#       echo ----------------------------Running Git---------------------------------
-#       git -C ~/repos/dotfiles add . && git -C ~/repos/dotfiles commit -m "WIP" && git -C ~/repos/dotfiles push
-#       echo ----------------------------Finished running Git---------------------------------
-#     '';
-# })
