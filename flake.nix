@@ -8,7 +8,7 @@
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
     # wezterm.url = "github:wez/wezterm?dir=nix";
-    bbb.url = "github:refaelsh/dotfiles?dir=bla";
+    home-manager.url = "github:refaelsh/dotfiles?dir=home-manager";
     nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
   };
 
@@ -29,7 +29,7 @@
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
-                inputs.bbb.packages.${system}.default
+                inputs.home-manager.packages.${system}.default
               ];
             }
           ];
