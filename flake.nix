@@ -43,9 +43,9 @@
                 # inputs.home-manager.packages.default.x86_64-linux
               ];
 
-              home-manager = {
-                users.refaelsh = import ./home-manager/home.nix;
-              };
+              # home-manager = {
+              #   users.refaelsh = import ./home-manager/home.nix;
+              # };
             }
           ];
         };
