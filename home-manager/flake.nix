@@ -15,9 +15,15 @@
       self,
       nixpkgs,
       home-manager,
-    }:
+      wezterm,
+      ...
+    }@inputs:
     {
       homeConfigurations = {
+        specialArgs = {
+          inherit inputs; # This makes all inputs available in your home.nix
+        };
+
         standalone = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           modules = [
