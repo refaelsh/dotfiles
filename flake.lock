@@ -274,22 +274,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
-      "locked": {
-        "lastModified": 1726871744,
-        "narHash": "sha256-V5LpfdHyQkUF7RfOaDPrZDP+oqz88lTJrMT1+stXNwo=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "a1d92660c6b3b7c26fb883500a80ea9d33321be2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -365,28 +349,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixvim": "nixvim",
-        "scriptology": "scriptology"
-      }
-    },
-    "scriptology": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_4"
-      },
-      "locked": {
-        "dir": "scriptology",
-        "lastModified": 1727150699,
-        "narHash": "sha256-ULmae/G5i3O0O9Jz4TZrp3eRi15q4F0MDM5DG9pMYNk=",
-        "owner": "refaelsh",
-        "repo": "dotfiles",
-        "rev": "aef374f06476c63355df403d201b90b036b8c0db",
-        "type": "github"
-      },
-      "original": {
-        "dir": "scriptology",
-        "owner": "refaelsh",
-        "repo": "dotfiles",
-        "type": "github"
+        "nixvim": "nixvim"
       }
     },
     "systems": {
