@@ -7,7 +7,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    inputs.wezterm.url = "github:wez/wezterm?dir=nix";
+    wezterm.url = "github:wez/wezterm?dir=nix";
     # home-manager.url = "github:refaelsh/dotfiles?dir=bla";
     nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
   };
