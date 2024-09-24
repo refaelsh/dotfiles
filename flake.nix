@@ -27,7 +27,7 @@
           modules = [
             ./nixos/configuration.nix
             inputs.home-manager.nixosModules.home-manager
-            inputs.bbb.nixosConfigurations.myNixos
+            # inputs.bbb.nixosConfigurations.myNixos
             # inputs.home-manager.nixosModules.home-manager
             # inputs.home-manager.homeConfigurations.refaelsh
             # inputs.home-manager.nixosModules.home-manager
@@ -38,7 +38,7 @@
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
-                # inputs.bbb.packages.${system}.default
+                inputs.bbb.packages.${system}.default
                 # inputs.home-manager.package.${system}.default
                 # inputs.home-manager.homeConfigurations.default
                 # inputs.home-manager.packages.default.x86_64-linux
