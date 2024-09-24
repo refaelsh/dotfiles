@@ -26,7 +26,7 @@
 
           modules = [
             ./nixos/configuration.nix
-            inputs.home-manager.nixosModules.home-manager
+            # inputs.home-manager.nixosModules.home-manager
             # inputs.bbb.nixosModules.default
             # inputs.home-manager.nixosModules.home-manager
             # inputs.home-manager.homeConfigurations.refaelsh
@@ -44,9 +44,9 @@
                 # inputs.home-manager.packages.default.x86_64-linux
               ];
 
-              home-manager = {
-                users.refaelsh = import ./home-manager/home.nix;
-              };
+              # home-manager = {
+              #   users.refaelsh = import ./home-manager/home.nix;
+              # };
             }
           ];
         };
