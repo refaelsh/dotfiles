@@ -15,13 +15,9 @@
       self,
       nixpkgs,
       home-manager,
-    }@inputs:
+    }:
     {
-      specialArgs = {
-        inherit inputs;
-      };
       homeConfigurations = {
-
         standalone = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           modules = [
