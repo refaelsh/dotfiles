@@ -25,7 +25,7 @@
         };
       };
 
-      config = {
+      cconfig = {
         modules = [
           ./home.nix # Your home-manager configuration file
         ];
