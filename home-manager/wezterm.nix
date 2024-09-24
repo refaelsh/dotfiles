@@ -1,8 +1,8 @@
-{ pkgs, inputs, wezterm, ... }:
+{ pkgs, inputs, ... }:
 {
   programs.wezterm = {
     enable = true;
-    package = wezterm.packages.${pkgs.system}.default;
+    package = inputs.wezterm.packages.${pkgs.system}.default;
     enableZshIntegration = true;
     extraConfig = # lua
       ''
