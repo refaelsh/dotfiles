@@ -8,7 +8,7 @@
     ./git.nix
     ./fzf.nix
     ./librewolf.nix
-    # ./kitty.nix
+    ./kitty.nix
     ./mangohud.nix
     ./starship.nix
     ./termonad.nix
