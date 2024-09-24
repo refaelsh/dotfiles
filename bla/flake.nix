@@ -26,7 +26,9 @@
       };
 
       config = {
-        someOutput = "exampleValue"; # Define your output here
+        modules = [
+          ./home.nix # Your home-manager configuration file
+        ];
       };
 
       # If you want to make the home-manager module directly accessible:
