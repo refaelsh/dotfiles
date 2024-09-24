@@ -26,7 +26,7 @@
 
           modules = [
             ./nixos/configuration.nix
-            # inputs.scriptology.nixosModules.default
+            inputs.scriptology.nixosModules.default
             # inputs.home-manager.nixosModules.home-manager
             # inputs.home-manager.homeConfigurations.refaelsh
             # inputs.home-manager.nixosModules.home-manager
