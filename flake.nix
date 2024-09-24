@@ -8,7 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     wezterm.url = "github:wez/wezterm?dir=nix";
-    # bbb.url = "github:refaelsh/dotfiles?dir=bla";
+    bbb.url = "github:refaelsh/dotfiles?dir=bla";
     nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
   };
 
@@ -27,6 +27,7 @@
           modules = [
             ./nixos/configuration.nix
             inputs.home-manager.nixosModules.home-manager
+            inputs.bbb.config.someOutput
             # inputs.home-manager.nixosModules.home-manager
             # inputs.home-manager.homeConfigurations.refaelsh
             # inputs.home-manager.nixosModules.home-manager
