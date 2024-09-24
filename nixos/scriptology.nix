@@ -14,6 +14,8 @@
       name = "flakization.sh";
       text = # bash
         ''
+          # For debug
+          # sudo nixos-rebuild switch --flake ~/repos/dotfiles/#myNixos --show-trace --print-build-logs --verbose --option eval-cache false
           sudo nixos-rebuild switch --flake ~/repos/dotfiles/#myNixos --option eval-cache false
           nix run ~/repos/dotfiles/bla
         '';
@@ -34,8 +36,6 @@
       text = # bash
         ''
           git.sh || true
-          # For debug
-          # sudo nixos-rebuild switch --flake ~/repos/dotfiles/#myNixos --show-trace --print-build-logs --verbose --option eval-cache false
           flakization.sh
           git.sh
         '';
