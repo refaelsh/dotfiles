@@ -15,22 +15,17 @@
       self,
       nixpkgs,
       home-manager,
+      wezterm,
     }@inputs:
     {
       homeConfigurations = {
-        specialArgs = {
-          inherit inputs;
-        };
+
         standalone = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           modules = [
             ./home.nix
           ];
         };
-      };
-
-      specialArgs = {
-        inherit inputs;
       };
 
       packages.x86_64-linux.default = self.homeConfigurations.standalone.activationPackage;
