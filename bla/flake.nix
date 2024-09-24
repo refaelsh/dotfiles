@@ -26,6 +26,6 @@
       };
 
       # If you want to make the home-manager module directly accessible:
-      defaultPackage.x86_64-linux = self.homeConfigurations.standalone.activationPackage;
+      packages.x86_64-linux.default = self.homeConfigurations.standalone.activationPackage;
     };
 }
