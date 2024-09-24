@@ -25,11 +25,7 @@
         };
       };
 
-      cconfig = {
-        modules = [
-          ./home.nix # Your home-manager configuration file
-        ];
-      };
+      cconfig = "sdfsd";
 
       # If you want to make the home-manager module directly accessible:
       packages.x86_64-linux.default = self.homeConfigurations.standalone.activationPackage;
