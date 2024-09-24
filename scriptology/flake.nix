@@ -30,20 +30,20 @@
           };
         };
 
-      # If you want to make this script available outside of NixOS configuration, for example, for development or testing:
-      packages.x86_64-linux.default =
-        let
-          pkgs = import nixpkgs { system = "x86_64-linux"; };
-        in
-        pkgs.writeShellApplication {
-          name = "git.sh";
-          text = # bash
-            ''
-              echo ----------------------------Running Git---------------------------------
-              git -C ~/repos/dotfiles add . && git -C ~/repos/dotfiles commit -m "WIP" && git -C ~/repos/dotfiles push
-              echo ----------------------------Finished running Git---------------------------------
-            '';
-        };
+      # # If you want to make this script available outside of NixOS configuration, for example, for development or testing:
+      # packages.x86_64-linux.default =
+      #   let
+      #     pkgs = import nixpkgs { system = "x86_64-linux"; };
+      #   in
+      #   pkgs.writeShellApplication {
+      #     name = "git.sh";
+      #     text = # bash
+      #       ''
+      #         echo ----------------------------Running Git---------------------------------
+      #         git -C ~/repos/dotfiles add . && git -C ~/repos/dotfiles commit -m "WIP" && git -C ~/repos/dotfiles push
+      #         echo ----------------------------Finished running Git---------------------------------
+      #       '';
+      #   };
     };
 }
 # (writeShellApplication {
