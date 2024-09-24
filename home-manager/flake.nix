@@ -18,6 +18,10 @@
       wezterm,
     }@inputs:
     {
+      specialArgs = {
+        inherit inputs;
+        inherit wezterm; # If wezterm is needed specifically
+      };
       homeConfigurations = {
 
         standalone = home-manager.lib.homeManagerConfiguration {
