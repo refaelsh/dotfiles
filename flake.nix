@@ -3,11 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    # home-manager = {
-    #   url = "github:nix-community/home-manager";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    # wezterm.url = "github:wez/wezterm?dir=nix";
     home-manager.url = "github:refaelsh/dotfiles?dir=home-manager";
     nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
   };
