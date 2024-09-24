@@ -20,14 +20,10 @@
     {
       homeConfigurations = {
         specialArgs = {
-          inherit inputs; # This makes all inputs available in your home.nix
+          inherit inputs; 
         };
 
         standalone = home-manager.lib.homeManagerConfiguration {
-          specialArgs = {
-            inherit inputs; # This makes all inputs available in your home.nix
-          };
-
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           modules = [
             ./home.nix
