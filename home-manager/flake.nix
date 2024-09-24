@@ -7,6 +7,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wezterm.url = "github:wez/wezterm?dir=nix";
   };
 
   outputs =
@@ -18,7 +19,7 @@
     {
       homeConfigurations = {
         standalone = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Adjust the system if necessary
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
           modules = [
             ./home.nix
           ];
