@@ -6,14 +6,11 @@
   };
 
   outputs =
-    { self, nixpkgs }:
     {
 
       # NixOS module that can be imported in your NixOS configuration
       nixosModules.default =
         {
-          config,
-          lib,
           pkgs,
           ...
         }:
