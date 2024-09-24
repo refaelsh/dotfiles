@@ -1,26 +1,5 @@
 {
   "nodes": {
-    "bbb": {
-      "inputs": {
-        "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "dir": "bla",
-        "lastModified": 1727208018,
-        "narHash": "sha256-mwaVlps8sFF2naiPe2br0vq4n7u7tUl2PlhqsxuV/tY=",
-        "owner": "refaelsh",
-        "repo": "dotfiles",
-        "rev": "a20cd34db2b1d6443762693604d2e5a9fcb162ba",
-        "type": "github"
-      },
-      "original": {
-        "dir": "bla",
-        "owner": "refaelsh",
-        "repo": "dotfiles",
-        "type": "github"
-      }
-    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
@@ -173,8 +152,29 @@
     },
     "home-manager": {
       "inputs": {
+        "home-manager": "home-manager_2",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "dir": "home-manager",
+        "lastModified": 1727209284,
+        "narHash": "sha256-r1jYa8Ybtpwbcxr4golVVeB97o4IWlvBfHQ27cMgpyw=",
+        "owner": "refaelsh",
+        "repo": "dotfiles",
+        "rev": "32512de2d99d35d6952e2cb9ef605feb6334bd02",
+        "type": "github"
+      },
+      "original": {
+        "dir": "home-manager",
+        "owner": "refaelsh",
+        "repo": "dotfiles",
+        "type": "github"
+      }
+    },
+    "home-manager_2": {
+      "inputs": {
         "nixpkgs": [
-          "bbb",
+          "home-manager",
           "nixpkgs"
         ]
       },
@@ -192,7 +192,7 @@
         "type": "github"
       }
     },
-    "home-manager_2": {
+    "home-manager_3": {
       "inputs": {
         "nixpkgs": [
           "nixvim",
@@ -340,7 +340,7 @@
         "flake-compat": "flake-compat",
         "flake-parts": "flake-parts_2",
         "git-hooks": "git-hooks",
-        "home-manager": "home-manager_2",
+        "home-manager": "home-manager_3",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs_4",
         "nuschtosSearch": "nuschtosSearch",
@@ -385,7 +385,7 @@
     },
     "root": {
       "inputs": {
-        "bbb": "bbb",
+        "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
         "nixvim": "nixvim"
       }
