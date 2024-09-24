@@ -14,18 +14,18 @@
       self,
       nixpkgs,
       home-manager,
-      ...
     }:
     {
-      homeConfigurations."refaelsh" = home-manager.lib.homeManagerConfiguration {
-
-        # Your home-manager modules go here
-        modules = [
-          ./home.nix # Assuming your configuration is in home.nix
-          # Add other modules here
-        ];
+      homeConfigurations = {
+        standalone = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Adjust the system if necessary
+          modules = [
+            ./home.nix # Your home-manager configuration file
+          ];
+        };
       };
 
-      packages.x86_64-linux.default = self.homeConfigurations."refaelsh".config.home.packages.myPackage;
+      # If you want to make the home-manager module directly accessible:
+      defaultPackage.x86_64-linux = self.homeConfigurations.standalone.activationPackage;
     };
 }
