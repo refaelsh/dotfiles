@@ -15,7 +15,7 @@
       self,
       nixpkgs,
       home-manager,
-    }:
+    }@inputs:
     {
       homeConfigurations = {
         standalone = home-manager.lib.homeManagerConfiguration {
