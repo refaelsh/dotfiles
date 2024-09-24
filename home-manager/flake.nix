@@ -13,19 +13,15 @@
   outputs =
     {
       self,
-      nixpkgs,
-      home-manager,
-      wezterm,
     }@inputs:
     {
       specialArgs = {
         inherit inputs;
-        inherit wezterm; # If wezterm is needed specifically
       };
       homeConfigurations = {
 
-        standalone = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        standalone = self.home-manager.lib.homeManagerConfiguration {
+          pkgs = self.nixpkgs.legacyPackages.x86_64-linux;
           modules = [
             ./home.nix
           ];
