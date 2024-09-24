@@ -27,7 +27,7 @@
 
       nixosModules.default = {
         modules = [
-          ./home.nix # Your home-manager configuration file
+          # ./home.nix # Your home-manager configuration file
         ];
 
       };
