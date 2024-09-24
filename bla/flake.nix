@@ -25,7 +25,12 @@
         };
       };
 
-      cconfig = "sdfsd";
+      nixosModules.default =
+        { config, ... }:
+        {
+          options = { };
+          config = { };
+        };
 
       # If you want to make the home-manager module directly accessible:
       packages.x86_64-linux.default = self.homeConfigurations.standalone.activationPackage;
