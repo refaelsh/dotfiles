@@ -28,13 +28,13 @@
       # If you want to make the home-manager module directly accessible:
       packages.x86_64-linux.default = self.homeConfigurations.standalone.activationPackage;
 
-      nixosConfigurations = {
-        myNixos = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./home.nix # Your home-manager configuration file
-          ];
-        };
-      };
+      # nixosConfigurations = {
+      #   myNixos = nixpkgs.lib.nixosSystem {
+      #     system = "x86_64-linux";
+      #     modules = [
+      #       ./home.nix # Your home-manager configuration file
+      #     ];
+      #   };
+      # };
     };
 }
