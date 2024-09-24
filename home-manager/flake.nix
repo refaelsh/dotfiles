@@ -13,6 +13,8 @@
   outputs =
     {
       self,
+      nixpkgs,
+      home-manager,
     }@inputs:
     {
       specialArgs = {
@@ -20,8 +22,8 @@
       };
       homeConfigurations = {
 
-        standalone = self.home-manager.lib.homeManagerConfiguration {
-          pkgs = self.nixpkgs.legacyPackages.x86_64-linux;
+        standalone = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
           modules = [
             ./home.nix
           ];
