@@ -8,10 +8,6 @@
   outputs = {
     nixosModules.default =
       {
-        pkgs,
-        ...
-      }:
-      {
         config = {
           environment.systemPackages = with pkgs; [
             (writeShellApplication {
