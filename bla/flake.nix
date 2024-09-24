@@ -32,9 +32,9 @@
         myNixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            # ./home.nix # Your home-manager configuration file
+            ./home.nix # Your home-manager configuration file
           ];
         };
       };
-    }iiiii;
+    };
 }
