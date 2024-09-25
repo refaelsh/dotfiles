@@ -8,7 +8,7 @@
   };
 
   outputs =
-    { nixpkgs, ... }@inputs:
+    { self, nixpkgs, ... }@inputs:
     let
       system = "x86_64-linux";
     in
@@ -21,7 +21,8 @@
 
           modules = [
             ./nixos/configuration.nix
-            inputs.home-manager.nixosModules.home-manager
+            # inputs.home-manager.nixosModules.home-manager
+            self.nixosModules.home-manager
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
