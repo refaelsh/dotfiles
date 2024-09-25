@@ -30,12 +30,6 @@
           modules = [
             ./nixos/configuration.nix
 
-            {
-              environment.systemPackages = [
-                inputs.nixvim.packages.${system}.default
-              ];
-            }
-
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = {
