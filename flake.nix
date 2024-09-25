@@ -25,7 +25,8 @@
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
-                inputs.home-manager.packages.${system}.default
+                # inputs.home-manager.packages.${system}.default
+                inputs.self.nixosModules.home-manager
               ];
             }
           ];
