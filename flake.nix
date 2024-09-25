@@ -8,7 +8,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     wezterm.url = "github:wez/wezterm?dir=nix";
-    nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
+    # nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
+    inputs.nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -40,6 +44,9 @@
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.users.refaelsh = import ./home-manager/home.nix;
             }
+
+            inputs.nixvim.nixosModules.nixvim
+            { modules = [./nixvim/config ]; }
           ];
         };
       };
