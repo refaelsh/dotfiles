@@ -41,14 +41,13 @@
               home-manager.extraSpecialArgs = {
                 inherit inputs;
               };
-              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.users.refaelsh = import ./home-manager/home.nix;
             }
 
             inputs.nixvim.nixosModules.nixvim
             {
               # modules = [ ./nixvim/config ];
-              nixvim = import ./nixvim/config;
+              nixvim = import ./nixvim/config/main.nix;
             }
           ];
         };
