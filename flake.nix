@@ -47,7 +47,9 @@
             inputs.nixvim.nixosModules.nixvim
             {
               # modules = [ ./nixvim/config ];
-              nixvim = import ./nixvim/config/main.nix;
+              opts = {
+                guifont = "FiraCode Nerd Font:h8.1";
+              };
             }
           ];
         };
