@@ -25,8 +25,13 @@
         config.colors = {
           visual_bell = '#bd93f9',
         }
+
+        config.keys = {
+          key="C", mods="CTRL", action=wezterm.action.CopyTo 'Clipboard',
+          key="V", mods="CTRL", action=wezterm.action.PasteFrom 'Clipboard',
+        }
+
         return config
-        
       '';
   };
 }
