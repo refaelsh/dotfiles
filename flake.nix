@@ -9,7 +9,7 @@
     };
     wezterm.url = "github:wez/wezterm?dir=nix";
     # nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
-    inputs.nixvim = {
+    nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -46,7 +46,9 @@
             }
 
             inputs.nixvim.nixosModules.nixvim
-            { modules = [./nixvim/config ]; }
+            {
+              modules = [ ./nixvim/config ];
+            }
           ];
         };
       };
