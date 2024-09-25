@@ -13,7 +13,7 @@
     ./mangohud.nix
     ./starship.nix
     ./termonad.nix
-    # ./wezterm.nix
+    ./wezterm.nix
     ./xmobar.nix
     ./zsh.nix
   ];
