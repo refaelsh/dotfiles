@@ -20,9 +20,9 @@
     {
       nixosModules.home-manager = {
         imports = [ home-manager.nixosModules.home-manager ];
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.users.myuser = import ./home.nix;
+        # home-manager.useGlobalPkgs = true;
+        # home-manager.useUserPackages = true;
+        home-manager.users.refaelsh = import ./home.nix;
         # Replace 'myuser' with your actual username or make it configurable
       };
 
