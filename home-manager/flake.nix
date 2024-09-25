@@ -30,6 +30,9 @@
           };
           modules = [
             ./home.nix
+            {
+              _module.args.inputs = inputs;
+            }
           ];
         };
       };
