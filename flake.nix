@@ -24,15 +24,19 @@
 
           modules = [
             ./nixos/configuration.nix
-            # inputs.home-manager.nixosModules.home-manager
+
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
                 # inputs.home-manager.packages.${system}.default
               ];
             }
+
             inputs.home-manager.nixosModules.home-manager
             {
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+              };
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.users.refaelsh = import ./home-manager/home.nix;
             }
