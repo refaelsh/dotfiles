@@ -22,11 +22,10 @@
           modules = [
             ./nixos/configuration.nix
             # inputs.home-manager.nixosModules.home-manager
-            inputs.self.nixosModules.home-manager
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
-                # inputs.home-manager.packages.${system}.default
+                inputs.home-manager.packages.${system}.default
               ];
             }
           ];
