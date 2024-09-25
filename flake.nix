@@ -3,7 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    home-manager.url = "github:refaelsh/dotfiles?dir=home-manager";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
   };
 
@@ -21,12 +24,17 @@
 
           modules = [
             ./nixos/configuration.nix
-            inputs.home-manager.nixosModules.home-manager
+            # inputs.home-manager.nixosModules.home-manager
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
                 # inputs.home-manager.packages.${system}.default
               ];
+            }
+            inputs.home-manager.nixosModules.home-manager
+            {
+              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+              home-manager.users.jdoe = import ./home-manager/home.nix;
             }
           ];
         };
