@@ -29,11 +29,11 @@
         config.keys = {
           -- paste from the clipboard
           { 
-            key = 'V', 
+            key = 'v', 
             mods = 'CTRL', 
             action = act.PasteFrom 'Clipboard' 
           },
-          {key="C", mods="CTRL", action=wezterm.action.CopyTo 'Clipboard'},
+          {key="c", mods="CTRL", action=wezterm.action.CopyTo 'Clipboard'},
 
           -- -- paste from the primary selection
           -- { key = 'V', mods = 'CTRL', action = act.PasteFrom 'PrimarySelection' },
