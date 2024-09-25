@@ -2,7 +2,7 @@
 {
   programs.wezterm = {
     enable = true;
-    package = inputs.wezterm.packages.${pkgs.system}.default;
+    # package = inputs.wezterm.packages.${pkgs.system}.default;
     enableZshIntegration = true;
     extraConfig = # lua
       ''
@@ -31,8 +31,8 @@
           { 
             key = 'V', 
             mods = 'CTRL', 
-            action = act.PasteFrom 'Clipboard' 
-          }
+            action = wezterm.action.Nop
+           }
 
           -- -- paste from the primary selection
           -- { key = 'V', mods = 'CTRL', action = act.PasteFrom 'PrimarySelection' },
