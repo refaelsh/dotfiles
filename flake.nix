@@ -31,7 +31,7 @@
                 # inputs.home-manager.packages.${system}.default
               ];
             }
-            inputs.home-manager.nixosModules.home-manager
+            # inputs.home-manager.nixosModules.home-manager
             {
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.users.refaelsh = import ./home-manager/home.nix;
