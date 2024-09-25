@@ -7,13 +7,17 @@
   };
 
   outputs =
-    { self, nixpkgs }:
+    {
+      self,
+      nixpkgs,
+      wezterm,
+    }@inputs:
     {
 
       # packages.x86_64-linux.hello = nixpkgs.legacyPackages.x86_64-linux.hello;
 
       # packages.x86_64-linux.default = self.packages.x86_64-linux.hello;
-      packages.x86_64-linux.default = self.wezterm.default;
+      packages.x86_64-linux.default = inputs.wezterm.packages.x86_64-linux.default;
 
     };
 }
