@@ -32,7 +32,8 @@
             key = 'V', 
             mods = 'CTRL', 
             action = act.PasteFrom 'Clipboard' 
-          }
+          },
+          {key="C", mods="CTRL", action=wezterm.action.CopyTo 'Clipboard'},
 
           -- -- paste from the primary selection
           -- { key = 'V', mods = 'CTRL', action = act.PasteFrom 'PrimarySelection' },
