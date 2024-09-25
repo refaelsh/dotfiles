@@ -25,14 +25,14 @@
 
         standalone = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          # specialArgs = {
-          #   inherit inputs;
-          # };
+          extraSpecialArgs = {
+            inherit inputs;
+          };
           modules = [
             ./home.nix
-            {
-              _module.args.inputs = inputs;
-            }
+            # {
+            #   _module.args.inputs = inputs;
+            # }
           ];
         };
       };
