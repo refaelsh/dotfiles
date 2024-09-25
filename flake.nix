@@ -47,7 +47,8 @@
 
             inputs.nixvim.nixosModules.nixvim
             {
-              modules = [ ./nixvim/config ];
+              # modules = [ ./nixvim/config ];
+              nixvim = import ./nixvim/config;
             }
           ];
         };
