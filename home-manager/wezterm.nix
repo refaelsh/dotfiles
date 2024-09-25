@@ -25,20 +25,8 @@
         config.colors = {
           visual_bell = '#bd93f9',
         }
-
-        config.keys = {
-          -- paste from the clipboard
-          { 
-            key = 'V', 
-            mods = 'CTRL', 
-            action = wezterm.action.Nop
-           }
-
-          -- -- paste from the primary selection
-          -- { key = 'V', mods = 'CTRL', action = act.PasteFrom 'PrimarySelection' },
-        }
-
         return config
+        
       '';
   };
 }
