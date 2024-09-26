@@ -8,7 +8,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     wezterm.url = "github:wez/wezterm?dir=nix";
-    # nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
