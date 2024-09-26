@@ -25,7 +25,7 @@
     in
     {
       nixosModules.nixvim = {
-        import = [ nixvimModule ];
+        imports = [ nixvimModule ];
       };
       checks.${system} = {
         # Run `nix flake check .` to verify that your config is not broken
