@@ -2,11 +2,6 @@
 {
   programs.zsh = {
     enable = true;
-    shellAliases = {
-      "cat" = "bat";
-      "ls" = "eza -a --icons --long --extended --git --header";
-      "bbb" = "git commit";
-    };
     autosuggestion.enable = true;
     defaultKeymap = "viins";
     enableCompletion = true;
