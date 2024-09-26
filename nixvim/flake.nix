@@ -17,16 +17,17 @@
         # inherit pkgs;
         module = import ./config; # import the module directly
         # You can use `extraSpecialArgs` to pass additional arguments to your module files
-        # extraSpecialArgs = {
-        #   # inherit (inputs) foo;
-        # };
+        extraSpecialArgs = {
+          # inherit (inputs) foo;
+        };
       };
       nvim = nixvim'.makeNixvimWithModule nixvimModule;
     in
     {
-      nixosModules.nixvim = {
-        imports = [ nixvimModule ];
-      };
+      # nixosModules.nixvim = {
+      #   imports = [ nixvimModule ];
+      # };
+
       checks.${system} = {
         # Run `nix flake check .` to verify that your config is not broken
         default = nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
