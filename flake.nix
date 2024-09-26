@@ -3,7 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    home-manager.url = "github:refaelsh/dotfiles?dir=home-manager";
+    # home-manager.url = "github:refaelsh/dotfiles?dir=home-manager";
+    home-manager.url = "./home-manager";
     # nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
     nixvim.url = "./nixvim";
   };
