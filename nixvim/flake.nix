@@ -33,6 +33,9 @@
           nvim = nixvim'.makeNixvimWithModule nixvimModule;
         in
         {
+          nixosModules.home-manager = {
+            module = nixvimModule;
+          };
           checks = {
             # Run `nix flake check .` to verify that your config is not broken
             default = nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
