@@ -210,11 +210,11 @@
       },
       "locked": {
         "dir": "home-manager",
-        "lastModified": 1727363636,
-        "narHash": "sha256-oF83dIsCAPHdJVSnAZtwJF6hOo75cVPO8UzlRRbpsXI=",
+        "lastModified": 1727364236,
+        "narHash": "sha256-InLUGGO5jpphvS8QZNtFHpSb5dMfiB4cZhqXxFulLls=",
         "owner": "refaelsh",
         "repo": "dotfiles",
-        "rev": "4dd54dc5a543c806e0b9c3b1d8798a1e46660a0e",
+        "rev": "f15b514f525a024c369f74d6cd0c6db6e0b0c1cb",
         "type": "github"
       },
       "original": {
@@ -406,11 +406,11 @@
       },
       "locked": {
         "dir": "nixvim",
-        "lastModified": 1727363636,
-        "narHash": "sha256-oF83dIsCAPHdJVSnAZtwJF6hOo75cVPO8UzlRRbpsXI=",
+        "lastModified": 1727364236,
+        "narHash": "sha256-InLUGGO5jpphvS8QZNtFHpSb5dMfiB4cZhqXxFulLls=",
         "owner": "refaelsh",
         "repo": "dotfiles",
-        "rev": "4dd54dc5a543c806e0b9c3b1d8798a1e46660a0e",
+        "rev": "f15b514f525a024c369f74d6cd0c6db6e0b0c1cb",
         "type": "github"
       },
       "original": {
