@@ -211,11 +211,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-Zw5CIpqh37EY8Qov4OiJIK7Xjn0ONp6yi38Zyh4COqA=",
-        "path": "/nix/store/9hjiqadz52sqivghm87adwk8h3wp6vf0-source/home-manager",
+        "path": "/nix/store/pqm5ha3ns3pcdyf855yaybasw1i8qvgw-source/home-manager",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/9hjiqadz52sqivghm87adwk8h3wp6vf0-source/home-manager",
+        "path": "/nix/store/pqm5ha3ns3pcdyf855yaybasw1i8qvgw-source/home-manager",
         "type": "path"
       }
     },
@@ -401,12 +401,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-671I/8AA6Ithq0drz93sHgMdfPHl7m49F7NaBsheroY=",
-        "path": "/nix/store/9hjiqadz52sqivghm87adwk8h3wp6vf0-source/nixvim",
+        "narHash": "sha256-/UlTGv1YDFxqxZxBGpZp1Q7v5aih8jyR1UWrMRVxWRo=",
+        "path": "/nix/store/pqm5ha3ns3pcdyf855yaybasw1i8qvgw-source/nixvim",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/9hjiqadz52sqivghm87adwk8h3wp6vf0-source/nixvim",
+        "path": "/nix/store/pqm5ha3ns3pcdyf855yaybasw1i8qvgw-source/nixvim",
         "type": "path"
       }
     },
