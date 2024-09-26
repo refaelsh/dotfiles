@@ -24,9 +24,9 @@
       nvim = nixvim'.makeNixvimWithModule nixvimModule;
     in
     {
-      # nixosModules.nixvim = {
-      #   imports = [ nixvimModule ];
-      # };
+      nixosModules.nixvim = {
+        # imports = [ nixvimModule ];
+      };
 
       checks.${system} = {
         # Run `nix flake check .` to verify that your config is not broken
