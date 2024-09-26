@@ -7,11 +7,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-0hBAbFqpM9cA71E0QY9wmwtTMzyixYnYsaNT17Wg0vA=",
-        "path": "/nix/store/hy8p15rjb3wfld01jgzzxckrdnvnd4b3-source/brave",
+        "path": "/nix/store/zky7r6vkc8nvsqxhhl244r1590j7719z-source/brave",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/hy8p15rjb3wfld01jgzzxckrdnvnd4b3-source/brave",
+        "path": "/nix/store/zky7r6vkc8nvsqxhhl244r1590j7719z-source/brave",
         "type": "path"
       }
     },
@@ -226,11 +226,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-Zw5CIpqh37EY8Qov4OiJIK7Xjn0ONp6yi38Zyh4COqA=",
-        "path": "/nix/store/hy8p15rjb3wfld01jgzzxckrdnvnd4b3-source/home-manager",
+        "path": "/nix/store/zky7r6vkc8nvsqxhhl244r1590j7719z-source/home-manager",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/hy8p15rjb3wfld01jgzzxckrdnvnd4b3-source/home-manager",
+        "path": "/nix/store/zky7r6vkc8nvsqxhhl244r1590j7719z-source/home-manager",
         "type": "path"
       }
     },
@@ -433,11 +433,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-CiSZDlO3lfI8JdNL3AwVP67dwtxXrfpejmL1ovTaYkA=",
-        "path": "/nix/store/hy8p15rjb3wfld01jgzzxckrdnvnd4b3-source/nixvim",
+        "path": "/nix/store/zky7r6vkc8nvsqxhhl244r1590j7719z-source/nixvim",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/hy8p15rjb3wfld01jgzzxckrdnvnd4b3-source/nixvim",
+        "path": "/nix/store/zky7r6vkc8nvsqxhhl244r1590j7719z-source/nixvim",
         "type": "path"
       }
     },
