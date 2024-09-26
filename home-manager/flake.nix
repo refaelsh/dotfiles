@@ -19,7 +19,7 @@
     }@inputs:
     {
       nixosModules.home-manager = {
-        # imports = [ home-manager.nixosModules.home-manager ];
+        imports = [ home-manager.nixosModules.home-manager ];
         home-manager.users.refaelsh = import ./home.nix;
       };
 
