@@ -20,7 +20,7 @@
     have_nerd_font = true;
   };
 
-  opts = {
+  programs.nixvim.opts = {
     guifont = "FiraCode Nerd Font:h8.1";
     autoread = true;
     cursorline = true;
