@@ -27,7 +27,7 @@
       nixosModules.home-manager = {
         module = nixvimModule;
       };
-      checks = {
+      checks.${system} = {
         # Run `nix flake check .` to verify that your config is not broken
         default = nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
       };
