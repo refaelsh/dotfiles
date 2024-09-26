@@ -405,19 +405,14 @@
         "nixvim": "nixvim_2"
       },
       "locked": {
-        "dir": "nixvim",
-        "lastModified": 1727364236,
-        "narHash": "sha256-InLUGGO5jpphvS8QZNtFHpSb5dMfiB4cZhqXxFulLls=",
-        "owner": "refaelsh",
-        "repo": "dotfiles",
-        "rev": "f15b514f525a024c369f74d6cd0c6db6e0b0c1cb",
-        "type": "github"
+        "lastModified": 1,
+        "narHash": "sha256-RMBXtphA5e4nciWHyyrAjnnIT8+/XnyA0y29M10fKE4=",
+        "path": "/nix/store/p80kc15hwfirz6kh4knl5wsb2vs4svkr-source/nixvim",
+        "type": "path"
       },
       "original": {
-        "dir": "nixvim",
-        "owner": "refaelsh",
-        "repo": "dotfiles",
-        "type": "github"
+        "path": "/nix/store/p80kc15hwfirz6kh4knl5wsb2vs4svkr-source/nixvim",
+        "type": "path"
       }
     },
     "nixvim_2": {
