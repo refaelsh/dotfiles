@@ -26,7 +26,7 @@
     {
       nixosModules.nixvim = {
         # imports = [ nixvimModule ];
-        module = import ./config; # import the module directly
+        modules = import ./config; # import the module directly
       };
 
       checks.${system} = {
