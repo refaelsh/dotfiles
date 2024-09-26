@@ -8,6 +8,7 @@
     # nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
     nixvim.url = "./nixvim";
     brave.url = "./brave";
+    xmonad.url = "./xmonad";
   };
 
   outputs =
