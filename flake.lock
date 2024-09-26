@@ -7,11 +7,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-0hBAbFqpM9cA71E0QY9wmwtTMzyixYnYsaNT17Wg0vA=",
-        "path": "/nix/store/4cdq66ks1np2x35nzfmdpk57z6wxkiwj-source/brave",
+        "path": "/nix/store/k3jn95d1n6hp4di1111qzbm0fbf51k80-source/brave",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/4cdq66ks1np2x35nzfmdpk57z6wxkiwj-source/brave",
+        "path": "/nix/store/k3jn95d1n6hp4di1111qzbm0fbf51k80-source/brave",
         "type": "path"
       }
     },
@@ -226,11 +226,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-XlmDmtPZ3IVtMLT2bBht1ot8d14/FGUMIyyQq3BB3wA=",
-        "path": "/nix/store/4cdq66ks1np2x35nzfmdpk57z6wxkiwj-source/home-manager",
+        "path": "/nix/store/k3jn95d1n6hp4di1111qzbm0fbf51k80-source/home-manager",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/4cdq66ks1np2x35nzfmdpk57z6wxkiwj-source/home-manager",
+        "path": "/nix/store/k3jn95d1n6hp4di1111qzbm0fbf51k80-source/home-manager",
         "type": "path"
       }
     },
@@ -449,11 +449,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-CiSZDlO3lfI8JdNL3AwVP67dwtxXrfpejmL1ovTaYkA=",
-        "path": "/nix/store/4cdq66ks1np2x35nzfmdpk57z6wxkiwj-source/nixvim",
+        "path": "/nix/store/k3jn95d1n6hp4di1111qzbm0fbf51k80-source/nixvim",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/4cdq66ks1np2x35nzfmdpk57z6wxkiwj-source/nixvim",
+        "path": "/nix/store/k3jn95d1n6hp4di1111qzbm0fbf51k80-source/nixvim",
         "type": "path"
       }
     },
@@ -622,11 +622,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-LTmlB1lUddiQ9XxE/9pIXn5kHehCw25RLkgnZY0hQNk=",
-        "path": "/nix/store/4cdq66ks1np2x35nzfmdpk57z6wxkiwj-source/xmonad",
+        "path": "/nix/store/k3jn95d1n6hp4di1111qzbm0fbf51k80-source/xmonad",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/4cdq66ks1np2x35nzfmdpk57z6wxkiwj-source/xmonad",
+        "path": "/nix/store/k3jn95d1n6hp4di1111qzbm0fbf51k80-source/xmonad",
         "type": "path"
       }
     },
