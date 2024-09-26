@@ -40,9 +40,9 @@
       enable = true;
       enableConfiguredRecompile = true;
       enableContribAndExtras = true;
-      extraPackages = haskellPackages: [
-        haskellPackages.xmonad-contrib
-        haskellPackages.xmobar
+      extraPackages = with haskellPackages: [
+        xmonad-contrib
+        xmobar
       ];
       config = builtins.readFile ./xmonad.hs;
     };
