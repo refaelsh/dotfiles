@@ -24,7 +24,7 @@
       nvim = nixvim'.makeNixvimWithModule nixvimModule;
     in
     {
-      nixosModules.home-manager = {
+      nixosModules.nixvim = {
         module = nixvimModule;
       };
       checks.${system} = {
