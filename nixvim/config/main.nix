@@ -3,7 +3,7 @@
 # viAlias = true;
 { self, pkgs, ... }:
 {
-  enable = true;
+  # enable = true;
   enableMan = true;
   colorschemes.dracula-nvim.enable = true;
   performance.byteCompileLua = {
