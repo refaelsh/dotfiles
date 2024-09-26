@@ -36,15 +36,5 @@
       layout = "us";
     };
     displayManager.lightdm.enable = true;
-    # windowManager.xmonad = {
-    #   enable = true;
-    #   enableConfiguredRecompile = true;
-    #   enableContribAndExtras = true;
-    #   extraPackages = haskellPackages: [
-    #     haskellPackages.xmonad-contrib
-    #     haskellPackages.xmobar
-    #   ];
-    #   config = builtins.readFile ./xmonad.hs;
-    # };
   };
 }
