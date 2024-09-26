@@ -7,6 +7,7 @@
     home-manager.url = "./home-manager";
     # nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
     nixvim.url = "./nixvim";
+    brave.url = "./brave";
   };
 
   outputs =
@@ -27,6 +28,7 @@
             {
               environment.systemPackages = [
                 inputs.nixvim.packages.${system}.default
+                inputs.brave.packages.${system}.default
               ];
             }
           ];
