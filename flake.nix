@@ -3,8 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    # home-manager.url = "github:refaelsh/dotfiles?dir=home-manager";
-    home-manager.url = "./home-manager";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,6 +34,9 @@
                 # inputs.nixvim.packages.${system}.default
                 # inputs.brave.packages.${system}.default
               ];
+
+              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+              home-manager.users.jdoe = import ./home-manager/home.nix
             }
           ];
         };
