@@ -2,8 +2,7 @@
 {
   xdg.configFile."lf/icons".source = pkgs.fetchurl {
     url = "https://github.com/gokcehan/lf/blob/master/etc/icons.example";
-    # You might need to specify sha256 or another hash to ensure integrity
-    # sha256 = "your-hash-here";
+    sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
   };
   programs.lf = {
     enable = true;
