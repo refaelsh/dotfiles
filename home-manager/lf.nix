@@ -19,7 +19,7 @@ in
   #   url = "https://raw.githubusercontent.com/gokcehan/lf/refs/heads/master/etc/icons.example";
   #   sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
   # };
-  xdg.configFile."lf/icons".source = myRawFile;
+  xdg.configFile."lf/icons".source = (builtins.readFile myRawFile);
 
   programs.lf = {
     enable = true;
