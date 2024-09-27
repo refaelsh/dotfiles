@@ -5,8 +5,10 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     # home-manager.url = "github:refaelsh/dotfiles?dir=home-manager";
     home-manager.url = "./home-manager";
-    # nixvim.url = "github:refaelsh/dotfiles?dir=nixvim";
-    nixvim.url = "./nixvim";
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     brave.url = "./brave";
     xmonad.url = "./xmonad";
   };
@@ -25,11 +27,12 @@
 
           modules = [
             ./nixos/configuration.nix
+            ./nixvim/config
             inputs.home-manager.nixosModules.home-manager
             inputs.xmonad.nixosModules.xmonad
             {
               environment.systemPackages = [
-                inputs.nixvim.packages.${system}.default
+                # inputs.nixvim.packages.${system}.default
                 inputs.brave.packages.${system}.default
               ];
             }
