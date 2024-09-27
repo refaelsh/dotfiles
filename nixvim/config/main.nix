@@ -1,9 +1,15 @@
 # defaultEditor = true;
 # vimAlias = true;
 # viAlias = true;
-{ self, inputs, pkgs, ... }:
+{
+  self,
+  inputs,
+  pkgs,
+  ...
+}:
 {
   imports = [ inputs.nixvim.nixosModules.nixvim ];
+
   programs.nixvim = {
     enable = true;
     enableMan = true;
