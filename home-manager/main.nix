@@ -1,5 +1,5 @@
 {
-  progrmas.home.stateVersion = "24.05";
+  programs.home.stateVersion = "24.05";
   home-manager.users.refaelsh = {
     modules = [
       ./alacritty.nix
