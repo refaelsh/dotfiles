@@ -1,6 +1,3 @@
-# defaultEditor = true;
-# vimAlias = true;
-# viAlias = true;
 {
   self,
   inputs,
@@ -12,6 +9,9 @@
 
   programs.nixvim = {
     enable = true;
+    defaultEditor = true;
+    vimAlias = true;
+    viAlias = true;
     enableMan = true;
     colorschemes.dracula-nvim.enable = true;
     performance.byteCompileLua = {
