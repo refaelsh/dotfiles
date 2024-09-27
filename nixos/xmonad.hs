@@ -35,7 +35,7 @@ myStartupHook = do
   spawn "amixer set Master 5%+"
   spawnOnOnce "1" "brave"
   spawnOnOnce "9" "signal-desktop"
-  spawnOnOnce "0" "neovide ~/repos/dotfiles/configuration.org"
+  spawnOnOnce "0" "neovide ~/repos/dotfiles"
 
 myXmobarPP :: PP
 myXmobarPP =
