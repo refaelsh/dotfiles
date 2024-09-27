@@ -1,9 +1,17 @@
 { pkgs, ... }:
-{
-  xdg.configFile."lf/icons".source = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/gokcehan/lf/refs/heads/master/etc/icons.example";
+let
+  rawUrl = "https://raw.githubusercontent.com/gokcehan/lf/refs/heads/master/etc/icons.example";
+  fetchedFile = pkgs.fetchurl {
+    url = rawUrl;
     sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
   };
+in
+{
+  # xdg.configFile."lf/icons".source = pkgs.fetchurl {
+  #   url = "https://raw.githubusercontent.com/gokcehan/lf/refs/heads/master/etc/icons.example";
+  #   sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
+  # };
+  xdg.configFile."lf/icons".source = ${fetchedFile};
 
   programs.lf = {
     enable = true;
