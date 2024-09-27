@@ -27,11 +27,11 @@
 
           modules = [
             ./nixos/configuration.nix
-            inputs.nixvim.nixosModules.nixvim
-            inputs.home-manager.nixosModules.home-manager
+            ./nixvim/config
             {
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.users.refaelsh = import ./home-manager/home.nix;
+              programs.nixvim.enable = true;
             }
             # {
             #   environment.systemPackages = [
