@@ -152,7 +152,7 @@
 
   ];
 
-  autoCmd = [
+  programs.nixvim.autoCmd = [
 
     {
       event = [
