@@ -9,8 +9,6 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    brave.url = "./brave";
-    xmonad.url = "./xmonad";
   };
 
   outputs =
