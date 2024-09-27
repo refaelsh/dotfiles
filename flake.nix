@@ -28,6 +28,7 @@
           modules = [
             ./nixos/configuration.nix
             ./nixvim/config
+            inputs.nixvim.nixosModules.nixvim
             inputs.home-manager.nixosModules.home-manager
             {
               environment.systemPackages = [
