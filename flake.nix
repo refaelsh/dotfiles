@@ -30,14 +30,13 @@
             inputs.nixvim.nixosModules.nixvim
             ./nixvim/main.nix
             inputs.home-manager.nixosModules.home-manager
+            ./homa-manager/main.nix
             {
               environment.systemPackages = [
                 # inputs.nixvim.packages.${system}.default
                 # inputs.brave.packages.${system}.default
               ];
 
-              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-              home-manager.users.refaelsh = import ./home-manager/home.nix;
             }
           ];
         };
