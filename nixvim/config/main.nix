@@ -3,7 +3,6 @@
 # viAlias = true;
 { self, pkgs, ... }:
 {
-  imports = [ <nixvim>.nixosModules.nixvim ];
   programs.nixvim = {
     # enable = true;
     enableMan = true;

@@ -25,6 +25,8 @@
             inherit inputs system;
           };
 
+          imports = [ <nixvim>.nixosModules.nixvim ];
+
           modules = [
             ./nixos/configuration.nix
             ./nixvim/config
