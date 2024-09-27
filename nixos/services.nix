@@ -36,7 +36,7 @@
       layout = "us";
     };
     displayManager.lightdm.enable = true;
-    services.xserver.windowManager.xmonad = {
+    windowManager.xmonad = {
       enable = true;
       enableConfiguredRecompile = true;
       enableContribAndExtras = true;

@@ -187,11 +187,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-XlmDmtPZ3IVtMLT2bBht1ot8d14/FGUMIyyQq3BB3wA=",
-        "path": "/nix/store/fmw82dfbhvsdvviwa1y08gdxiplkz2i5-source/home-manager",
+        "path": "/nix/store/dsbla7j7viwwfpln17mqahvk18s8kr4v-source/home-manager",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/fmw82dfbhvsdvviwa1y08gdxiplkz2i5-source/home-manager",
+        "path": "/nix/store/dsbla7j7viwwfpln17mqahvk18s8kr4v-source/home-manager",
         "type": "path"
       }
     },
