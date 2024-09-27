@@ -1,5 +1,18 @@
 {
-  # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-  home-manager.users.refaelsh = import ./home.nix;
-  # imports = [ ./home.nix ];
+  home.stateVersion = "24.05";
+  home-manager.users.refaelsh = {
+    modules = [
+      ./alacritty.nix
+      ./git.nix
+      ./fzf.nix
+      ./librewolf.nix
+      ./kitty.nix
+      ./mangohud.nix
+      ./starship.nix
+      ./termonad.nix
+      ./wezterm.nix
+      ./xmobar.nix
+      ./zsh.nix
+    ];
+  };
 }
