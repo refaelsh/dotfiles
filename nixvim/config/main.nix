@@ -5,7 +5,7 @@
 {
   imports = [ inputs.nixvim.nixosModules.nixvim ];
   programs.nixvim = {
-    # enable = true;
+    enable = true;
     enableMan = true;
     colorschemes.dracula-nvim.enable = true;
     performance.byteCompileLua = {
