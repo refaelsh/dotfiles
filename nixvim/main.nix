@@ -1,4 +1,3 @@
-
 {
   self,
   inputs,
@@ -6,7 +5,7 @@
   ...
 }:
 {
-  programs.nixvim = {
+  inputs.nixvim.nixosModules.nixvim.programs.nixvim = {
     enable = true;
     defaultEditor = true;
     vimAlias = true;
