@@ -30,7 +30,7 @@
             inputs.nixvim.nixosModules.nixvim
             ./nixvim/main.nix
             inputs.home-manager.nixosModules.home-manager
-            ./homa-manager/main.nix
+            ./home-manager/main.nix
             {
               environment.systemPackages = [
                 # inputs.nixvim.packages.${system}.default
