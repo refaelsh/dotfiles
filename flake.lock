@@ -1,20 +1,5 @@
 {
   "nodes": {
-    "brave": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-0hBAbFqpM9cA71E0QY9wmwtTMzyixYnYsaNT17Wg0vA=",
-        "path": "/nix/store/63a8bawr1nh14i1487m9dip9khkckr3l-source/brave",
-        "type": "path"
-      },
-      "original": {
-        "path": "/nix/store/63a8bawr1nh14i1487m9dip9khkckr3l-source/brave",
-        "type": "path"
-      }
-    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
@@ -196,17 +181,17 @@
     "home-manager": {
       "inputs": {
         "home-manager": "home-manager_2",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "wezterm": "wezterm"
       },
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-XlmDmtPZ3IVtMLT2bBht1ot8d14/FGUMIyyQq3BB3wA=",
-        "path": "/nix/store/63a8bawr1nh14i1487m9dip9khkckr3l-source/home-manager",
+        "path": "/nix/store/fmw82dfbhvsdvviwa1y08gdxiplkz2i5-source/home-manager",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/63a8bawr1nh14i1487m9dip9khkckr3l-source/home-manager",
+        "path": "/nix/store/fmw82dfbhvsdvviwa1y08gdxiplkz2i5-source/home-manager",
         "type": "path"
       }
     },
@@ -292,22 +277,6 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1727266098,
-        "narHash": "sha256-AHTKbJ9ffR7Nx+XcR2XP0AYLI4OlUh2IGh4SAkdG5Ig=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "4f31540079322e6013930b5b2563fd10f96917f0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
         "lastModified": 1727089097,
         "narHash": "sha256-ZMHMThPsthhUREwDebXw7GX45bJnBCVbfnH1g5iuSPc=",
         "owner": "NixOS",
@@ -322,7 +291,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1726238386,
         "narHash": "sha256-3//V84fYaGVncFImitM6lSAliRdrGayZLdxWlpcuGk0=",
@@ -338,7 +307,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1727122398,
         "narHash": "sha256-o8VBeCWHBxGd4kVMceIayf5GApqTavJbTa44Xcg5Rrk=",
@@ -350,22 +319,6 @@
       "original": {
         "owner": "nixos",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_5": {
-      "locked": {
-        "lastModified": 1727296349,
-        "narHash": "sha256-C3SRU3GMDNII9l16o4+nkybuxaDX4x5TBypwmmUBCo0=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "fe866c653c24adf1520628236d4e70bbb2fdd949",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -422,11 +375,9 @@
     },
     "root": {
       "inputs": {
-        "brave": "brave",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_4",
-        "nixvim": "nixvim",
-        "xmonad": "xmonad"
+        "nixpkgs": "nixpkgs_3",
+        "nixvim": "nixvim"
       }
     },
     "rust-overlay": {
@@ -508,7 +459,7 @@
         "freetype2": "freetype2",
         "harfbuzz": "harfbuzz",
         "libpng": "libpng",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "rust-overlay": "rust-overlay",
         "zlib": "zlib"
       },
@@ -526,21 +477,6 @@
         "owner": "wez",
         "repo": "wezterm",
         "type": "github"
-      }
-    },
-    "xmonad": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_5"
-      },
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-LTmlB1lUddiQ9XxE/9pIXn5kHehCw25RLkgnZY0hQNk=",
-        "path": "/nix/store/63a8bawr1nh14i1487m9dip9khkckr3l-source/xmonad",
-        "type": "path"
-      },
-      "original": {
-        "path": "/nix/store/63a8bawr1nh14i1487m9dip9khkckr3l-source/xmonad",
-        "type": "path"
       }
     },
     "zlib": {

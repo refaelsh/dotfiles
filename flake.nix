@@ -27,7 +27,6 @@
             ./nixos/configuration.nix
             ./nixvim/config
             inputs.home-manager.nixosModules.home-manager
-            inputs.xmonad.nixosModules.xmonad
             {
               environment.systemPackages = [
                 # inputs.nixvim.packages.${system}.default
