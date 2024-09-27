@@ -7,6 +7,7 @@
     settings = {
       icons = true;
       hidden = true;
+      drawbox = true;
     };
   };
 }
