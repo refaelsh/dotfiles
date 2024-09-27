@@ -5,13 +5,21 @@ let
     url = rawUrl;
     sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
   };
+  myRawFile =
+    pkgs.fetchFromGitHub {
+      owner = "gokcehan";
+      repo = "lf";
+      # rev = "commit-hash-or-tag"; # Can be a branch, tag, or commit hash
+      sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
+    }
+    + "/ect/icons.exaple";
 in
 {
   # xdg.configFile."lf/icons".source = pkgs.fetchurl {
   #   url = "https://raw.githubusercontent.com/gokcehan/lf/refs/heads/master/etc/icons.example";
   #   sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
   # };
-  xdg.configFile."lf/icons".source = fetchedFile;
+  xdg.configFile."lf/icons".source = myRawFile;
 
   programs.lf = {
     enable = true;
