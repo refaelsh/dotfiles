@@ -9,7 +9,7 @@ let
     pkgs.fetchFromGitHub {
       owner = "gokcehan";
       repo = "lf";
-      # rev = "commit-hash-or-tag"; # Can be a branch, tag, or commit hash
+      rev = "master"; # Can be a branch, tag, or commit hash
       sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
     }
     + "/ect/icons.exaple";
