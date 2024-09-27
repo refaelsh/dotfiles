@@ -27,7 +27,7 @@
 
           modules = [
             ./nixos/configuration.nix
-            ./nixvim
+            ./nixvim/main.nix
             inputs.nixvim.nixosModules.nixvim
             inputs.home-manager.nixosModules.home-manager
             {
