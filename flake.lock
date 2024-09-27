@@ -7,11 +7,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-0hBAbFqpM9cA71E0QY9wmwtTMzyixYnYsaNT17Wg0vA=",
-        "path": "/nix/store/q4bshcakcs0prncfhniqd9cqy9pxlw38-source/brave",
+        "path": "/nix/store/zz69m2lb2agbzyv7q1q5rn29mi6p84n2-source/brave",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/q4bshcakcs0prncfhniqd9cqy9pxlw38-source/brave",
+        "path": "/nix/store/zz69m2lb2agbzyv7q1q5rn29mi6p84n2-source/brave",
         "type": "path"
       }
     },
@@ -202,11 +202,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-XlmDmtPZ3IVtMLT2bBht1ot8d14/FGUMIyyQq3BB3wA=",
-        "path": "/nix/store/q4bshcakcs0prncfhniqd9cqy9pxlw38-source/home-manager",
+        "path": "/nix/store/zz69m2lb2agbzyv7q1q5rn29mi6p84n2-source/home-manager",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/q4bshcakcs0prncfhniqd9cqy9pxlw38-source/home-manager",
+        "path": "/nix/store/zz69m2lb2agbzyv7q1q5rn29mi6p84n2-source/home-manager",
         "type": "path"
       }
     },
@@ -535,11 +535,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-LTmlB1lUddiQ9XxE/9pIXn5kHehCw25RLkgnZY0hQNk=",
-        "path": "/nix/store/q4bshcakcs0prncfhniqd9cqy9pxlw38-source/xmonad",
+        "path": "/nix/store/zz69m2lb2agbzyv7q1q5rn29mi6p84n2-source/xmonad",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/q4bshcakcs0prncfhniqd9cqy9pxlw38-source/xmonad",
+        "path": "/nix/store/zz69m2lb2agbzyv7q1q5rn29mi6p84n2-source/xmonad",
         "type": "path"
       }
     },
