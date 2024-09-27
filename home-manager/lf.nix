@@ -10,7 +10,7 @@ let
       owner = "gokcehan";
       repo = "lf";
       rev = "master"; # Can be a branch, tag, or commit hash
-      sha256 = "sha256-20VeJfroHHk6N8oN5Mv0offYFrJXgPaqUYfexLvHv7c=";
+      sha256 = "sha256-WljTws+z1qKOHHr5/K6xXKvkDNqbpfVepHcTBlIKQU0=";
     }
     + "/ect/icons.exaple";
 in
