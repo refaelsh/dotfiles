@@ -27,7 +27,7 @@
         }
 
         config.keys = {
-          {
+          { 
             mods = 'CTRL', 
             key = 'v', 
             action = act.PasteFrom 'Clipboard' 

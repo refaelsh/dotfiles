@@ -135,7 +135,6 @@
       speedtest-cli
       numlockx
       zoom-us
-      brave
     ];
   };
 }
