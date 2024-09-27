@@ -1,5 +1,5 @@
 {
-  # programs.home-manager.enable = true;
+  programs.home-manager.enable = true;
   home.stateVersion = "24.05";
   # home.username = "refaelsh";
   # home.homeDirectory = "/home/refaelsh";
@@ -8,6 +8,7 @@
     ./alacritty.nix
     ./git.nix
     ./fzf.nix
+    ./lf.nix
     ./librewolf.nix
     ./kitty.nix
     ./mangohud.nix
