@@ -44,22 +44,12 @@ in
   config = mkIf cfg.enable {
     home.packages = [ pkgs.xmobar ];
 
-    # xdg.configFile."xmobar/.xmobarrc_bla" = {
-    #   text = ''
-    #     # Base configuration for nixmobar
-    #     [general]
-    #     update-interval = ${toString cfg.updateInterval}
-    #
-    #     # Here you might include default settings or templates for nixmobar
-    #
-    #     # Extra configuration provided by the user
-    #     ${cfg.extraConfig}
-    #   '';
-    # };
     xdg.configFile."xmobar/.xmobarrc_bla" = {
-      text = builtins.concatStringsSep "\n" (
-        builtins.attrValues (builtins.mapAttrs (name: value: "${name} = ${value}") cfg.settings)
-      );
+      text =
+        "sdfds\n"
+        ++ builtins.concatStringsSep "\n" (
+          builtins.attrValues (builtins.mapAttrs (name: value: "${name} = ${value}") cfg.settings)
+        );
     };
   };
 }
