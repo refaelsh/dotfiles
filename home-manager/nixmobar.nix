@@ -56,7 +56,7 @@ in
     #     ${cfg.extraConfig}
     #   '';
     # };
-    xdg.configFile."xmobar/xmobarrc_bla".source = (pkgs.formats.yaml { }).generate "something" {
+    xdg.configFile."xmobar/.xmobarrc_bla".source = (pkgs.formats.yaml { }).generate "something" {
       settings = {
         draw_bold_text_with_bright_colors = true;
         dynamic_title = true;
