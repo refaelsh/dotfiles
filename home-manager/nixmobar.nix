@@ -4,63 +4,40 @@
   pkgs,
   ...
 }:
+
 with lib;
+
+let
+  cfg = config.services.nixmobar;
+in
 {
-  options.programs.nixmobar = {
-    enable = mkEnableOption "Enable nixmobar customization for Xmobar";
+  options.services.nixmobar = {
+    # Option to enable or disable the nixmobar service
+    enable = mkEnableOption "nixmobar service";
 
-    font = mkOption {
-      type = types.str;
-      default = "xft:Monospace:size=10";
-      description = "The font to use in Xmobar.";
+    # A simple integer option for the refresh interval in seconds
+    refreshInterval = mkOption {
+      type = types.int;
+      default = 300; # Default refresh interval of 5 minutes
+      description = "The interval in seconds at which nixmobar refreshes its data.";
     };
 
-    bgColor = mkOption {
-      type = types.str;
-      default = "#000000";
-      description = "Background color of the bar.";
+    # Option to append extra configuration to the nixmobar config
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Extra configuration lines to be added to the nixmobar configuration.";
     };
-
-    fgColor = mkOption {
-      type = types.str;
-      default = "#ffffff";
-      description = "Foreground (text) color of the bar.";
-    };
-
-    template = mkOption {
-      type = types.str;
-      default = "%date% | %battery% | %cpu% | %memory%";
-      description = "The template for the bar content.";
-    };
-
-    # Here you can add more options like position, commands for plugins, etc.
-    commands = mkOption {
-      type = types.attrsOf types.str;
-      default = { };
-      example = literalExpression ''
-        {
-          date = "date '+%Y-%m-%d %H:%M'";
-          battery = "upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage | awk '{print $2}'";
-        }
-      '';
-      description = "Commands to run for updating bar segments.";
-    };
-
-    # Additional configurations can be added here
   };
 
-  config.programs.nixmobar = mkIf config.enable {
-    home.packages = [ pkgs.xmobar ];
+  config = mkIf cfg.enable {
+    # Here you would typically set up the service, but for this example, we're just setting up the configuration.
+    environment.etc."nixmobar/bla".text = ''
+      # Basic configuration for nixmobar
+      refresh_interval = ${toString cfg.refreshInterval}
 
-    xdg.configFile."xmobar/bla".text = ''
-      Config {
-        font = "${cfg.font}",
-        bgColor = "${cfg.bgColor}",
-        fgColor = "${cfg.fgColor}",
-        ${toXmobarConfig cfg.commands}
-        -- Add more config options here based on what's defined in the module
-      }
-      ${cfg.template}
+      # Include extra configuration provided by the user
+      ${cfg.extraConfig}
     '';
   };
 }
