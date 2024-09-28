@@ -21,6 +21,15 @@ in
       description = "The interval in seconds at which the bar updates.";
     };
 
+    settings = mkOption {
+      type = types.attrs;
+      default = { bla = "h";};
+      description = ''
+        An attribute set that will be converted to Xmobar's configuration format.
+        Adjust the conversion in the module if Xmobar uses a different config format.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -32,17 +41,20 @@ in
   config = mkIf cfg.enable {
     home.packages = [ pkgs.xmobar ];
 
+    # xdg.configFile."xmobar/.xmobarrc_bla" = {
+    #   text = ''
+    #     # Base configuration for nixmobar
+    #     [general]
+    #     update-interval = ${toString cfg.updateInterval}
+    #
+    #     # Here you might include default settings or templates for nixmobar
+    #
+    #     # Extra configuration provided by the user
+    #     ${cfg.extraConfig}
+    #   '';
+    # };
     xdg.configFile."xmobar/.xmobarrc_bla" = {
-      text = ''
-        # Base configuration for nixmobar
-        [general]
-        update-interval = ${toString cfg.updateInterval}
-
-        # Here you might include default settings or templates for nixmobar
-
-        # Extra configuration provided by the user
-        ${cfg.extraConfig}
-      '';
+      text = builints.json { config = cfg.settings; };
     };
   };
 }
