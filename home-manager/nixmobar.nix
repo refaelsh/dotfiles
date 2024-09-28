@@ -57,7 +57,7 @@ in
     #   '';
     # };
     xdg.configFile."xmobar/.xmobarrc_bla" = {
-      text = lib.generators.toINI  { Config = cfg.settings; };
+      text = lib.generators.toINI (cfg.settings);
     };
   };
 }
