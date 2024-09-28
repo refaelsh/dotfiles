@@ -30,7 +30,7 @@ in
 
   # Actual configuration for home-manager
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.nixmobar ];
+    home.packages = [ pkgs.xmobar ];
 
     xdg.configFile."nixmobar/bla" = {
       text = ''

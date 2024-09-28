@@ -19,5 +19,8 @@
     ./xmobar.nix
     ./zsh.nix
   ];
+
+  programs.nixmobar = {
+    enable = true;
+  };
 }
-# sdfsdfsd
