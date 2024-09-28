@@ -29,7 +29,7 @@
             ./nixos/configuration.nix
 
             inputs.nixvim.nixosModules.nixvim
-            ./nixvim/main.nix
+            ./nixvim
 
             inputs.home-manager.nixosModules.home-manager
             ./home-manager
