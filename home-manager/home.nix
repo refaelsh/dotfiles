@@ -11,6 +11,7 @@
     ./lf.nix
     ./librewolf.nix
     ./kitty.nix
+    ./nixmobar.nix
     ./mangohud.nix
     ./starship.nix
     ./termonad.nix
