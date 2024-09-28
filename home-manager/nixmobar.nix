@@ -48,7 +48,6 @@ in
     xdg.configFile."xmobar/.xmobarrc_bla" = {
       text = builtins.concatStringsSep "\n" (
         [ "Config {" ]
-        ++ [ "  " ]
         ++ builtins.attrValues (builtins.mapAttrs (name: value: "${name} = ${value}") cfg.settings)
       );
     };
