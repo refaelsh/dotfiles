@@ -32,7 +32,7 @@ in
   config = mkIf cfg.enable {
     home.packages = [ pkgs.xmobar ];
 
-    xdg.configFile."nixmobar/bla" = {
+    xdg.configFile."xmobar/.xmobarrc_bla" = {
       text = ''
         # Base configuration for nixmobar
         [general]
