@@ -55,16 +55,11 @@ in
     xdg.configFile."xmobar/.xmobarrc_bla" = {
       text = builtins.concatStringsSep "\n" (
         [
-          # Prepend your initial configurations here
-          "template = \"%StdinReader% | %date%\""
-          "alignSep = \"}{ \""
+          "Config {"
         ]
         ++ builtins.attrValues (builtins.mapAttrs (name: value: "${name} = ${value}") cfg.settings)
         ++ [
-          # Append additional configurations here
-          "position = Top"
-          "commands = [ Run StdinReader, Run Date \"%a %b %_d %Y %H:%M\" \"date\" 10 ]"
-          "sepChar = \"%\""
+          "}"
         ]
       );
     };
