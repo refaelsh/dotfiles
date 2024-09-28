@@ -54,7 +54,7 @@ in
     #   '';
     # };
     xdg.configFile."xmobar/.xmobarrc_bla" = {
-      text = builints.json { config = cfg.settings; };
+      text = builtins.json { config = cfg.settings; };
     };
   };
 }
