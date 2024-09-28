@@ -26,7 +26,7 @@ in
       default = {
         bla = "h";
         bla2 = "h2";
-        bla3 = 42;
+        bla3 = "42";
       };
       description = ''
         An attribute set that will be converted to Xmobar's configuration format.
