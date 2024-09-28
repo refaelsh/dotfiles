@@ -23,7 +23,10 @@ in
 
     settings = mkOption {
       type = types.attrs;
-      default = { bla = "h";};
+      default = {
+        bla = "h";
+        bla2 = "h2";
+      };
       description = ''
         An attribute set that will be converted to Xmobar's configuration format.
         Adjust the conversion in the module if Xmobar uses a different config format.
@@ -54,7 +57,7 @@ in
     #   '';
     # };
     xdg.configFile."xmobar/.xmobarrc_bla" = {
-      text = builtins.toJSON { Config = cfg.settings; };
+      text = lib.generators.toINI  { Config = cfg.settings; };
     };
   };
 }
