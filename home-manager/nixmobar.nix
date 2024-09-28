@@ -49,7 +49,7 @@ with lib;
     # Additional configurations can be added here
   };
 
-  config = mkIf config.enable {
+  config.programs.nixmobar = mkIf config.enable {
     home.packages = [ pkgs.xmobar ];
 
     xdg.configFile."xmobar/bla".text = ''
