@@ -34,7 +34,7 @@ in
       '';
     };
 
-    extraConfig = mkOption {
+    commands = mkOption {
       type = types.lines;
       default = "";
       description = "Extra configuration lines to add to nixmobar's config.";
@@ -58,6 +58,7 @@ in
           "Config {"
         ]
         ++ builtins.attrValues (builtins.mapAttrs (name: value: "  ${name} = ${value}") cfg.settings)
+        ++ cfg.commands
         ++ [
           "}"
         ]
