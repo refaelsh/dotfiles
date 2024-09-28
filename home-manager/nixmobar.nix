@@ -57,10 +57,10 @@ in
         [
           "Config {"
         ]
-        ++ builtins.attrValues (builtins.mapAttrs (name: value: "  ${name} = ${value}") cfg.settings)
-        ++ [ "" ]
+        ++ builtins.attrValues (builtins.mapAttrs (name: value: "  ${name} = ${value},") cfg.settings)
+        ++ [ "commands = [\n" ]
         ++ [ cfg.commands ]
-        ++ [ "" ]
+        ++ [ "]" ]
         ++ [
           "}"
         ]
