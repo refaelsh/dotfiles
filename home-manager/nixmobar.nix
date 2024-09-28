@@ -57,7 +57,9 @@ in
     #   '';
     # };
     xdg.configFile."xmobar/.xmobarrc_bla" = {
-      text = builtins.concatStringsSep "\n" (builtins.attrValues configLines);
+      text = builtins.concatStringsSep "\n" (
+        builtins.attrValues (builtins.mapAttrs (name: value: "${name} = ${value}") configSet)
+      );
     };
   };
 }
