@@ -8,36 +8,41 @@
 with lib;
 
 let
-  cfg = config.services.nixmobar;
+  cfg = config.programs.nixmobar;
 in
 {
-  options.services.nixmobar = {
-    # Option to enable or disable the nixmobar service
-    enable = mkEnableOption "nixmobar service";
+  # Define the options for the module
+  options.programs.nixmobar = {
+    enable = mkEnableOption "nixmobar, a minimal status bar";
 
-    # A simple integer option for the refresh interval in seconds
-    refreshInterval = mkOption {
+    updateInterval = mkOption {
       type = types.int;
-      default = 300; # Default refresh interval of 5 minutes
-      description = "The interval in seconds at which nixmobar refreshes its data.";
+      default = 30;
+      description = "The interval in seconds at which the bar updates.";
     };
 
-    # Option to append extra configuration to the nixmobar config
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Extra configuration lines to be added to the nixmobar configuration.";
+      description = "Extra configuration lines to add to nixmobar's config.";
     };
   };
 
+  # Actual configuration for home-manager
   config = mkIf cfg.enable {
-    # Here you would typically set up the service, but for this example, we're just setting up the configuration.
-    environment.etc."nixmobar/bla".text = ''
-      # Basic configuration for nixmobar
-      refresh_interval = ${toString cfg.refreshInterval}
+    home.packages = [ pkgs.nixmobar ];
 
-      # Include extra configuration provided by the user
-      ${cfg.extraConfig}
-    '';
+    xdg.configFile."nixmobar/bla" = {
+      text = ''
+        # Base configuration for nixmobar
+        [general]
+        update-interval = ${toString cfg.updateInterval}
+
+        # Here you might include default settings or templates for nixmobar
+
+        # Extra configuration provided by the user
+        ${cfg.extraConfig}
+      '';
+    };
   };
 }
