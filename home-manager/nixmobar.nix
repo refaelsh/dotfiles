@@ -46,10 +46,8 @@ in
 
     xdg.configFile."xmobar/.xmobarrc_bla" = {
       text =
-        [ "sdfds\n" ]
-        ++ builtins.concatStringsSep "\n" (
-          builtins.attrValues (builtins.mapAttrs (name: value: "${name} = ${value}") cfg.settings)
-        );
+        builtins.concatStringsSep "\n" [ "Config {" ]
+        ++ (builtins.attrValues (builtins.mapAttrs (name: value: "${name} = ${value}") cfg.settings));
     };
   };
 }
