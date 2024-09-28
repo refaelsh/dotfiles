@@ -1,4 +1,3 @@
-
 import XMonad
 import XMonad.Actions.Navigation2D
 import XMonad.Actions.SpawnOn
