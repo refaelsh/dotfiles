@@ -104,7 +104,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable builtins.trace "Entering nixmobar config" {
+  config = mkIf config.enable {
     home.packages = [ pkgs.xmobar ];
     xdg.configFile."xmobar/.xmobarrc" = {
       text = ''
