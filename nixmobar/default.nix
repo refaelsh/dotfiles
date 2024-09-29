@@ -11,6 +11,7 @@ let
 in
 {
   imports = [ inputs.home-manager.nixosModules.home-manager ];
+
   options.programs.nixmobar = {
     enable = mkEnableOption (mdDoc "Xmobar, a minimalistic status bar");
 
@@ -106,7 +107,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home-manager.home.packages = [ pkgs.xmobar ];
+    home.packages = [ pkgs.xmobar ];
     xdg.configFile."xmobar/.xmobarrc" = {
       text = ''
         Config {
