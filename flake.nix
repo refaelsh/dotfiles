@@ -35,8 +35,6 @@
             inputs.home-manager.nixosModules.home-manager
             ./home-manager
 
-            inputs.nixmobar.nixosModules.nixmobar
-            ./home-manager/
 
             {
               environment.systemPackages = [

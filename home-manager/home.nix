@@ -5,6 +5,7 @@
   # home.homeDirectory = "/home/refaelsh";
 
   imports = [
+    inputs.nixmobar.nixosModules.nixmobar;
     ./alacritty.nix
     ./git.nix
     ./fzf.nix
