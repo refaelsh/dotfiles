@@ -37,7 +37,7 @@
       #   nixmobar = import ./default.nix;
       # };
 
-      nixosModules.default =
+      nixosModules.nixmobar =
         {
           config,
           lib,
