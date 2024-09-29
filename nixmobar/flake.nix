@@ -12,6 +12,15 @@
   outputs =
     {
       self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    let
+      lib = nixpkgs.lib;
+    in
+    {
+      self,
       lib,
       nixpkgs,
       home-manager,
