@@ -41,10 +41,10 @@
     bgColor = "#282A36";
     fgColor = "#F8F8F2";
     textOffset = 2;
-    verbose = "True";
-    allDesktops = "True";
-    lowerOnStart = "True";
-    overrideRedirect = "True";
+    verbose = true;
+    allDesktops = true;
+    lowerOnStart = true;
+    overrideRedirect = true;
     position = "BottomH 26";
     alpha = "200";
     alignSep = "}{";
