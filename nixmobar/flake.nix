@@ -26,6 +26,6 @@
       home-manager,
     }:
     {
-      homeManagerModules.nixmobar = import ./default.nix;
+      # homeManagerModules.nixmobar = import ./default.nix;
     };
 }
