@@ -1,5 +1,5 @@
 {
-  programs.nixmobar = {
+  nixmobar = {
     enable = true;
     font = "Fira Code 13";
     additionalFonts = [ "Fira Code 22" ];
