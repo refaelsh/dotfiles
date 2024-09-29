@@ -7,7 +7,7 @@
 }:
 with lib;
 let
-  cfg = config.programs.nixmobar;
+  # cfg = config.programs.nixmobar;
 in
 {
   options.programs.nixmobar = {
