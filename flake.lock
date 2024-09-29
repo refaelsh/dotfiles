@@ -166,27 +166,6 @@
     "home-manager_2": {
       "inputs": {
         "nixpkgs": [
-          "nixmobar",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1727383923,
-        "narHash": "sha256-4/vacp3CwdGoPf8U4e/N8OsGYtO09WTcQK5FqYfJbKs=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "ffe2d07e771580a005e675108212597e5b367d2d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
-    "home-manager_3": {
-      "inputs": {
-        "nixpkgs": [
           "nixvim",
           "nixpkgs"
         ]
@@ -229,17 +208,16 @@
     "nixmobar": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "home-manager": "home-manager_2",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-RLeOYftVHyA41nNf2nTyPgHrKowyfqDGj1I+tbieSNI=",
-        "path": "/nix/store/35d3db572bzvl2l099bziamclfmpra6j-source/nixmobar",
+        "narHash": "sha256-4fqVVEJUfMWNAMjfeufGtMJWKxkhC4tNDo2ya5whFz4=",
+        "path": "/nix/store/f11pxs6v8373qvkbka0si8mfbxi0kcng-source/nixmobar",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/35d3db572bzvl2l099bziamclfmpra6j-source/nixmobar",
+        "path": "/nix/store/f11pxs6v8373qvkbka0si8mfbxi0kcng-source/nixmobar",
         "type": "path"
       }
     },
@@ -281,7 +259,7 @@
         "flake-compat": "flake-compat",
         "flake-parts": "flake-parts",
         "git-hooks": "git-hooks",
-        "home-manager": "home-manager_3",
+        "home-manager": "home-manager_2",
         "nix-darwin": "nix-darwin",
         "nixpkgs": [
           "nixpkgs"
