@@ -145,7 +145,14 @@ in
     # };
 
     xdg.configFile."xmobar/.xmobarrc_bla" = {
-      text = # haskell
+      text =
+        let
+          # Helper to format command entries
+          formatCommand =
+            cmd: ''Run ${cmd.name} [${lib.concatMapStringsSep ", " (s: "\"" + s + "\"") cmd.settings}]'';
+
+          commandStrings = map formatCommand cfg.commands; # haskell
+        in
         ''
           Config {
             font = "${cfg.font}",
@@ -159,7 +166,7 @@ in
             overrideRedirect = ${if cfg.overrideRedirect then "True" else "False"},
             position = "${cfg.position}",
             alpha = ${toString cfg.alpha},
-            commands = [${lib.concatStringsSep ", " (map (''Run ${cmd.name} [${lib.concatMapStringsSep ", " (s: "\"" + s + "\"") cmd.settings}]'') cfg.commands)}],
+            commands = [${lib.concatStringsSep ", " commandStrings}],
             alignSep = "${cfg.alignSep}",
             template = "${cfg.template}"
           }
