@@ -13,44 +13,22 @@
     {
       self,
       nixpkgs,
-      home-manager,
+      flake-utils,
       ...
     }@inputs:
-    let
-      lib = nixpkgs.lib;
-      mkHomeConfig =
-        username:
-        {
-          config,
-          lib,
-          pkgs,
-          ...
-        }:
-        {
-          imports = [
-            ./default.nix # Path to your module file
-          ];
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
         };
-    in
-    {
-      # nixosModules = {
-      #   nixmobar = import ./default.nix;
-      # };
+      in
+      {
+        # The module can be imported in home-manager configurations
+        homeModules.nixmobar = import ./default.nix
 
-      nixosModules.nixmobar =
-        {
-          config,
-          lib,
-          pkgs,
-          ...
-        }:
-        {
-          imports = [
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.users = lib.mapAttrs (name: value: mkHomeConfig name) config.users.users; # This dynamically sets up home-manager for all defined users
-            }
-          ];
-        };
-    };
+        # Optionally, provide a default package if your module has an associated tool
+        # defaultPackage = pkgs.callPackage ./path-to-your-package {};
+      }
+    );
 }
