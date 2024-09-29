@@ -16,19 +16,17 @@
       flake-utils,
       ...
     }@inputs:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
-      in
-      {
-        # The module can be imported in home-manager configurations
-        homeModules.nixmobar = import ./default.nix;
+    system:
+    let
+      pkgs = import nixpkgs {
+        inherit system;
+      };
+    in
+    {
+      # The module can be imported in home-manager configurations
+      homeModules.x86_64-linux.nixmobar = import ./default.nix;
 
-        # Optionally, provide a default package if your module has an associated tool
-        # defaultPackage = pkgs.callPackage ./path-to-your-package {};
-      }
-    );
+      # Optionally, provide a default package if your module has an associated tool
+      # defaultPackage = pkgs.callPackage ./path-to-your-package {};
+    };
 }
