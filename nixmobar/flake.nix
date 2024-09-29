@@ -21,7 +21,7 @@
     in
     {
       # You might want to export homeManagerModules directly here
-      nixosMoules.x86_64-linux = {
+      nixosMoules= {
         nixmobar = import ./default.nix;
       };
       # If you need to expose other outputs like nixosConfigurations or devShells,
