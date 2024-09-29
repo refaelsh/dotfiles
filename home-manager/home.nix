@@ -22,20 +22,21 @@
 
   programs.nixmobar = {
     enable = true;
-    settings = {
-      font = "Fira Code 13";
-      additionalFonts = "Fira Code 22";
-      fgColor = "#82A36";
-      textOffset = "#F8F8F2";
-      verbose = "True";
-      allDesktops = "True";
-      lowerOnStart = "True";
-      overrideRedirect = "True";
-      position = "BottomH 26";
-      alpha = "200";
-      alignSep = "}{";
-      template = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc>%wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc>%cat0%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc>%kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc>%kernel_version%|%date%|%_XMONAD_TRAYPAD%";
-    };
+    # settings = {
+    #   font = "Fira Code 13";
+    #   additionalFonts = "Fira Code 22";
+    #   fgColor = "#82A36";
+    #   textOffset = "#F8F8F2";
+    #   verbose = "True";
+    #   allDesktops = "True";
+    #   lowerOnStart = "True";
+    #   overrideRedirect = "True";
+    #   position = "BottomH 26";
+    #   alpha = "200";
+    #   alignSep = "}{";
+    #   template = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc>%wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc>%cat0%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc>%kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc>%kernel_version%|%date%|%_XMONAD_TRAYPAD%";
+    # };
+    font = "Fira Code 13";
     commands = # haskell
       ''
         Run XMonadLog,
