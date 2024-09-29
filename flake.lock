@@ -235,11 +235,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-a5TgXcBt4mRbAGsdzcTGhCiEXnVeevKIdfSTUmUVmD8=",
-        "path": "/nix/store/43k9di31m3hbd85zkqsn1qxkamzgjkwv-source/nixmobar",
+        "path": "/nix/store/bbipidldkfz77kgz6hl00dmga5qky1rp-source/nixmobar",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/43k9di31m3hbd85zkqsn1qxkamzgjkwv-source/nixmobar",
+        "path": "/nix/store/bbipidldkfz77kgz6hl00dmga5qky1rp-source/nixmobar",
         "type": "path"
       }
     },
