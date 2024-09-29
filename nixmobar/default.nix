@@ -10,8 +10,6 @@ let
   cfg = config.programs.nixmobar;
 in
 {
-  imports = [ inputs.home-manager.nixosModules.home-manager ];
-
   options.programs.nixmobar = {
     enable = mkEnableOption (mdDoc "Xmobar, a minimalistic status bar");
 

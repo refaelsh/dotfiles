@@ -18,10 +18,39 @@
     }@inputs:
     let
       lib = nixpkgs.lib;
+      mkHomeConfig =
+        username:
+        {
+          config,
+          lib,
+          pkgs,
+          ...
+        }:
+        {
+          imports = [
+            ./default.nix # Path to your module file
+          ];
+        };
     in
     {
-      nixosModules = {
-        nixmobar = import ./default.nix;
-      };
+      # nixosModules = {
+      #   nixmobar = import ./default.nix;
+      # };
+
+      nixosModules.default =
+        {
+          config,
+          lib,
+          pkgs,
+          ...
+        }:
+        {
+          imports = [
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.users = lib.mapAttrs (name: value: mkHomeConfig name) config.users.users; # This dynamically sets up home-manager for all defined users
+            }
+          ];
+        };
     };
 }
