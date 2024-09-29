@@ -35,6 +35,8 @@
             inputs.home-manager.nixosModules.home-manager
             ./home-manager
 
+            inputs.nixmobar.homeModules.nixmobar
+
             {
               environment.systemPackages = [
                 # inputs.nixvim.packages.${system}.default
