@@ -7,6 +7,7 @@
     #   url = "github:nix-community/home-manager";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
@@ -19,10 +20,10 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
       in
+      # pkgs = import nixpkgs {
+      #   inherit system;
+      # };
       {
         # The module can be imported in home-manager configurations
         homeModules.nixmobar = import ./default.nix;
