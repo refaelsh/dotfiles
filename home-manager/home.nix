@@ -16,7 +16,7 @@
     ./starship.nix
     ./termonad.nix
     ./wezterm.nix
-    ./xmobar.nix
+    # ./xmobar.nix
     ./zsh.nix
   ];
 

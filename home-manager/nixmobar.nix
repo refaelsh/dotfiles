@@ -104,63 +104,29 @@ in
       default = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc>%wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc>%cat0%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc>%kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc>%kernel_version%|%date%|%_XMONAD_TRAYPAD%";
       description = mdDoc "Template string for Xmobar layout.";
     };
-
-    # Additional commands could be defined here using mkCommand helper function
   };
 
-  # Actual configuration for home-manager
   config = mkIf cfg.enable {
     home.packages = [ pkgs.xmobar ];
-
-    # xdg.configFile."xmobar/.xmobarrc_bla" = {
-    #   text = builtins.concatStringsSep "\n" (
-    #     [ "Config {" ]
-    #     ++ builtins.attrValues (builtins.mapAttrs (name: value: "${name} = ${value}") cfg.settings)
-    #   );
-    # };
-
-    # xdg.configFile."xmobar/.xmobarrc_bla" = {
-    #   text = builtins.concatStringsSep "\n" (
-    #     [
-    #       "Config {"
-    #     ]
-    #     ++ builtins.attrValues (builtins.mapAttrs (name: value: "  ${name} = ${value},") cfg.settings)
-    #     ++ [ "  commands = [" ]
-    #     ++ [ cfg.commands ]
-    #     ++ [ "  ]" ]
-    #     ++ [
-    #       "}"
-    #     ]
-    #   );
-    # };
-
-    xdg.configFile."xmobar/.xmobarrc_bla" = {
-      text =
-        let
-          # Helper to format command entries
-          formatCommand =
-            cmd: ''Run ${cmd.name} [${lib.concatMapStringsSep ", " (s: "\"" + s + "\"") cmd.settings}]'';
-
-          commandStrings = map formatCommand cfg.commands; # haskell
-        in
-        ''
-          Config {
-            font = "${cfg.font}",
-            additionalFonts = [${lib.concatMapStringsSep ", " (s: "\"" + s + "\"") cfg.additionalFonts}],
-            bgColor = "${cfg.bgColor}",
-            fgColor = "${cfg.fgColor}",
-            textOffset = ${toString cfg.textOffset},
-            verbose = ${if cfg.verbose then "True" else "False"},
-            allDesktops = ${if cfg.allDesktops then "True" else "False"},
-            lowerOnStart = ${if cfg.lowerOnStart then "True" else "False"},
-            overrideRedirect = ${if cfg.overrideRedirect then "True" else "False"},
-            position = "${cfg.position}",
-            alpha = ${toString cfg.alpha},
-            commands = [${cfg.commands}],
-            alignSep = "${cfg.alignSep}",
-            template = "${cfg.template}"
-          }
-        '';
+    xdg.configFile."xmobar/.xmobarrc" = {
+      text = ''
+        Config {
+          font = "${cfg.font}",
+          additionalFonts = [${lib.concatMapStringsSep ", " (s: "\"" + s + "\"") cfg.additionalFonts}],
+          bgColor = "${cfg.bgColor}",
+          fgColor = "${cfg.fgColor}",
+          textOffset = ${toString cfg.textOffset},
+          verbose = ${if cfg.verbose then "True" else "False"},
+          allDesktops = ${if cfg.allDesktops then "True" else "False"},
+          lowerOnStart = ${if cfg.lowerOnStart then "True" else "False"},
+          overrideRedirect = ${if cfg.overrideRedirect then "True" else "False"},
+          position = "${cfg.position}",
+          alpha = ${toString cfg.alpha},
+          commands = [${cfg.commands}],
+          alignSep = "${cfg.alignSep}",
+          template = "${cfg.template}"
+        }
+      '';
     };
   };
 }
