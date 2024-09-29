@@ -217,11 +217,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-B1jX3KHKwILM0fg4zMGalGchKhT6w+pc6J3tsuiHdDE=",
-        "path": "/nix/store/ypzbm02n4j8nknhkyv6p77fi7kmv8ann-source/nixmobar",
+        "path": "/nix/store/fmzs9izlwvkgk5igbpbr3s8pg2afnzys-source/nixmobar",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/ypzbm02n4j8nknhkyv6p77fi7kmv8ann-source/nixmobar",
+        "path": "/nix/store/fmzs9izlwvkgk5igbpbr3s8pg2afnzys-source/nixmobar",
         "type": "path"
       }
     },
