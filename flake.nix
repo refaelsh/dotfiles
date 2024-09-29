@@ -32,10 +32,10 @@
             inputs.nixvim.nixosModules.nixvim
             ./nixvim
 
+            inputs.nixmobar.homeManagerModules.nixmobar
+
             inputs.home-manager.nixosModules.home-manager
             ./home-manager
-
-            inputs.nixmobar.homeManagerModules.nixmobar
 
             {
               environment.systemPackages = [
