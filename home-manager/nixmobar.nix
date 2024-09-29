@@ -159,7 +159,7 @@ in
             overrideRedirect = ${if cfg.overrideRedirect then "True" else "False"},
             position = "${cfg.position}",
             alpha = ${toString cfg.alpha},
-            commands = [${lib.concatStringsSep ", " (map formatCommand cfg.commands)}],
+            commands = [${lib.concatStringsSep ", " (map (''Run ${cmd.name} [${lib.concatMapStringsSep ", " (s: "\"" + s + "\"") cmd.settings}]'') cfg.commands)}],
             alignSep = "${cfg.alignSep}",
             template = "${cfg.template}"
           }
