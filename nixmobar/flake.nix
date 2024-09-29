@@ -20,12 +20,11 @@
       lib = nixpkgs.lib;
     in
     {
-      self,
-      lib,
-      nixpkgs,
-      home-manager,
-    }:
-    {
-      homeManagerModules.nixmobar = import ./default.nix;
+      # You might want to export homeManagerModules directly here
+      homeManagerModules.default = {
+        nixmobar = import ./default.nix;
+      };
+      # If you need to expose other outputs like nixosConfigurations or devShells,
+      # you would add them here directly, not wrapped in another function.
     };
 }
