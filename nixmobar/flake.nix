@@ -20,7 +20,7 @@
       lib = nixpkgs.lib;
     in
     {
-      nixosModule = {
+      nixosModules = {
         nixmobar = import ./default.nix;
       };
     };
