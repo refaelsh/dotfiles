@@ -156,7 +156,7 @@ in
             overrideRedirect = ${if cfg.overrideRedirect then "True" else "False"},
             position = "${cfg.position}",
             alpha = ${toString cfg.alpha},
-            commands = [${lib.concatStringsSep ", " commandStrings}],
+            commands = [${cfg.commands}],
             alignSep = "${cfg.alignSep}",
             template = "${cfg.template}"
           }
