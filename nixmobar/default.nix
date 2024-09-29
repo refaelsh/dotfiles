@@ -106,7 +106,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.xmobar ];
+    # home.packages = [ pkgs.xmobar ];
     xdg.configFile."xmobar/.xmobarrc" = {
       text = ''
         Config {
