@@ -22,6 +22,11 @@
 
   programs.nixmobar = {
     enable = true;
+    settings = {
+      sdfdsf = "Sdfs";
+      hjhjh = 42;
+      qwer = "\"42\"";
+    };
     commands = ''
       Run XMonadLog,
       Run DiskU [("/", "<fc=#bd93f9><fn=1>\xf0a0</fn></fc> <free>")] [] 50,
