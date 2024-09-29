@@ -20,11 +20,17 @@
       lib = nixpkgs.lib;
     in
     {
-      # You might want to export homeManagerModules directly here
-      homeManagerModules= {
-        nixmobar = import ./default.nix;
+      # homeManagerModules= {
+      #   nixmobar = import ./default.nix;
+      # };
+
+      homeConfigurations = {
+        "yourUsername@yourHostname" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Or your system architecture
+          modules = [
+            ./default.nix # Path to your home-manager configuration
+          ];
+        };
       };
-      # If you need to expose other outputs like nixosConfigurations or devShells,
-      # you would add them here directly, not wrapped in another function.
     };
 }
