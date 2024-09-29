@@ -71,7 +71,7 @@ in
 
     position = mkOption {
       type = types.str;
-      default = "BottomH 26";
+      default = BottomH 26;
       description = mdDoc "Position of Xmobar on the screen.";
     };
 
