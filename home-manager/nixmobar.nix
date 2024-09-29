@@ -82,25 +82,15 @@ in
     };
 
     commands = mkOption {
-      type = types.listOf (
-        types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = mdDoc "Name of the command or plugin.";
-            };
-            settings = mkOption {
-              type = types.listOf types.str;
-              default = [ ];
-              description = mdDoc "Settings or arguments for the command.";
-            };
-          };
-        }
-      );
-      default = [
-        # Here you would list your commands like XMonadLog, DiskU, etc., with their respective settings
-      ];
-      description = mdDoc "List of commands to run in Xmobar.";
+      type = types.lines;
+      default = ''
+        Run XMonadLog
+        Run DiskU ["/", "<fc=#bd93f9><fn=1>\\xf0a0</fn></fc> <free>"] [] 50
+        Run DiskIO ["/", "<read><fc=#bd93f9> R</fc> <fc=#bd93f9>W</fc> <write>"] ["-t", "", "-w", "4"] 10
+        Run Date "%a %_d %b %H:%M:%S" "date" 10
+        # Add more commands here, one per line
+      '';
+      description = mdDoc "List of commands to run in Xmobar, each on a new line.";
     };
 
     alignSep = mkOption {
