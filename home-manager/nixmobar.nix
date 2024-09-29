@@ -11,7 +11,6 @@ let
   cfg = config.programs.nixmobar;
 in
 {
-  # Define the options for the module
   options.programs.nixmobar = {
     enable = mkEnableOption (mdDoc "Xmobar, a minimalistic status bar");
 
