@@ -216,12 +216,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-P0LUNPuREYOo3As5f6y+q3D9tg5d1e+v0PehTjzxpCw=",
-        "path": "/nix/store/mwqgq5x4f8x6wahrgyzwhi301ram782x-source/nixmobar",
+        "narHash": "sha256-W6H5uY59AZp0tWoULmTQw8C/j3VzHpieCgi+3KCK1oI=",
+        "path": "/nix/store/cil754cxl86kxbxrvqbi18c6q6yxsnc7-source/nixmobar",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mwqgq5x4f8x6wahrgyzwhi301ram782x-source/nixmobar",
+        "path": "/nix/store/cil754cxl86kxbxrvqbi18c6q6yxsnc7-source/nixmobar",
         "type": "path"
       }
     },

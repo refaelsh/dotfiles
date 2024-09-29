@@ -5,8 +5,6 @@
   ...
 }:
 {
-  imports = [ inputs.home-manager.nixosModules.home-manager ];
-
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
