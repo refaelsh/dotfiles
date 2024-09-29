@@ -71,7 +71,7 @@ in
 
     position = mkOption {
       type = types.str;
-      default = BottomH 26;
+      default = "BottomH 26";
       description = mdDoc "Position of Xmobar on the screen.";
     };
 
@@ -120,7 +120,7 @@ in
           allDesktops = ${if cfg.allDesktops then "True" else "False"},
           lowerOnStart = ${if cfg.lowerOnStart then "True" else "False"},
           overrideRedirect = ${if cfg.overrideRedirect then "True" else "False"},
-          position = "${cfg.position}",
+          position = ${cfg.position},
           alpha = ${toString cfg.alpha},
           commands = [${cfg.commands}],
           alignSep = "${cfg.alignSep}",
