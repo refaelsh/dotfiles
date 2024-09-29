@@ -2,8 +2,8 @@
 {
   imports = [ inputs.nixmobar.homeModules.nixmobar ];
 
-  programs.nixmobar = builtins.trace "Entering nixmobar config" {
-    enable = true;
+  programs.nixmobar = {
+    # enable = true;
     font = "Fira Code 13";
     additionalFonts = [ "Fira Code 22" ];
     bgColor = "#282A36";
