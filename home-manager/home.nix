@@ -38,8 +38,9 @@
     # };
     font = "Fira Code 13";
     additionalFonts = [ "Fira Code 22" ];
-    fgColor = "#82A36";
-    textOffset = "#F8F8F2";
+    bgColor = "#282A36";
+    fgColor = "#F8F8F2";
+    textOffset = 2;
     verbose = "True";
     allDesktops = "True";
     lowerOnStart = "True";
