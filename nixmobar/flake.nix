@@ -20,17 +20,8 @@
       lib = nixpkgs.lib;
     in
     {
-      # homeManagerModules= {
-      #   nixmobar = import ./default.nix;
-      # };
-
-      homeConfigurations = {
-        "yourUsername@yourHostname" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Or your system architecture
-          modules = [
-            ./default.nix # Path to your home-manager configuration
-          ];
-        };
+      nixosModule = {
+        nixmobar = import ./default.nix;
       };
     };
 }
