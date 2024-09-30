@@ -108,7 +108,7 @@ in
     # inputs = [ inputs.home-manager.nixosModules.home-manager ];
 
     home-manager.users.refaelsh.home.packages = [ pkgs.xmobar ];
-    xdg.configFile."xmobar/.xmobarrc" = {
+    home-manager.users.refaelsh.xdg.configFile."xmobar/.xmobarrc" = {
       text = # haskell
         ''
           Config {
