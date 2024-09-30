@@ -1,7 +1,7 @@
 { inputs, nixmobar, ... }:
 {
   # imports = [ nixmobar.homeModules.nixmobar ];
-  imports = [ inputs.self.homeModules.nixmobar ];
+  # imports = [ inputs.self.homeModules.nixmobar ];
 
   programs.nixmobar = {
     enable = true;
