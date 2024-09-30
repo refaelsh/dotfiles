@@ -10,7 +10,7 @@ let
   cfg = config.programs.nixmobar;
 in
 {
-  options.home-manager.users.refaelsh.programs.nixmobar = {
+  options.programs.nixmobar = {
     enable = mkEnableOption (mdDoc "Xmobar, a minimalistic status bar");
 
     font = mkOption {
@@ -107,8 +107,8 @@ in
   config = mkIf cfg.enable {
     # inputs = [ inputs.home-manager.nixosModules.home-manager ];
 
-    home-manager.users.refaelsh.home.packages = [ pkgs.xmobar ];
-    home-manager.users.refaelsh.xdg.configFile."xmobar/.xmobarrc" = {
+    home.packages = [ pkgs.xmobar ];
+    xdg.configFile."xmobar/.xmobarrc" = {
       text = # haskell
         ''
           Config {
