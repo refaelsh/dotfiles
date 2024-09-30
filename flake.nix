@@ -11,7 +11,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixmobar.url = "./nixmobar";
+    # nixmobar.url = "./nixmobar";
   };
 
   outputs =
@@ -20,6 +20,8 @@
       system = "x86_64-linux";
     in
     {
+      homeModules.nixmobar = import ./default.nix;
+
       nixosConfigurations = {
         myNixos = nixpkgs.lib.nixosSystem {
           specialArgs = {
@@ -36,6 +38,7 @@
             ./home-manager
 
             # inputs.nixmobar.homeModules.nixmobar
+            inputs.self.homeModules.nixmobar
 
             {
               environment.systemPackages = [
