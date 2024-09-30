@@ -20,7 +20,6 @@
       system = "x86_64-linux";
     in
     {
-      homeModules.nixmobar = import ./nixmobar/default.nix;
 
       nixosConfigurations = {
         myNixos = nixpkgs.lib.nixosSystem {
@@ -50,5 +49,6 @@
           ];
         };
       };
+      homeModules.nixmobar = import ./nixmobar/default.nix;
     };
 }
