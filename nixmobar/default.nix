@@ -10,7 +10,7 @@ let
   cfg = config.programs.nixmobar;
 in
 {
-  options.programs.nixmobar = {
+  options.home-manager.users.refaelsh.programs.nixmobar = {
     enable = mkEnableOption (mdDoc "Xmobar, a minimalistic status bar");
 
     font = mkOption {
