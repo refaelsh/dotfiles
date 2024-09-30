@@ -105,7 +105,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    inputs = [ inputs.home-manager.nixosModules.home-manager ];
+    # inputs = [ inputs.home-manager.nixosModules.home-manager ];
 
     home.packages = [ pkgs.xmobar ];
     xdg.configFile."xmobar/.xmobarrc" = {
