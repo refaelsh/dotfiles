@@ -20,9 +20,6 @@
       system = "x86_64-linux";
     in
     {
-      extraSpecialArgs = {
-        inherit inputs; # or specific values from inputs
-      };
       homeModules.nixmobar = import ./nixmobar/default.nix;
 
       nixosConfigurations = {
