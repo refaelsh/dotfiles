@@ -27,6 +27,9 @@
           specialArgs = {
             inherit inputs system;
           };
+          extraSpecialArgs = {
+            inherit inputs; # or specific values from inputs
+          };
 
           modules = [
             ./nixos/configuration.nix
