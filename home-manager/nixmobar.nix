@@ -1,6 +1,6 @@
 { nixmobar, ... }:
 {
-  imports = [ nixmobar.homeModules.nixmobar ];
+  # imports = [ nixmobar.homeModules.nixmobar ];
 
   programs.nixmobar = {
     enable = true;
