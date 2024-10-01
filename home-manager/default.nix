@@ -4,7 +4,7 @@
 
   home-manager = {
     extraSpecialArgs = {
-      inherit inputs;
+      inherit inputs nixmobar;
     };
     users.refaelsh = import ./home.nix;
   };
