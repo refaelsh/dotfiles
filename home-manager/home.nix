@@ -13,7 +13,7 @@
   imports = [
     # inputs.nixmobar.homeModules.nixmobar
     # inputs.self.homeModules.nixmobar
-    nixmobar.homeModules.nixmobar
+    inputs.nixmobar.homeModules.nixmobar
     ./alacritty.nix
     ./git.nix
     ./fzf.nix
