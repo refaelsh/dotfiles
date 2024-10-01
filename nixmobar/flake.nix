@@ -17,19 +17,11 @@
       flake-utils,
       ...
     }@inputs:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-      in
-      # pkgs = import nixpkgs {
-      #   inherit system;
-      # };
-      {
-        # The module can be imported in home-manager configurations
-        homeModules.mainmodule = import ./default.nix;
+    {
+      # The module can be imported in home-manager configurations
+      homeModules.mainmodule = import ./default.nix;
 
-        # Optionally, provide a default package if your module has an associated tool
-        # defaultPackage = pkgs.callPackage ./path-to-your-package {};
-      }
-    );
+      # Optionally, provide a default package if your module has an associated tool
+      # defaultPackage = pkgs.callPackage ./path-to-your-package {};
+    };
 }
