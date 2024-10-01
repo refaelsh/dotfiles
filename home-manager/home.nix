@@ -1,7 +1,7 @@
 {
+  self,
   inputs,
   nixmobar,
-  self,
   ...
 }:
 {
