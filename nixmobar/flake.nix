@@ -26,7 +26,7 @@
       # };
       {
         # The module can be imported in home-manager configurations
-        homeModules.nixmobar = import ./default.nix;
+        homeModules.mainmodule = import ./default.nix;
 
         # Optionally, provide a default package if your module has an associated tool
         # defaultPackage = pkgs.callPackage ./path-to-your-package {};
