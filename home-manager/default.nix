@@ -1,6 +1,11 @@
-{ nixmobar, ... }:
+{ inputs, nixmobar, ... }:
 {
   # imports = [ nixmobar.homeModules.nixmobar ];
 
-  home-manager.users.refaelsh = import ./home.nix;
+  home-manager = {
+    extraSpecialArgs = {
+      inherit inputs;
+    };
+    users.refaelsh = import ./home.nix;
+  };
 }
