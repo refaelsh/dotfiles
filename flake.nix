@@ -37,7 +37,7 @@
             inputs.home-manager.nixosModules.home-manager
             ./home-manager
 
-            inputs.nixmobar.homeModules.nixmobar
+            # inputs.nixmobar.homeModules.nixmobar
             # inputs.self.homeModules.nixmobar
 
             {
