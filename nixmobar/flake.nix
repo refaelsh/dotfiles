@@ -10,7 +10,14 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    homeModules.mainmodule = import ./default.nix;
-  };
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      ...
+    }:
+    {
+      homeModules.mainmodule = import ./default.nix;
+    };
 }
