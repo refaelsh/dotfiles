@@ -6,7 +6,7 @@
 }:
 {
   programs.nixvim = {
-    imports = [ ./plugins.nix ];
+    imports = [ ./plugins];
   };
 
   programs.nixvim = {
