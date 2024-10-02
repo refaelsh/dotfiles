@@ -11,7 +11,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixmobar.url = "github:refaelsh/dotfiles/nixmobar";
+    nixmobar.url = "github:refaelsh/dotfiles?ref=nixmobar";
   };
 
   outputs =
