@@ -12,12 +12,6 @@
 
   outputs =
     {
-      self,
-      nixpkgs,
-      flake-utils,
-      ...
-    }:
-    {
       homeModules.mainmodule = import ./default.nix;
     };
 }
