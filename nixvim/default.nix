@@ -32,7 +32,6 @@
     };
 
     keymaps = [
-
       {
         mode = "n";
         key = ":";

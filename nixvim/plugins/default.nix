@@ -1,6 +1,6 @@
 {
   imports = [
-    ./one-liner-plugins.nix
+    ./one-liners.nix
     ./plugins.nix
   ];
 }
