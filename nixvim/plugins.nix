@@ -1,5 +1,5 @@
 {
-  programs.nixvim.plugins = {
+  plugins = {
     plantuml-syntax.enable = true;
     undotree.enable = true;
     vim-surround.enable = true;
