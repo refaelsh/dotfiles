@@ -194,12 +194,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-xeacal0xHp3uQeQm0n1106UfqWYT8JRXVN0ynYUnsow=",
-        "path": "/nix/store/lk76a1mphq3cq5si6d1kk09v65f4snr6-source/nixmobar",
+        "narHash": "sha256-kVaYTdu2so9FD2lNg7b2/c2JqrFA+dpc5GKzO2rawfk=",
+        "path": "/nix/store/jc1gdf5gzcbv75d8jjkbic9fzbsgjzd8-source/nixmobar",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/lk76a1mphq3cq5si6d1kk09v65f4snr6-source/nixmobar",
+        "path": "/nix/store/jc1gdf5gzcbv75d8jjkbic9fzbsgjzd8-source/nixmobar",
         "type": "path"
       }
     },
