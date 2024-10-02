@@ -12,6 +12,8 @@
 
   outputs =
     {
+      self,
+      ...
     }:
     {
       homeModules.mainmodule = import ./default.nix;
