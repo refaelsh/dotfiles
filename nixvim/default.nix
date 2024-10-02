@@ -5,7 +5,7 @@
   ...
 }:
 {
-  import = [ ./plugins.nix ];
+  imports = [ ./plugins.nix ];
 
   programs.nixvim = {
     enable = true;
