@@ -12,6 +12,8 @@
 
   outputs =
     {
+    }:
+    {
       homeModules.mainmodule = import ./default.nix;
     };
 }
