@@ -195,11 +195,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-McaGqgScB1cYKderJnZUEs606Ef6IzGnqUDpFSFEI80=",
-        "path": "/nix/store/b01qr1dzlpgdg06a50jcrnf63i4nff55-source/nixmobar",
+        "path": "/nix/store/lh6f1gah3ks4f4v5xqnfzadyplhn2aip-source/nixmobar",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b01qr1dzlpgdg06a50jcrnf63i4nff55-source/nixmobar",
+        "path": "/nix/store/lh6f1gah3ks4f4v5xqnfzadyplhn2aip-source/nixmobar",
         "type": "path"
       }
     },
