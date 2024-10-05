@@ -1,7 +1,9 @@
 {
-  imports = [
-    ./cmp.nix
-    ./one-liners.nix
-    ./plugins.nix
-  ];
+  plugins = {
+    imports = [
+      ./cmp.nix
+      ./one-liners.nix
+      ./plugins.nix
+    ];
+  };
 }
