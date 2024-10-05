@@ -1,10 +1,7 @@
-{ pkgs, ... }:
 {
-  plugins = {
-    imports = [
-      ./cmp.nix
-      ./one-liners.nix
-      ./plugins.nix
-    ];
-  };
+  imports = [
+    ./cmp.nix
+    ./one-liners.nix
+    ./plugins.nix
+  ];
 }
