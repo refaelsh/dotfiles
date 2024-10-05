@@ -1,5 +1,5 @@
 {
-  treesitter = {
+  plugins.treesitter = {
     enable = true;
     nixvimInjections = true;
     settings = {
