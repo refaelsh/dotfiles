@@ -1,5 +1,6 @@
 {
   plugins = {
+    imports = [];
     # imports = [
     #   ./cmp.nix
     #   ./lsp.nix
