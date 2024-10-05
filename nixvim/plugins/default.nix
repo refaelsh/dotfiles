@@ -7,5 +7,6 @@
       ./one-liners.nix
       ./treesitter.nix
     ];
+    haskell-scope-highlighting.enable = true;
   };
 }
