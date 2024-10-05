@@ -6,14 +6,14 @@
 }:
 {
   # programs.home-manager.enable = true;
-  home.stateVersion = "24.05";
+  home.stateversion = "24.05";
   # home.username = "refaelsh";
-  # home.homeDirectory = "/home/refaelsh";
+  # home.homedirectory = "/home/refaelsh";
 
   imports = [
-    # inputs.nixmobar.homeModules.nixmobar
-    # inputs.self.homeModules.nixmobar
-    inputs.nixmobar.homeModules.mainmodule
+    # inputs.nixmobar.homemodules.nixmobar
+    # inputs.self.homemodules.nixmobar
+    inputs.nixmobar.homemodules.mainmodule
     ./alacritty.nix
     ./git.nix
     ./fzf.nix
