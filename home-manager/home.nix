@@ -6,7 +6,7 @@
 }:
 {
   # programs.home-manager.enable = true;
-  home.stateversion = "24.05";
+  home.stateVersion = "24.05";
   # home.username = "refaelsh";
   # home.homedirectory = "/home/refaelsh";
 
