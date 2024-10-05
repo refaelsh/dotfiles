@@ -41,7 +41,7 @@
     treesitter = {
       enable = true;
       nixvimInjections = true;
-      nixGrammars = false;
+      # nixGrammars = false;
       settings = {
         auto_install = true;
         ensure_installed = "all";
