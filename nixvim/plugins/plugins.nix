@@ -1,10 +1,5 @@
 {
   plugins = {
-    otter = {
-      enable = true;
-      autoActivate = true;
-    };
-
     auto-save = {
       enable = true;
       settings = {
