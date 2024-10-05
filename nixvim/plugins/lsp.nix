@@ -1,5 +1,5 @@
 {
-  lsp = {
+  plugins.lsp = {
     enable = true;
     inlayHints = true;
     keymaps.lspBuf = {
