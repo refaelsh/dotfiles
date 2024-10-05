@@ -33,7 +33,7 @@
     wrap = false;
     path.__raw = ''vim.opt.path + "**"'';
     wildmenu = true;
-    conceallevel = 1;
+    conceallevel = 0;
     # concealcursor = "nc";
   };
 }
