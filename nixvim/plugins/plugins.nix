@@ -37,18 +37,5 @@
       };
       actions.openFile.resizeWindow = true;
     };
-
-    treesitter = {
-      enable = true;
-      nixvimInjections = true;
-      # nixGrammars = false;
-      settings = {
-        auto_install = true;
-        ensure_installed = "all";
-        ignore_install = [ "org" ];
-        highlight.enable = true;
-        indent.enable = true;
-      };
-    };
   };
 }
