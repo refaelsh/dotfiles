@@ -21,30 +21,30 @@
       };
       defaultSession = "none+xmonad";
     };
-  };
 
-  services.xserver = {
-    enable = true;
-    resolutions = [
-      {
-        x = 1920;
-        y = 1080;
-      }
-    ];
-    xkb = {
-      variant = "";
-      layout = "us";
-    };
-    displayManager.lightdm.enable = true;
-    windowManager.xmonad = {
+    xserver = {
       enable = true;
-      enableConfiguredRecompile = true;
-      enableContribAndExtras = true;
-      extraPackages = haskellPackages: [
-        haskellPackages.xmonad-contrib
-        haskellPackages.xmobar
+      resolutions = [
+        {
+          x = 1920;
+          y = 1080;
+        }
       ];
-      config = builtins.readFile ./xmonad.hs;
+      xkb = {
+        variant = "";
+        layout = "us";
+      };
+      displayManager.lightdm.enable = true;
+      windowManager.xmonad = {
+        enable = true;
+        enableConfiguredRecompile = true;
+        enableContribAndExtras = true;
+        extraPackages = haskellPackages: [
+          haskellPackages.xmonad-contrib
+          haskellPackages.xmobar
+        ];
+        config = builtins.readFile ./xmonad.hs;
+      };
     };
   };
 }
