@@ -1,7 +1,4 @@
-{
-  inputs,
-  ...
-}:
+{ inputs, ... }:
 {
   # programs.home-manager.enable = true;
   home.stateVersion = "24.05";
@@ -9,8 +6,6 @@
   # home.homedirectory = "/home/refaelsh";
 
   imports = [
-    # inputs.nixmobar.homemodules.nixmobar
-    # inputs.self.homemodules.nixmobar
     inputs.nixmobar.homeModules.mainmodule
     ./alacritty.nix
     ./git.nix
