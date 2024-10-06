@@ -136,6 +136,7 @@
       numlockx
       zoom-us
       brave
+      qemu
     ];
   };
 }
