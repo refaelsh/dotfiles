@@ -1,7 +1,5 @@
-{ inputs, nixmobar, ... }:
+{ inputs, ... }:
 {
-  # imports = [ nixmobar.homeModules.nixmobar ];
-
   home-manager = {
     extraSpecialArgs = {
       inherit inputs;
