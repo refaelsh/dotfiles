@@ -6,7 +6,6 @@
   # home.homedirectory = "/home/refaelsh";
 
   imports = [
-    inputs.nixmobar.homeModules.mainmodule
     ./alacritty.nix
     ./git.nix
     ./fzf.nix
@@ -14,6 +13,7 @@
     ./librewolf.nix
     ./kitty.nix
     ./mangohud.nix
+    inputs.nixmobar.homeModules.mainmodule
     ./nixmobar.nix
     ./starship.nix
     ./termonad.nix
