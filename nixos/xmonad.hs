@@ -47,7 +47,6 @@ myXmobarPP =
       ppUrgent = xmobarColor "#ff5555" "" . wrap "!" "!",
       ppOrder = \(ws : l : t : ex) -> [ws]
     }
-  where
 
 main :: IO ()
 main =
