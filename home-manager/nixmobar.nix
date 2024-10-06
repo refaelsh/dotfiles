@@ -1,8 +1,4 @@
-{ inputs, nixmobar, ... }:
 {
-  # imports = [ nixmobar.homeModules.nixmobar ];
-  # imports = [ inputs.self.homeModules.nixmobar ];
-
   programs.nixmobar = {
     enable = true;
     font = "Fira Code 13";
