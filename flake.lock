@@ -233,11 +233,10 @@
       },
       "locked": {
         "dir": "nix",
+        "dirtyRev": "0f16c14a85bb50e3b3af2478cf84bedd37ffdf0d-dirty",
+        "dirtyShortRev": "0f16c14-dirty",
         "lastModified": 1728324196,
-        "narHash": "sha256-sN9JcIDkelVuecleSFMI+pd6f7VVYPa8LZecS2E9Uuw=",
-        "ref": "refs/heads/add-flake",
-        "rev": "0f16c14a85bb50e3b3af2478cf84bedd37ffdf0d",
-        "revCount": 1922,
+        "narHash": "sha256-8XRhyaWB5hFictI+TU6EASm+Kcj8en1yLWNKcJZ9KaI=",
         "type": "git",
         "url": "file:///home/refaelsh/repos/xmobar?dir=nix"
       },
