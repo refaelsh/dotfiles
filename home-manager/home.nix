@@ -14,7 +14,7 @@
     ./librewolf.nix
     ./kitty.nix
     ./mangohud.nix
-    inputs.nixmobar.homeModules.nixmobar
+    inputs.nixmobar222.homeModules.nixmobar333
     ./nixmobar.nix
     ./starship.nix
     ./termonad.nix
