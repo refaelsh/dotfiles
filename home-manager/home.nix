@@ -13,7 +13,7 @@
     ./librewolf.nix
     ./kitty.nix
     ./mangohud.nix
-    inputs.nixmobar.homeModules.nixmobar
+    inputs.nixmobar.homeModules.nixmobar222
     ./nixmobar.nix
     ./starship.nix
     ./termonad.nix
