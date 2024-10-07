@@ -233,11 +233,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1728324043,
-        "narHash": "sha256-i0imDW7L1S25gyU7cXU4uqD/enKcGCSVFwjMHyNEudE=",
+        "lastModified": 1728324196,
+        "narHash": "sha256-sN9JcIDkelVuecleSFMI+pd6f7VVYPa8LZecS2E9Uuw=",
         "ref": "add-flake",
-        "rev": "8ed1fb77b29688f70a8041d2beea186a10065539",
-        "revCount": 1921,
+        "rev": "0f16c14a85bb50e3b3af2478cf84bedd37ffdf0d",
+        "revCount": 1922,
         "type": "git",
         "url": "https://codeberg.org/refaelsh/xmobar.git/?dir=nix"
       },

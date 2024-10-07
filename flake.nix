@@ -11,7 +11,8 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixmobar.url = "git+https://codeberg.org/refaelsh/xmobar.git/?ref=add-flake&dir=nix";
+    # nixmobar.url = "git+https://codeberg.org/refaelsh/xmobar.git/?ref=add-flake&dir=nix";
+    nixmobar.url = "../xmobar/nix";
   };
 
   outputs =
