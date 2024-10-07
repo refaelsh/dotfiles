@@ -19,7 +19,6 @@
     ./hardware-configuration.nix
     ./boot-loader.nix
     ./default-applications.nix
-    ./environment-shell-aliases.nix
     ./enviornment-system-package.nix
     ./environment-variables.nix
     ./fonts.nix
