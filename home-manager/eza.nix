@@ -12,7 +12,7 @@
       "--header"
     ];
   };
-  xdg.configFile."eza/theme.yaml" = {
+  xdg.configFile."eza/theme.yml" = {
     text = ''
       colourful: true
       # yellow #F1FA8C
