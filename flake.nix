@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # nixmobar.url = "git+https://codeberg.org/refaelsh/xmobar.git/?ref=add-flake&dir=nix";
-    nixmobar.url = "../xmobar/nix";
+    nixmobar.url = "~/repos/xmobar/nix";
   };
 
   outputs =
