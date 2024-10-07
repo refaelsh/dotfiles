@@ -9,6 +9,8 @@
       "--icons"
       "--long"
       "--extended"
+      "--git"
+      "--header"
     ];
   };
 }
