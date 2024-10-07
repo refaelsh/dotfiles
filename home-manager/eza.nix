@@ -4,7 +4,12 @@
     enableZshIntegration = true;
     git = true;
     icons = true;
-    extraOptions = [ ];
+    extraOptions = [
+      "-a"
+      "--icons"
+      "--long"
+      "--extended"
+    ];
   };
 }
 
