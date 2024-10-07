@@ -1,4 +1,4 @@
-{ self, inputs, ... }:
+{ self, inputs, nixmobar, ... }:
 {
   # programs.home-manager.enable = true;
   home.stateVersion = "24.05";
