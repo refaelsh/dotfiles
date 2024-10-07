@@ -6,10 +6,8 @@
     icons = true;
     extraOptions = [
       "-a"
-      "--icons"
       "--long"
       "--extended"
-      "--git"
       "--header"
     ];
   };
