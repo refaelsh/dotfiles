@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 {
   # programs.home-manager.enable = true;
   home.stateVersion = "24.05";
@@ -14,7 +14,7 @@
     ./librewolf.nix
     ./kitty.nix
     ./mangohud.nix
-    inputs.nixmobar222.homeModules.nixmobar333
+    inputs.nixmobar.homeModules.nixmobar
     ./nixmobar.nix
     ./starship.nix
     ./termonad.nix
