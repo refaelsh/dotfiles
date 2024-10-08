@@ -12,7 +12,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
-    # nixmobar.url = "/home/refaelsh/repos/xmobar/nix";
   };
 
   outputs =
