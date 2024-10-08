@@ -7,6 +7,7 @@
 
   imports = [
     ./alacritty.nix
+    ./bat.nix
     ./eza.nix
     ./git.nix
     ./fzf.nix
