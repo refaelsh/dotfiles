@@ -19,8 +19,6 @@
       google-chrome
       glib
       nnn
-      bat
-      eza
       wget
       go
       xclip
