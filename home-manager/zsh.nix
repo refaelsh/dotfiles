@@ -3,8 +3,7 @@
   programs.zsh = {
     enable = true;
     shellAliases = {
-      # cat = "bat";
-      bat = "cat";
+      cat = "bat";
     };
     autosuggestion.enable = true;
     defaultKeymap = "viins";
