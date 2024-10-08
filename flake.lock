@@ -233,19 +233,18 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1728401352,
+        "lastModified": 1728407894,
         "narHash": "sha256-ev/BFFaMC3bnpP+6WaB1pFO+5Icw4jW3xSToIUgd6IU=",
-        "ref": "add-flake",
-        "rev": "a9f80595eae797e7f8fe86e4d8c496ec54759814",
-        "revCount": 1930,
+        "ref": "refs/heads/master",
+        "rev": "7390d759240785f660cbdb0ca55898732aa12c98",
+        "revCount": 1914,
         "type": "git",
-        "url": "https://codeberg.org/refaelsh/xmobar.git/?dir=nix"
+        "url": "https://codeberg.org/xmobar/xmobar.git/?dir=nix"
       },
       "original": {
         "dir": "nix",
-        "ref": "add-flake",
         "type": "git",
-        "url": "https://codeberg.org/refaelsh/xmobar.git/?dir=nix"
+        "url": "https://codeberg.org/xmobar/xmobar.git/?dir=nix"
       }
     },
     "nixpkgs": {
