@@ -2,6 +2,9 @@
 {
   programs.zsh = {
     enable = true;
+    shellAliases = {
+      cat = "bat";
+    };
     autosuggestion.enable = true;
     defaultKeymap = "viins";
     enableCompletion = true;
