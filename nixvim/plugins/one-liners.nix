@@ -20,7 +20,6 @@
     autosource.enable = true;
     numbertoggle.enable = true;
     barbecue.enable = true;
-    haskell-scope-highlighting.enable = true;
     illuminate.enable = true;
     nvim-lightbulb.enable = true;
     which-key.enable = true;
