@@ -23,6 +23,7 @@
       jsonls.enable = true;
       hls = {
         enable = true;
+        installGhc = false;
         filetypes = [
           "haskell"
           "lhaskell"
