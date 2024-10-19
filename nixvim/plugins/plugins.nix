@@ -3,7 +3,7 @@
     auto-save = {
       enable = true;
       settings = {
-        execution_message.cleaning_interval = 5000;
+        # execution_message.cleaning_interval = 5000;
       };
     };
 
