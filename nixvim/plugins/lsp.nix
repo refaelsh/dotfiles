@@ -21,6 +21,8 @@
       taplo.enable = true;
       marksman.enable = true;
       jsonls.enable = true;
+      kotlin_language_server.enable = true;
+      jdtls.enable = true;
       hls = {
         enable = true;
         installGhc = false;
