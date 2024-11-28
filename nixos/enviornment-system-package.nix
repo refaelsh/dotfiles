@@ -136,7 +136,7 @@
       brave
       qemu
       android-studio
-      cpu-checker
+      kvm
     ];
   };
 }
