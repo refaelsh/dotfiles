@@ -136,7 +136,6 @@
       brave
       qemu
       android-studio
-      kvm
     ];
   };
 }
