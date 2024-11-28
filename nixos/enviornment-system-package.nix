@@ -135,6 +135,7 @@
       zoom-us
       brave
       qemu
+      android-studio
     ];
   };
 }
