@@ -10,5 +10,6 @@
       dedicatedServer.openFirewall = true;
     };
     gamemode.enable = true;
+    adb.enable = true;
   };
 }
