@@ -5,6 +5,7 @@
     gvfs.enable = true;
     udisks2.enable = true;
     devmon.enable = true;
+
     pipewire = {
       enable = true;
       alsa = {
@@ -14,6 +15,7 @@
       pulse.enable = true;
       jack.enable = true;
     };
+
     displayManager = {
       autoLogin = {
         enable = true;
