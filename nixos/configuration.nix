@@ -15,6 +15,8 @@
     pathsToLink = [ "/share/zsh" ];
   };
 
+  nixpkgs.config.android_sdk.accept_license = true;
+
   imports = [
     ./hardware-configuration.nix
     ./boot-loader.nix
