@@ -18,6 +18,9 @@
     { nixpkgs, ... }@inputs:
     let
       system = "x86_64-linux";
+      config = {
+        android_sdk.accept_license = true;
+      };
     in
     {
       nixosConfigurations = {
