@@ -3,14 +3,16 @@
   fonts = {
     fontconfig.enable = true;
     packages = with pkgs; [
+      nerd-fonts.inconsolata
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
+      nerd-fonts.awesome
       hack-font
-      nerdfonts
       cascadia-code
       hasklig
       fira-code-symbols
       fira-code
       cantarell-fonts
-      inconsolata-nerdfont
       symbola
       source-code-pro
       font-awesome
