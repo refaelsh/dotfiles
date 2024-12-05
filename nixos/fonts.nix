@@ -6,7 +6,7 @@
       nerd-fonts.inconsolata
       nerd-fonts.fira-code
       nerd-fonts.fira-mono
-      nerd-fonts.font-awesome
+      nerd-fonts.awesome
       hack-font
       cascadia-code
       hasklig
