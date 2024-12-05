@@ -134,7 +134,7 @@
       brave
       qemu
       android-studio
-      # marksman
+      marksman
     ];
   };
 }
