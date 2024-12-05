@@ -80,7 +80,6 @@
       nodePackages.prettier
       gimp
       tig
-      marksman
       zk
       man-pages
       man-pages-posix
@@ -98,7 +97,6 @@
       nixpkgs-fmt
       microcodeIntel
       lshw
-      openra
       transmission_4
       transmission_4-gtk
       vlc
@@ -136,6 +134,7 @@
       brave
       qemu
       android-studio
+      # marksman
     ];
   };
 }
