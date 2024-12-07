@@ -133,7 +133,7 @@
       zoom-us
       brave
       qemu
-      # android-studio
+      android-studio
       marksman
     ];
   };
