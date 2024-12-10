@@ -135,6 +135,7 @@
       qemu
       android-studio
       marksman
+      p7zip
     ];
   };
 }
