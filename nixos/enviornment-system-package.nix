@@ -136,6 +136,7 @@
       android-studio
       marksman
       p7zip
+      zulu
     ];
   };
 }
