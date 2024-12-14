@@ -8,6 +8,7 @@
         "networkmanager"
         "wheel"
         "storage"
+        "adbusers"
       ];
       useDefaultShell = true;
     };
