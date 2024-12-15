@@ -137,6 +137,7 @@
       marksman
       p7zip
       zulu
+      exiftool
     ];
   };
 }
