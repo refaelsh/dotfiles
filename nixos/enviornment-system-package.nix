@@ -138,6 +138,7 @@
       p7zip
       zulu
       exiftool
+      keepass
     ];
   };
 }
