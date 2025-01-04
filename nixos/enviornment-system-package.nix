@@ -108,7 +108,6 @@
       keyutils
       rofi
       doublecmd
-      shotcut
       usbutils
       discord
       prismlauncher
