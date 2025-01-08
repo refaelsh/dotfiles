@@ -1,5 +1,6 @@
 {
   programs = {
+    zsh.enable = true;
     nm-applet.enable = true;
     dconf.enable = true;
     steam = {
