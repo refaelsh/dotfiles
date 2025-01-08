@@ -36,7 +36,6 @@
       zip
       unzip
       openssh
-      shutter
       flameshot
       signal-desktop
       kbdd
