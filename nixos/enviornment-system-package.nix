@@ -138,7 +138,6 @@
       exiftool
       keepass
       bottles
-      lutris-free
     ];
   };
 }
