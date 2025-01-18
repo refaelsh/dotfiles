@@ -137,6 +137,7 @@
       zulu
       exiftool
       keepass
+      bottles
     ];
   };
 }
