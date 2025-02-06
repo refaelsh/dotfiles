@@ -47,7 +47,7 @@
 
     extraConfigLua = # lua
       ''
-        require('org-bullets').setup()
+        -- require('org-bullets').setup()
         require('colorizer').setup({
           -- mode = 'background'
         })
