@@ -263,12 +263,12 @@
         "rev": "7390d759240785f660cbdb0ca55898732aa12c98",
         "revCount": 1914,
         "type": "git",
-        "url": "https://codeberg.org/xmobar/xmobar.git/"
+        "url": "https://codeberg.org/xmobar/xmobar.git/?dir=nix"
       },
       "original": {
         "dir": "nix",
         "type": "git",
-        "url": "https://codeberg.org/xmobar/xmobar.git/"
+        "url": "https://codeberg.org/xmobar/xmobar.git/?dir=nix"
       }
     },
     "nixpkgs": {
