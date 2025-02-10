@@ -54,7 +54,7 @@
       networkmanagerapplet
       gdb
       lm_sensors
-      python310Packages.psutil
+      python3Packages.psutil
       xorg.xmessage
       haskellPackages.cabal-fmt
       cabal-install
