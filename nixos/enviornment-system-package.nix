@@ -102,8 +102,6 @@
       imagemagick
       bc
       baobab
-      # python310Packages.adblock
-      # python311Packages.adblock
       python3Packages.adblock
       keyutils
       rofi
