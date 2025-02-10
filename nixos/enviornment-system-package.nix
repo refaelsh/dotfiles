@@ -26,7 +26,7 @@
       git
       kdiff3
       bitwarden
-      bitwarden-cli
+      # bitwarden-cli
       alacritty
       dracula-theme
       gnumake
