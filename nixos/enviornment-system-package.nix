@@ -138,6 +138,7 @@
       keepass
       bottles
       # lutris
+      shotcut
     ];
   };
 }
