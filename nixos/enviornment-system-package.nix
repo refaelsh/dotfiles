@@ -139,6 +139,7 @@
       bottles
       # lutris
       shotcut
+      zen
     ];
   };
 }
