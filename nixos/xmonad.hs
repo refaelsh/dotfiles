@@ -32,7 +32,7 @@ myStartupHook = do
   spawnOnce "kbdd"
   spawn "amixer set Master 5%-"
   spawn "amixer set Master 5%+"
-  spawnOnOnce "1" "brave"
+  spawnOnOnce "1" "zen"
   spawnOnOnce "9" "signal-desktop"
   spawnOnOnce "0" "neovide ~/repos/dotfiles"
 
