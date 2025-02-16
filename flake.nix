@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
-    zen-browser.url = "github:MarceColl/zen-browser-flake";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 
   outputs =
@@ -40,7 +40,7 @@
               environment.systemPackages = [
                 # inputs.nixvim.packages.${system}.default
                 # inputs.brave.packages.${system}.default
-                inputs.zen-browser.packages."${system}".specific
+                inputs.zen-browser.packages."${system}".default
               ];
             }
           ];
