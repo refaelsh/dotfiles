@@ -12,6 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
+    zen-browser.url = "github:MarceColl/zen-browser-flake";
   };
 
   outputs =

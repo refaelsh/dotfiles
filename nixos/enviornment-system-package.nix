@@ -139,7 +139,7 @@
       bottles
       # lutris
       shotcut
-      zen-browser
+      # zen-browser
     ];
   };
 }
