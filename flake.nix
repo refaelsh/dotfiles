@@ -40,6 +40,7 @@
               environment.systemPackages = [
                 # inputs.nixvim.packages.${system}.default
                 # inputs.brave.packages.${system}.default
+                inputs.zen-browser.packages."${system}".specific
               ];
             }
           ];
