@@ -11,7 +11,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixmobar.url = "https://codeberg.org/xmobar/xmobar/src/branch/master/nix";
+    nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 
