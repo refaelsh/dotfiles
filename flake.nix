@@ -13,7 +13,7 @@
     };
     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
     xmobar-flake = {
-      url = "https://codeberg.org/xmobar/xmobar";
+      url = "https://codeberg.org/xmobar/xmobar?master";
       dir = "nix";
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
