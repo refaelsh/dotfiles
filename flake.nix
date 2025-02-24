@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
-    inputs.xmobar-flake = {
+    xmobar-flake = {
       url = "https://codeberg.org/xmobar/xmobar";
       dir = "nix";
     };
