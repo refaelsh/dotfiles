@@ -136,7 +136,7 @@
       zulu
       exiftool
       keepass
-      bottles
+      # bottles
       # lutris
       shotcut
       # zen-browser
