@@ -111,16 +111,16 @@
       prismlauncher
       dysk
       rclone
-      netflix
+      # netflix
       iw
       usbutils
       udiskie
       udisks
       udisks2
       alsa-utils
-      popcorntime
+      # popcorntime
       trayer
-      nawk
+      # nawk
       lxappearance
       git-extras
       nixfmt-rfc-style
@@ -129,13 +129,13 @@
       numlockx
       zoom-us
       brave
-      qemu
+      # qemu
       # android-studio
       marksman
       p7zip
-      zulu
+      # zulu
       exiftool
-      keepass
+      # keepass
       # bottles
       # lutris
       shotcut
