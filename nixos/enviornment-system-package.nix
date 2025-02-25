@@ -107,7 +107,7 @@
       rofi
       doublecmd
       usbutils
-      discord
+      # discord
       prismlauncher
       dysk
       rclone
