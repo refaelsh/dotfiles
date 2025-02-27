@@ -24,4 +24,6 @@
     ./zsh.nix
   ];
 
+pkgs.st.override { conf = ./path/to/config.h; };
+
 }
