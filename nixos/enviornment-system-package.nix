@@ -140,8 +140,7 @@
       # lutris
       shotcut
       # zen-browser
-      st.override
-      { conf = ./config.h; }
+      st.override { conf = ./config.h; }
     ];
   };
 }
