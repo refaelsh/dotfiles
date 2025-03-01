@@ -139,7 +139,6 @@
       # bottles
       # lutris
       shotcut
-      # zen-browser
       (st.overrideAttrs (oldAttrs: rec {
         buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
         configFile = pkgs.writeText "config.def.h" (builtins.readFile ./st-config.h);
