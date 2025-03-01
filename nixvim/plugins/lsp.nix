@@ -16,7 +16,10 @@
       yamlls.enable = true;
       bashls.enable = true;
       cmake.enable = true;
-      clangd.enable = true;
+      clangd = {
+        enable = true;
+        cmd = "clangd";
+      };
       pylsp.enable = true;
       taplo.enable = true;
       marksman.enable = true;
