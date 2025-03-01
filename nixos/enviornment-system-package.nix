@@ -143,7 +143,6 @@
       (st.overrideAttrs (oldAttrs: rec {
         # Path to your custom config.h
 
-        # config = builtins.readFile ./xmonad.hs;
         configFile = pkgs.writeText "config.h" (builtins.readFile ./config.h);
 
         # Copy the config.h into the build directory after patching
