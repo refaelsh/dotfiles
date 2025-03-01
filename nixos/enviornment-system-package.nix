@@ -141,12 +141,9 @@
       shotcut
       # zen-browser
       (st.overrideAttrs (oldAttrs: rec {
-        # Path to your custom config.h
-
-        configFile = pkgs.writeText "config.def.h" (builtins.readFile ./config.h);
-
-        # Copy the config.h into the build directory after patching
-        postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
+        buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
+        configFile = pkgs.writeText "config.def.h" (builtins.readFile ./st-config.h);
+        postPatch = oldAttrs.postPatch ++ ''cp ${configFile} config.def.h'';
       }))
     ];
   };
