@@ -18,7 +18,7 @@
       cmake.enable = true;
       clangd = {
         enable = true;
-        cmd = ["clangd"];
+        cmd = { "clangd", "--format-style=Google" };
       };
       pylsp.enable = true;
       taplo.enable = true;
