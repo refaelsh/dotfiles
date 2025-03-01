@@ -23,6 +23,7 @@
       jsonls.enable = true;
       kotlin_language_server.enable = true;
       jdtls.enable = true;
+      lua_ls.enable = true;
       hls = {
         enable = true;
         installGhc = false;
@@ -32,7 +33,6 @@
           "cabal"
         ];
       };
-      lua_ls.enable = true;
     };
   };
 }
