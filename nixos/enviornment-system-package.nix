@@ -146,7 +146,7 @@
         configFile = pkgs.writeText "config.def.h" (builtins.readFile ./config.h);
 
         # Copy the config.h into the build directory after patching
-        postPatch = oldAttrs.postPatch ++ ''cp ${configFile} config.def.h'';
+        postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
       }))
     ];
   };
