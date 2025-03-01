@@ -3,7 +3,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-#include <cstddef>
+#include <stdio.h>
 static const char* font = "Fira Code:pixelsize=15:antialias=true:autohint=true";
 static int borderpx = 2;
 
@@ -19,10 +19,10 @@ static const char* shell = "/bin/sh";
 char* utmp = NULL;
 /* scroll program: to enable use a string like "scroll" */
 char* scroll = NULL;
-char* stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
+const char* stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 
 /* identification sequence returned in DA and DECID */
-char* vtiden = "\033[?6c";
+const char* vtiden = "\033[?6c";
 
 /* Kerning / character bounding-box multipliers */
 static float cwscale = 1.0;
@@ -33,7 +33,7 @@ static float chscale = 1.0;
  *
  * More advanced example: L" `'\"()[]{}"
  */
-wchar_t* worddelimiters = L" ";
+const wchar_t* worddelimiters = L" ";
 
 /* selection timeouts (in milliseconds) */
 static unsigned int doubleclicktimeout = 300;
@@ -73,7 +73,7 @@ static unsigned int cursorthickness = 2;
 static int bellvolume = 0;
 
 /* default TERM value */
-char* termname = "st-256color";
+const char* termname = "st-256color";
 
 /*
  * spaces per tab
