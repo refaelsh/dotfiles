@@ -142,7 +142,7 @@
       (st.overrideAttrs (oldAttrs: rec {
         buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
         configFile = pkgs.writeText "config.def.h" (builtins.readFile ./st-config.h);
-        postPatch = oldAttrs.postPatch ++ ''cp ${configFile} config.def.h'';
+        postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
       }))
     ];
   };
