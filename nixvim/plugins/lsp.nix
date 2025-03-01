@@ -16,10 +16,7 @@
       yamlls.enable = true;
       bashls.enable = true;
       cmake.enable = true;
-      clangd = {
-        enable = true;
-        cmd = ["clangd" "--input-style=Google"];
-      };
+      clangd.enable = true;
       pylsp.enable = true;
       taplo.enable = true;
       marksman.enable = true;
