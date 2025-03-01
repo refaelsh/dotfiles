@@ -7,7 +7,7 @@
 }:
 let
   clangFormatConfig = pkgs.runCommand "clang-format-config" { buildInputs = [ pkgs.clang-tools ]; } ''
-    clang-format -style=Google -dump-config > $out
+    clang-format -style=Mozilla -dump-config > $out
   '';
 in
 {
