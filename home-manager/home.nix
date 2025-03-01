@@ -11,10 +11,9 @@ let
   '';
 in
 {
-  # programs.home-manager.enable = true;
+  home.file.".clang-format".source = clangFormatConfig;
+
   home.stateVersion = "24.05";
-  # home.username = "refaelsh";
-  # home.homedirectory = "/home/refaelsh";
 
   imports = [
     ./alacritty.nix
@@ -34,6 +33,4 @@ in
     # ./xmobar.nix
     ./zsh.nix
   ];
-
-  home.file.".clang-format".source = clangFormatConfig;
 }
