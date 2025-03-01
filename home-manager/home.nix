@@ -1,4 +1,15 @@
-{ self, inputs, nixmobar, ... }:
+{
+  self,
+  pkgs,
+  inputs,
+  nixmobar,
+  ...
+}:
+let
+  clangFormatConfig = pkgs.runCommand "clang-format-config" { buildInputs = [ pkgs.clang-tools ]; } ''
+    clang-format -style=Google -dump-config > $out
+  '';
+in
 {
   # programs.home-manager.enable = true;
   home.stateVersion = "24.05";
@@ -23,4 +34,6 @@
     # ./xmobar.nix
     ./zsh.nix
   ];
+
+  home.file.".clang-format".source = clangFormatConfig;
 }
