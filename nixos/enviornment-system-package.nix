@@ -138,6 +138,7 @@
       # keepass
       # bottles
       # lutris
+      file
       shotcut
       (st.overrideAttrs (oldAttrs: rec {
         buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
