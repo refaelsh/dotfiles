@@ -1,5 +1,6 @@
 {
   services = {
+    preload.enable = true;
     libinput.enable = true;
     thermald.enable = true;
     gvfs.enable = true;
