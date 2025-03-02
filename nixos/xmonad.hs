@@ -35,6 +35,7 @@ myStartupHook = do
   spawnOnOnce "1" "brave"
   spawnOnOnce "9" "signal-desktop"
   spawnOnOnce "0" "cd ~/repos/dotfiles/ && neovide flake.nix -- -c \"NvimTreeOpen\""
+  spawnOnOnce "0" myTerminal
 
 myXmobarPP :: PP
 myXmobarPP =
