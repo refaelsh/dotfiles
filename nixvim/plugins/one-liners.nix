@@ -24,6 +24,6 @@
     nvim-lightbulb.enable = true;
     which-key.enable = true;
     wilder.enable = true;
-    otter.enable = true;
+    # otter.enable = true;
   };
 }
