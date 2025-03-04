@@ -1,6 +1,6 @@
 {
   services = {
-    hledger-web.enable = true;
+    # hledger-web.enable = true;
     libinput.enable = true;
     thermald.enable = true;
     gvfs.enable = true;
