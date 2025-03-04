@@ -15,12 +15,12 @@
       };
     };
 
-    orgmode = {
-      enable = true;
-      settings = {
-        org_startup_indented = true;
-      };
-    };
+    #   orgmode = {
+    #      enable = true;
+    #  settings = {
+    #    org_startup_indented = true;
+    #  };
+    #};
 
     lualine = {
       enable = true;
