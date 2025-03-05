@@ -12,6 +12,8 @@
     history = {
       expireDuplicatesFirst = true;
       extended = true;
+      save = 1000;
+      size = 1000;
     };
     syntaxHighlighting = {
       enable = true;
