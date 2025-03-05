@@ -7,7 +7,7 @@
     };
     autosuggestion.enable = true;
     defaultKeymap = "viins";
-    enableCompletion = true;
+    # enableCompletion = true;
     enableVteIntegration = true;
     history = {
       expireDuplicatesFirst = true;
