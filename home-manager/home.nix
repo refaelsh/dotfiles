@@ -27,7 +27,7 @@ in
     ./mangohud.nix
     inputs.nixmobar.homeModules.mainmodule
     ./nixmobar.nix
-    ./starship.nix
+    # ./starship.nix
     ./termonad.nix
     ./wezterm.nix
     # ./xmobar.nix
