@@ -15,7 +15,6 @@
       nodePackages.bash-language-server
       taplo-lsp
       wget
-      firefox
       google-chrome
       glib
       nnn
