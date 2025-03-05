@@ -29,17 +29,17 @@
       ''
         fpath+=($HOME/.zsh/plugins/zsh-completions/share/zsh/site-functions)
       '';
-    plugins = [
-      {
-        name = "zsh-you-should-use";
-        src = pkgs.zsh-you-should-use;
-        file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
-      }
-      {
-        name = "zsh-completions";
-        src = pkgs.zsh-completions;
-      }
-    ];
+    # plugins = [
+    #   {
+    #     name = "zsh-you-should-use";
+    #     src = pkgs.zsh-you-should-use;
+    #     file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
+    #   }
+    #   {
+    #     name = "zsh-completions";
+    #     src = pkgs.zsh-completions;
+    #   }
+    # ];
     initExtra = # bash
       ''
         # Everything that follows below is Dracula theme for zsh-syntax-highlighting.
@@ -108,22 +108,22 @@
         ZSH_HIGHLIGHT_STYLES[default]='fg=#F8F8F2'
         ZSH_HIGHLIGHT_STYLES[cursor]='standout'
       '';
-    # oh-my-zsh = {
-    #   enable = true;
-    #   plugins = [
-    #     "sudo"
-    #     "git"
-    #     "git-extras"
-    #     "git-escape-magic"
-    #     "gitfast"
-    #     "zsh-interactive-cd"
-    #     "vi-mode"
-    #     "colored-man-pages"
-    #     "extract"
-    #     "cp"
-    #     "cabal"
-    #     "fzf"
-    #   ];
-    # };
+    oh-my-zsh = {
+      enable = true;
+      plugins = [
+        "sudo"
+        "git"
+        "git-extras"
+        "git-escape-magic"
+        "gitfast"
+        "zsh-interactive-cd"
+        "vi-mode"
+        "colored-man-pages"
+        "extract"
+        "cp"
+        "cabal"
+        "fzf"
+      ];
+    };
   };
 }
