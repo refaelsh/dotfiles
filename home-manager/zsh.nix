@@ -108,22 +108,22 @@
         ZSH_HIGHLIGHT_STYLES[default]='fg=#F8F8F2'
         ZSH_HIGHLIGHT_STYLES[cursor]='standout'
       '';
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "sudo"
-        "git"
-        "git-extras"
-        "git-escape-magic"
-        "gitfast"
-        "zsh-interactive-cd"
-        "vi-mode"
-        "colored-man-pages"
-        "extract"
-        "cp"
-        "cabal"
-        "fzf"
-      ];
-    };
+    # oh-my-zsh = {
+    #   enable = true;
+    #   plugins = [
+    #     "sudo"
+    #     "git"
+    #     "git-extras"
+    #     "git-escape-magic"
+    #     "gitfast"
+    #     "zsh-interactive-cd"
+    #     "vi-mode"
+    #     "colored-man-pages"
+    #     "extract"
+    #     "cp"
+    #     "cabal"
+    #     "fzf"
+    #   ];
+    # };
   };
 }
