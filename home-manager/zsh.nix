@@ -7,7 +7,7 @@
     };
     autosuggestion.enable = true;
     defaultKeymap = "viins";
-    # enableCompletion = true;
+    enableCompletion = true;
     enableVteIntegration = true;
     history = {
       expireDuplicatesFirst = true;
@@ -35,10 +35,10 @@
         src = pkgs.zsh-you-should-use;
         file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
       }
-      # {
-      #   name = "zsh-completions";
-      #   src = pkgs.zsh-completions;
-      # }
+      {
+        name = "zsh-completions";
+        src = pkgs.zsh-completions;
+      }
     ];
     initExtra = # bash
       ''
