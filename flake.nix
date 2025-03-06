@@ -11,7 +11,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?ref=master&dir=nix";
+    # nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?ref=master&dir=nix";
   };
 
   outputs =
@@ -39,6 +39,7 @@
               environment.systemPackages = [
                 # inputs.nixvim.packages.${system}.default
                 # inputs.brave.packages.${system}.default
+                # inputs.zen-browser.packages."${system}".default
               ];
             }
           ];
