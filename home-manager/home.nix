@@ -22,7 +22,6 @@ in
     ./git.nix
     ./fzf.nix
     ./lf.nix
-    ./librewolf.nix
     ./kitty.nix
     ./mangohud.nix
     inputs.nixmobar.homeModules.mainmodule
