@@ -24,7 +24,7 @@ in
     ./lf.nix
     ./kitty.nix
     ./mangohud.nix
-    ./nixmobar.nix
+    # ./nixmobar.nix
     ./starship.nix
     ./termonad.nix
     ./wezterm.nix
