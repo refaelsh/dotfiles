@@ -24,12 +24,12 @@ in
     ./lf.nix
     ./kitty.nix
     ./mangohud.nix
-    inputs.nixmobar.homeModules.mainmodule
     ./nixmobar.nix
     ./starship.nix
     ./termonad.nix
     ./wezterm.nix
     # ./xmobar.nix
+    # inputs.nixmobar.homeModules.mainmodule
     ./zsh.nix
   ];
 }
