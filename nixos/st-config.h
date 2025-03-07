@@ -240,8 +240,8 @@ static uint ignoremod = Mod2Mask | XK_SWITCH_MOD;
  */
 static Key key[] = {
   /* keysym           mask            string      appkey appcursor */
-  { ShiftMask, XK_Page_Up, kscrollup, { .i = -1 } },
-  { ShiftMask, XK_Page_Down, kscrolldown, { .i = -1 } },
+  { XK_Page_Up, ShiftMask, kscrollup, { .i = -1 }, 0 },
+  { XK_Page_Down, ShiftMask, kscrolldown, { .i = -1 }, 0 },
   { XK_KP_Home, ShiftMask, "\033[2J", 0, -1 },
   { XK_KP_Home, ShiftMask, "\033[1;2H", 0, +1 },
   { XK_KP_Home, XK_ANY_MOD, "\033[H", 0, -1 },
