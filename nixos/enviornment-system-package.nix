@@ -142,15 +142,10 @@
       (st.overrideAttrs (oldAttrs: rec {
         buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
         patches = [
-          # # scrollback
-          # (fetchpatch {
-          #   url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.9.2.diff";
-          #   sha256 = "0ymc5db75cwmdvv8ak3bfaf7iz4snj65fbmhrl9blv7h7pw3pdld";
-          # })
           # ligatures patch
           (fetchpatch {
-            url = "https://st.suckless.org/patches/ligatures/0.9.2/st-ligatures-scrollback-ringbuffer-20240427-0.9.2.diff";
-            sha256 = "0vz54f7013za4wy6pzv5y4vr0nvpcck5yps1p1976xpx0fjxajlm";
+            url = "https://st.suckless.org/patches/ligatures/0.9.2/st-ligatures-20240427-0.9.2.diff";
+            sha256 = "077l1v1spkiqcl1jppnpp96m7bzki37q7v2hdkz92gkxvp725k74";
           })
         ];
         configFile = pkgs.writeText "config.def.h" (builtins.readFile ./st-config.h);
