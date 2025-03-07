@@ -144,8 +144,8 @@
         patches = [
           # ligatures patch
           (fetchpatch {
-            url = "https://st.suckless.org/patches/ligatures/0.8.3/st-ligatures-20200430-0.8.3.diff";
-            sha256 = "67b668c77677bfcaff42031e2656ce9cf173275e1dfd6f72587e8e8726298f09";
+            url = "https://st.suckless.org/patches/ligatures/0.9.2/st-ligatures-20240427-0.9.2.diff";
+            sha256 = "077l1v1spkiqcl1jppnpp96m7bzki37q7v2hdkz92gkxvp725k74";
           })
         ];
         configFile = pkgs.writeText "config.def.h" (builtins.readFile ./st-config.h);
