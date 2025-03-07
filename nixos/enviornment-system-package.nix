@@ -149,8 +149,8 @@
           # })
           # ligatures patch
           (fetchpatch {
-            url = "https://st.suckless.org/patches/ligatures/0.9.2/st-ligatures-scrollback-20240427-0.9.2.diff";
-            sha256 = "1bxmq0s0n687ndxpnwckxnk488m32a7wddzh538jn4h288850s2s";
+            url = "https://st.suckless.org/patches/ligatures/0.9.2/st-ligatures-scrollback-ringbuffer-20240427-0.9.2.diff";
+            sha256 = "0vz54f7013za4wy6pzv5y4vr0nvpcck5yps1p1976xpx0fjxajlm";
           })
         ];
         configFile = pkgs.writeText "config.def.h" (builtins.readFile ./st-config.h);
