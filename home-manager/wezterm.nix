@@ -13,7 +13,7 @@
         config.font = wezterm.font 'Fira Code'
         config.window_close_confirmation = 'NeverPrompt'
         config.color_scheme = 'Dracula (Official)'
-        config.front_end = "WebGpu"
+        -- config.front_end = "WebGpu"
         config.enable_tab_bar = false
         config.audible_bell = "Disabled"
         config.visual_bell = {
