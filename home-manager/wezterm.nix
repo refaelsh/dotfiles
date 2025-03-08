@@ -34,9 +34,9 @@
             action = act.PasteFrom 'Clipboard' 
           },
           {
-            mods="CTRL", 
-            key="c", 
-            action=wezterm.action.CopyTo 'Clipboard'
+            mods = "CTRL", 
+            key = "c", 
+            action = wezterm.action.CopyTo 'Clipboard'
           },
         }
 
