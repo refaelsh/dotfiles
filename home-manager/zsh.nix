@@ -44,6 +44,7 @@
     ];
     initExtra = # bash
       ''
+        zmodload zsh/zprof
         # Everything that follows below is Dracula theme for zsh-syntax-highlighting.
         # Taken from here: https://github.com/dracula/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.sh.
         typeset -gA ZSH_HIGHLIGHT_STYLES
