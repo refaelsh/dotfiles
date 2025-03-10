@@ -15,7 +15,7 @@ static int borderpx = 2;
  * 4: value of shell in /etc/passwd
  * 5: value of shell in config.h
  */
-static const char* shell = "/bin/zsh";
+static const char* shell = "/bin/sh";
 char* utmp = NULL;
 /* scroll program: to enable use a string like "scroll" */
 char* scroll = NULL;
