@@ -139,23 +139,23 @@
       # lutris
       file
       shotcut
-      (st.overrideAttrs (oldAttrs: rec {
-        buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
-        patches = [
-          # scrollback
-          (fetchpatch {
-            url = "https://st.suckless.org/patches/scrollback/st-scrollback-ringbuffer-0.9.2.diff";
-            sha256 = "1r23q4mi5bkam49ld5c3ccwaa1li7bbjx0ndjgm207p02az9h4cn";
-          })
-          # ligatures
-          (fetchpatch {
-            url = "https://st.suckless.org/patches/ligatures/0.9.2/st-ligatures-scrollback-ringbuffer-20240427-0.9.2.diff";
-            sha256 = "0vz54f7013za4wy6pzv5y4vr0nvpcck5yps1p1976xpx0fjxajlm";
-          })
-        ];
-        configFile = pkgs.writeText "config.def.h" (builtins.readFile ./st-config.h);
-        postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
-      }))
+      # (st.overrideAttrs (oldAttrs: rec {
+      #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
+      #   patches = [
+      #     # scrollback
+      #     (fetchpatch {
+      #       url = "https://st.suckless.org/patches/scrollback/st-scrollback-ringbuffer-0.9.2.diff";
+      #       sha256 = "1r23q4mi5bkam49ld5c3ccwaa1li7bbjx0ndjgm207p02az9h4cn";
+      #     })
+      #     # ligatures
+      #     (fetchpatch {
+      #       url = "https://st.suckless.org/patches/ligatures/0.9.2/st-ligatures-scrollback-ringbuffer-20240427-0.9.2.diff";
+      #       sha256 = "0vz54f7013za4wy6pzv5y4vr0nvpcck5yps1p1976xpx0fjxajlm";
+      #     })
+      #   ];
+      #   configFile = pkgs.writeText "config.def.h" (builtins.readFile ./st-config.h);
+      #   postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
+      # }))
     ];
   };
 }
