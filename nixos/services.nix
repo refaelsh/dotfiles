@@ -18,10 +18,10 @@
     };
 
     displayManager = {
-      # autoLogin = {
-      #   enable = true;
-      #   user = "refaelsh";
-      # };
+      autoLogin = {
+        enable = true;
+        user = "refaelsh";
+      };
       defaultSession = "none+xmonad";
       # defaultSession = "niri";
     };
