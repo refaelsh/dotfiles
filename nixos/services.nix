@@ -18,6 +18,10 @@
     };
 
     displayManager = {
+      lightdm = {
+        enable = true;
+        wayland.enable = true; 
+      };
       autoLogin = {
         enable = true;
         user = "refaelsh";
@@ -37,7 +41,7 @@
         variant = "";
         layout = "us";
       };
-      displayManager.lightdm.enable = true;
+      # displayManager.lightdm.enable = true;
       windowManager.xmonad = {
         enable = true;
         enableConfiguredRecompile = true;
