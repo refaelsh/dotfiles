@@ -1,4 +1,5 @@
 {
+  services.displayManager.lightdm.enable = true;
   services = {
     # hledger-web.enable = true;
     libinput.enable = true;
@@ -17,17 +18,13 @@
       jack.enable = true;
     };
 
-    displayManager = {
-      lightdm = {
-        enable = true;
-        wayland.enable = true; 
-      };
-      autoLogin = {
-        enable = true;
-        user = "refaelsh";
-      };
-      defaultSession = "none+xmonad";
-    };
+    # displayManager = {
+    #   autoLogin = {
+    #     enable = true;
+    #     user = "refaelsh";
+    #   };
+    #   defaultSession = "none+xmonad";
+    # };
 
     xserver = {
       enable = true;
@@ -41,7 +38,7 @@
         variant = "";
         layout = "us";
       };
-      # displayManager.lightdm.enable = true;
+      displayManager.lightdm.enable = true;
       windowManager.xmonad = {
         enable = true;
         enableConfiguredRecompile = true;
