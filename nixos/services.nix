@@ -1,5 +1,4 @@
 {
-  services.displayManager.lightdm.enable = true;
   services = {
     # hledger-web.enable = true;
     libinput.enable = true;
@@ -18,13 +17,14 @@
       jack.enable = true;
     };
 
-    # displayManager = {
-    #   autoLogin = {
-    #     enable = true;
-    #     user = "refaelsh";
-    #   };
-    #   defaultSession = "none+xmonad";
-    # };
+    displayManager = {
+      autoLogin = {
+        enable = true;
+        user = "refaelsh";
+      };
+      # defaultSession = "none+xmonad";
+      defaultSession = "niri";
+    };
 
     xserver = {
       enable = true;
