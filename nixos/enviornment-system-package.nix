@@ -140,6 +140,7 @@
       file
       shotcut
       cachix
+      xwayland-satellite
       fuzzel
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
