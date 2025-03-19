@@ -139,7 +139,7 @@
       # lutris
       file
       shotcut
-      cashix
+      cachix
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       #   patches = [
