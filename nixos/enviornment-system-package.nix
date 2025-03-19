@@ -140,6 +140,7 @@
       file
       shotcut
       cachix
+      fuzzel
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       #   patches = [
