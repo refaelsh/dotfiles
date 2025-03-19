@@ -32,4 +32,6 @@ in
     ./nixmobar.nix
     ./zsh.nix
   ];
+
+  waybar.enable = true;
 }
