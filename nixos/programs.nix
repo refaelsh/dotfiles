@@ -11,5 +11,6 @@
     };
     gamemode.enable = true;
     # adb.enable = true;
+    niri.enable = true;
   };
 }
