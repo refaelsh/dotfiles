@@ -13,6 +13,7 @@
     # adb.enable = true;
 
     xwayland.enable = true;
+    waybar.enable = true;
     niri.enable = true;
   };
 }
