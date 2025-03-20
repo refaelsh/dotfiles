@@ -127,7 +127,6 @@
       speedtest-cli
       numlockx
       zoom-us
-      brave
       # qemu
       # android-studio
       marksman
