@@ -27,10 +27,6 @@
         "line"
       ];
     };
-    initExtraBeforeCompInit = # bash
-      ''
-        fpath+=($HOME/.zsh/plugins/zsh-completions/share/zsh/site-functions)
-      '';
     plugins = [
       {
         name = "zsh-you-should-use";
@@ -45,6 +41,7 @@
     initContent = # bash
       ''
         zmodload zsh/zprof
+        fpath+=($HOME/.zsh/plugins/zsh-completions/share/zsh/site-functions)
         # Everything that follows below is Dracula theme for zsh-syntax-highlighting.
         # Taken from here: https://github.com/dracula/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.sh.
         typeset -gA ZSH_HIGHLIGHT_STYLES
