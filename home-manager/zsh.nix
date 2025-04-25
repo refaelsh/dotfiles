@@ -42,7 +42,7 @@
         src = pkgs.zsh-completions;
       }
     ];
-    initExtra = # bash
+    initContent = # bash
       ''
         zmodload zsh/zprof
         # Everything that follows below is Dracula theme for zsh-syntax-highlighting.
