@@ -23,6 +23,7 @@
       "SpellcheckEnabled": false,
       "NewTabPageContentEnabled": false,
       "BraveAdsDisabled": true,
+      "BackgroundModeEnabled": false,
     }
   '';
 }
