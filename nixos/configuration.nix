@@ -47,7 +47,6 @@
       "MetricsReportingEnabled": false,
       "TranslateEnabled": false,
       "SpellcheckEnabled": false,
-      "BraveAdsDisabled": true,
       "BackgroundModeEnabled": false,
       "BraveVPNDisabled": true,
       "BraveAIChatEnabled": false,
