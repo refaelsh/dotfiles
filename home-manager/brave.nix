@@ -10,7 +10,7 @@
     ];
   };
 
-  xdg.configFile."BraveSoftware/Brave-Browser/policies/managed/policies.json".text = ''
+  environment.etc."brave/policies/managed/policies.json".text = ''
     {
       "BraveRewardsDisabled": true,
       "TorDisabled": true,
