@@ -24,6 +24,7 @@
       "NewTabPageContentEnabled": false,
       "BraveAdsDisabled": true,
       "BackgroundModeEnabled": false,
+      "BraveVPNDisabled": true,
     }
   '';
 }
