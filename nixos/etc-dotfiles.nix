@@ -13,6 +13,7 @@
       "BackgroundModeEnabled": false,
       "BraveVPNDisabled": true,
       "BraveAIChatEnabled": false,
+      "BraveNewsEnable": false,
     }
   '';
 }
