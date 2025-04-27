@@ -40,7 +40,6 @@
     {
       "BraveRewardsDisabled": true,
       "TorDisabled": true,
-      "IPFSDisabled": true,
       "BraveWalletDisabled": true,
       "PasswordManagerEnabled": false,
       "AutofillAddressEnabled": false,
@@ -48,7 +47,6 @@
       "MetricsReportingEnabled": false,
       "TranslateEnabled": false,
       "SpellcheckEnabled": false,
-      "NewTabPageContentEnabled": false,
       "BraveAdsDisabled": true,
       "BackgroundModeEnabled": false,
       "BraveVPNDisabled": true,
