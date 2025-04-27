@@ -21,6 +21,8 @@
       "MetricsReportingEnabled": false,
       "TranslateEnabled": false,
       "SpellcheckEnabled": false,
+      "NewTabPageContentEnabled": false,
+      "BraveAdsDisabled": true,
     }
   '';
 }
