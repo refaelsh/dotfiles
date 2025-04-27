@@ -25,6 +25,7 @@
       "BraveAdsDisabled": true,
       "BackgroundModeEnabled": false,
       "BraveVPNDisabled": true,
+      "BraveAiChatEnabled": false,
     }
   '';
 }
