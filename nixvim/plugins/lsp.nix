@@ -24,6 +24,7 @@
       kotlin_language_server.enable = true;
       jdtls.enable = true;
       lua_ls.enable = true;
+      typos_lsp.enable = true;
       hls = {
         enable = true;
         installGhc = false;
