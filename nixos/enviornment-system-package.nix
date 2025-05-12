@@ -106,7 +106,6 @@
       rofi
       doublecmd
       usbutils
-      # discord
       prismlauncher
       dysk
       rclone
@@ -141,6 +140,7 @@
       cachix
       xwayland-satellite
       fuzzel
+      discord
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       #   patches = [
