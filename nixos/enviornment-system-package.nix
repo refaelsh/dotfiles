@@ -141,8 +141,6 @@
       xwayland-satellite
       fuzzel
       discord
-      ladybird
-      floorp
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       #   patches = [
