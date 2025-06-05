@@ -33,6 +33,4 @@ in
     ./brave.nix
     ./nyxt.nix
   ];
-
-  home.file.".config/nyxt/config.lisp".source = ./nyxt-config.lisp;
 }
