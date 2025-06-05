@@ -27,11 +27,11 @@ in
     ./starship.nix
     ./termonad.nix
     ./wezterm.nix
-    # ./xmobar.nix
     inputs.nixmobar.homeModules.mainmodule
     ./nixmobar.nix
     ./zsh.nix
     ./brave.nix
+    ./nyxt.nix
   ];
 
   programs.waybar = {
