@@ -34,5 +34,5 @@ in
     ./nyxt.nix
   ];
 
-  home.packages = [ pkgs.nyxt ];
+  home.file.".config/nyxt/config.lisp".source = ./nyxt-config.lisp;
 }
