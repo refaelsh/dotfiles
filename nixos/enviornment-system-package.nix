@@ -141,6 +141,7 @@
       xwayland-satellite
       fuzzel
       discord
+      nyxt
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       #   patches = [
