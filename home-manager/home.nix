@@ -34,12 +34,5 @@ in
     ./nyxt.nix
   ];
 
-  programs.waybar = {
-    enable = true;
-    settings = {
-      mainBar = {
-        position = "bottom";
-      };
-    };
-  };
+  home.packages = [ pkgs.nyxt ];
 }

@@ -1,6 +1,6 @@
-{ pkgs, inputs, ... }:
-{
-  programs.nyxt = {
-    enable = true;
-  };
-}
+# { pkgs, inputs, ... }:
+# {
+#   programs.nyxt = {
+#     enable = true;
+#   };
+# }
