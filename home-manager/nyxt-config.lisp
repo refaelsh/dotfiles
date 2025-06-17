@@ -14,4 +14,4 @@
                                        :fallback-url "https://www.google.com")))))
 
 (define-configuration web-buffer
-  ((renderer (make-instance 'qt-web-engine))))
+  ((renderer :blink)))
