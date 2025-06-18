@@ -1,8 +1,8 @@
 (in-package #:nyxt-user)
 
 ;; Import Files
-(nyxt::load-lisp "~/.config/nyxt/statusline.lisp")
-(nyxt::load-lisp "~/.config/nyxt/stylesheet.lisp")
+(nyxt::load-lisp "./statusline.lisp")
+(nyxt::load-lisp "./stylesheet.lisp")
 
 (define-configuration browser
   ((theme theme:+dark-theme+)))
