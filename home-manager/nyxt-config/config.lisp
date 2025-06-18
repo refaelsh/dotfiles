@@ -5,6 +5,7 @@
 
 (define-configuration web-buffer
   ((default-modes (pushnew 'nyxt/force-https-mode:force-https-mode %slot-value%))))
+
 (define-configuration browser
   ((default-modes (append '(force-https-mode) %slot-default%))))
 
