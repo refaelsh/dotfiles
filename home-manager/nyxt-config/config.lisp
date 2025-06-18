@@ -1,4 +1,4 @@
-(in-package #:nyxt-user)
+; (in-package #:nyxt-user)
 
 ; (nyxt::load-lisp "./statusline.lisp")
 ; (nyxt::load-lisp "./stylesheet.lisp")
