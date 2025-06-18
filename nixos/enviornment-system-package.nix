@@ -144,7 +144,6 @@
       nyxt
       sbclPackages.cl-webkit2
       sbclPackages.cl-cffi-gtk
-      webkitgtk
       gsettings-desktop-schemas
       glib-networking
       # (st.overrideAttrs (oldAttrs: rec {
