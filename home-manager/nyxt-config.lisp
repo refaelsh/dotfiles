@@ -9,5 +9,4 @@
 ;                                        :fallback-url "https://www.google.com")))))
 
 (define-configuration web-buffer
-  ((default-new-buffer-url "about:blank")
-   (web-engine :blink)))
+  ((web-engine :blink)))
