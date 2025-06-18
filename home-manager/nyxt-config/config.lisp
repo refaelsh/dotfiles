@@ -3,6 +3,9 @@
 ; (nyxt::load-lisp "./statusline.lisp")
 ; (nyxt::load-lisp "./stylesheet.lisp")
 
+(define-configuration browser
+  ((default-modes (append '(force-https-mode) %slot-default%))))
+
 (define-configuration status-buffer ((glyph-mode-presentation-p t)))
 (define-configuration force-https-mode:force-https-mode ((glyph "")))
 (define-configuration nyxt/blocker-mode:blocker-mode ((glyph "")))
