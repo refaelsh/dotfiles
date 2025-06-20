@@ -13,29 +13,33 @@
 (define-configuration nyxt/mode/help:help-mode ((glyph "")))
 (define-configuration document-mode ((glyph "ω")))
 
-; (define-configuration browser
-;   ((theme (make-instance
-;            'theme:theme
-;            :dark-p t
-;            :background-color "#282a36"
-;            :text-color "#f8f8f2"
-;            :accent-color "#ff5555"
-;            :primary-color "#50fa7b"
-;            :secondary-color "#bd93f9"
-;            :tertiary-color "#6272a4"
-;            :quaternary-color "#44475a"))))
-;
-; ;; Custom Dark-mode for webpages
-; (define-configuration nyxt/style-mode:dark-mode
-;   ((style #.(cl-css:css
-;              '((*
-;                 :background-color "#282a36 !important"
-;                 :background-image "none !important"
-;                 :color "#f8f8f2")
-;                (a
-;                 :background-color "#282a36 !important"
-;                 :background-image "none !important"
-;                 :color "#6272a4 !important"))))))
+(define-configuration browser
+    ((theme
+      (make-instance 'theme:theme
+                     :background-color "#282a36"
+                     :on-background-color "#f8f8f2"
+                     :accent-color "#ff5555"
+                     :on-accent-color "#282a36"
+                     :primary-color "#50fa7b"
+                     :on-primary-color "#282a36"
+                     :secondary-color "#bd93f9"
+                     :on-secondary-color "#282a36"))))
+
+(define-configuration prompt-buffer
+    ((style
+      (str:concat
+       %slot-value%
+       (theme:themed-css
+        (theme *browser*)
+        '("#prompt"
+          :background-color "#282a36" :color "#f8f8f2")
+        '("#prompt-extra"
+          :background-color "#282a36" :color "#f8f8f2")
+        '("#selection"
+          :background-color "#44475a" :color "#f8f8f2")
+        '("#input"
+          :background-color "#6272a4" :color "#f8f8f2" :border-color "#44475a")
+        '("#input:focus" :border-color "#6272a4"))))))
 
 ; (define-configuration browser
 ;   ((theme theme:+dark-theme+)))
