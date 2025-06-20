@@ -142,7 +142,6 @@
       fuzzel
       discord
       nyxt
-      chromium-codecs-ffmpeg-extra
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       #   patches = [
