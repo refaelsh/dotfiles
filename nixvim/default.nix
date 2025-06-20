@@ -45,6 +45,10 @@
     #   })
     # ];
 
+    extraPlugins = with pkgs.vimPlugins; [
+      vim-nix
+    ];
+
     extraConfigLua = # lua
       ''
         -- require('org-bullets').setup()

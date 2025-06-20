@@ -142,10 +142,7 @@
       fuzzel
       discord
       nyxt
-      sbclPackages.cl-webkit2
-      sbclPackages.cl-cffi-gtk
-      gsettings-desktop-schemas
-      glib-networking
+      chromium-codecs-ffmpeg-extra
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       #   patches = [
