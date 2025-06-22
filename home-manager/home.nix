@@ -19,6 +19,7 @@ in
     ./alacritty.nix
     ./bat.nix
     ./eza.nix
+    ./emacs.nix
     ./git.nix
     ./fzf.nix
     ./lf.nix
