@@ -1,40 +1,340 @@
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(package-refresh-contents)
+(setq package-archives '(("elpa" . "https://elpa.gnu.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                         ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(setq use-package-always-ensure t)
+(use-package auto-package-update
+:config
+(auto-package-update-maybe))
 
-(use-package evil
-  :init      ;; tweak evil's configuration before loading it
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  (setq evil-vsplit-window-right t)
-  (setq evil-split-window-below t)
-  (evil-mode))
-(use-package evil-collection
-  :after evil
+(menu-bar-mode -1) 
+(tool-bar-mode -1) 
+(scroll-bar-mode -1) 
+(setq-default frame-title-format nil)
+(setq frame-resize-pixelwise nil)
+
+(save-place-mode 1)
+(setq desktop-load-locked-desktop nil)
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(savehist-mode 1)
+
+(use-package beacon)
+(beacon-mode 1)
+
+(setq visible-bell t)
+
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+(set-default 'truncate-lines t)
+
+(setq package-install-upgrade-built-in t)
+
+(setq pixel-scroll-precision-mode t)
+
+(use-package super-save
+  :ensure t
   :config
-  (setq evil-collection-mode-list '(dashboard dired ibuffer))
-  (evil-collection-init))
-(use-package evil-tutor)
+  (super-save-mode +1))
+(setq super-save-auto-save-when-idle t)
+
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
+
+(use-package which-key
+    :config
+    (which-key-mode))
 
 (use-package general
   :config
   (general-evil-setup t))
 
-;; Using garbage magic hack.
- (use-package gcmh
-   :config
-   (gcmh-mode 1))
-;; Setting garbage collection threshold
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'visual)
+;; (add-to-list 'focus-in-hook (lambda () (setq display-line-numbers-type 'visual)))
+;; (add-to-list 'focus-out-hook (lambda () (setq display-line-numbers-type t)))
+
+;; (add-hook 'focus-in-hook (lambda () (message "Emacs is gainging focus...")))
+;; (add-hook 'focus-out-hook (lambda () (message "Emacs is losing focus...")))
+
+(use-package all-the-icons
+  :if (display-graphic-p))
+
+;; (all-the-icons-install-fonts)
+
+(setq flymake-no-changes-timeout 0.1)
+
+(use-package tree-sitter)
+(use-package tree-sitter-langs)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+(add-hook 'org-mode-hook 'org-indent-mode)
+
+(setq org-src-preserve-indentation nil
+      org-src-tab-acts-natively t
+      org-hide-emphasis-markers t
+      org-ellipsis "…"
+      org-edit-src-content-indentation 2
+      org-catch-invisible-edits 'show-and-error)
+
+(use-package org-modern)
+(setq org-pretty-entities t
+      org-agenda-tags-column 0
+      org-agenda-block-separator ?─
+      org-agenda-time-grid
+        '((daily today require-timed)
+          (800 1000 1200 1400 1600 1800 2000)
+          " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+      org-agenda-current-time-string
+        "⭠ now ─────────────────────────────────────────────────")
+(global-org-modern-mode)
+
+;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+;; (custom-set-variables '(org-modern-table nil))
+
+(setq org-src-fontify-natively t
+      org-src-tab-acts-natively t
+      org-confirm-babel-evaluate nil)
+
+(use-package toc-org
+  :commands toc-org-enable
+  :init (add-hook 'org-mode-hook 'toc-org-enable))
+
+(use-package org-tempo :ensure nil)
+
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+(add-to-list 'org-structure-template-alist '("ha" . "src haskell"))
+
+(general-nmap
+  "<leader>t" 'org-babel-tangle)
+
+(setq org-startup-numerated t)
+
+(setq org-startup-with-inline-images t)
+
+(use-package restart-emacs)
+(general-nmap
+  "<leader>re" '(lambda ()
+    (interactive)
+    (save-some-buffers t)
+    (org-babel-tangle)
+    (restart-emacs)))
+(setq confirm-kill-processes nil)
+
+(set-face-attribute 'default nil
+                    :family "Fira Code" 
+                    :height 130
+                    :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+                    :font "Ubuntu"
+                    :height 130
+                    :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+                    :font "Fira Code"
+                    :height 130
+                    :weight 'medium)
+
+(use-package ligature
+  :load-path "path-to-ligature-repo"
+  :config
+  ;; Enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; Enable traditional ligature support in eww-mode, if the
+  ;; `variable-pitch' face supports it
+  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+  ;; Enable all Cascadia and Fira Code ligatures in programming modes
+  (ligature-set-ligatures '(prog-mode text-mode)
+                          '(;; == === ==== => =| =>>=>=|=>==>> ==< =/=//=// =~
+                            ;; =:= =!=
+                            ("=" (rx (+ (or ">" "<" "|" "/" "~" ":" "!" "="))))
+                            ;; ;; ;;;
+                            (";" (rx (+ ";")))
+                            ;; && &&&
+                            ("&" (rx (+ "&")))
+                            ;; !! !!! !. !: !!. != !== !~
+                            ("!" (rx (+ (or "=" "!" "\." ":" "~"))))
+                            ;; ?? ??? ?:  ?=  ?.
+                            ("?" (rx (or ":" "=" "\." (+ "?"))))
+                            ;; %% %%%
+                            ("%" (rx (+ "%")))
+                            ;; |> ||> |||> ||||> |] |} || ||| |-> ||-||
+                            ;; |->>-||-<<-| |- |== ||=||
+                            ;; |==>>==<<==<=>==//==/=!==:===>
+                            ("|" (rx (+ (or ">" "<" "|" "/" ":" "!" "}" "\]"
+                                            "-" "=" ))))
+                            ;; \\ \\\ \/
+                            ("\\" (rx (or "/" (+ "\\"))))
+                            ;; ++ +++ ++++ +>
+                            ("+" (rx (or ">" (+ "+"))))
+                            ;; :: ::: :::: :> :< := :// ::=
+                            (":" (rx (or ">" "<" "=" "//" ":=" (+ ":"))))
+                            ;; // /// //// /\ /* /> /===:===!=//===>>==>==/
+                            ("/" (rx (+ (or ">"  "<" "|" "/" "\\" "\*" ":" "!"
+                                            "="))))
+                            ;; .. ... .... .= .- .? ..= ..<
+                            ("\." (rx (or "=" "-" "\?" "\.=" "\.<" (+ "\."))))
+                            ;; -- --- ---- -~ -> ->> -| -|->-->>->--<<-|
+                            ("-" (rx (+ (or ">" "<" "|" "~" "-"))))
+                            ;; *> */ *)  ** *** ****
+                            ("*" (rx (or ">" "/" ")" (+ "*"))))
+                            ;; www wwww
+                            ("w" (rx (+ "w")))
+                            ;; <> <!-- <|> <: <~ <~> <~~ <+ <* <$ </  <+> <*>
+                            ;; <$> </> <|  <||  <||| <|||| <- <-| <-<<-|-> <->>
+                            ;; <<-> <= <=> <<==<<==>=|=>==/==//=!==:=>
+                            ;; << <<< <<<<
+                            ("<" (rx (+ (or "\+" "\*" "\$" "<" ">" ":" "~"  "!"
+                                            "-"  "/" "|" "="))))
+                            ;; >: >- >>- >--|-> >>-|-> >= >== >>== >=|=:=>>
+                            ;; >> >>> >>>>
+                            (">" (rx (+ (or ">" "<" "|" "/" ":" "=" "-"))))
+                            ;; #: #= #! #( #? #[ #{ #_ #_( ## ### #####
+                            ("#" (rx (or ":" "=" "!" "(" "\?" "\[" "{" "_(" "_"
+                                         (+ "#"))))
+                            ;; ~~ ~~~ ~=  ~-  ~@ ~> ~~>
+                            ("~" (rx (or ">" "=" "-" "@" "~>" (+ "~"))))
+                            ;; __ ___ ____ _|_ __|____|_
+                            ("_" (rx (+ (or "_" "|"))))
+                            ;; Fira code: 0xFF 0x12
+                            ("0" (rx (and "x" (+ (in "A-F" "a-f" "0-9")))))
+                            ;; Fira code:
+                            "Fl"  "Tl"  "fi"  "fj"  "fl"  "ft"
+                            ;; The few not covered by the regexps.
+                            "{|"  "[|"  "]#"  "(*"  "}#"  "$>"  "^="))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
+;; (setq doom-modeline-minor-modes t)
+(column-number-mode)
+
+(use-package doom-themes
+  :config
+  (load-theme 'doom-dracula t)
+  (doom-themes-visual-bell-config)
+  ;; (doom-themes-neotree-config)
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config))
+
+(setq scroll-conservatively 101)
+
+(setq mouse-wheel-scroll-amount '(3 ((shift) . 3)))
+
+(setq mouse-wheel-progressive-speed t)
+
+(setq mouse-wheel-follow-mouse 't)
+
+(use-package bug-hunter)
+
+(use-package undohist
+  :config
+  (undohist-initialize))
+
+(use-package page-break-lines)
+(global-page-break-lines-mode)
+
+(use-package neotree)
+(setq-default neo-show-hidden-files t)
+(setq neo-theme 'icons)
+(setq neo-window-fixed-size nil)
+(setq neo-window-width 27)
+
+(setq neo-smart-open t)
+
+(setq projectile-switch-project-action 'neotree-projectile-action)
+
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+(setq dashboard-projects-backend 'projectile)
+(setq dashboard-items '((recents . 9)
+                        (projects . 9)
+                        (agenda . 9)
+                        (bookmarks . 3)
+                        (registers . 3)))
+(setq dashboard-center-content t)
+(setq dashboard-show-shortcuts nil)
+(setq dashboard-icon-type 'all-the-icons) 
+;; (setq dashboard-set-heading-icons t)
+;; (setq dashboard-set-file-icons t)
+
+(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+
+(use-package evil
+  :init
+  (setq evil-want-keybinding nil)
+  (evil-mode))
+(evil-set-undo-system 'undo-redo)
+(with-eval-after-load 'evil-maps
+  (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
+  (define-key evil-motion-state-map (kbd ";") 'evil-ex))
+
+(use-package evil-org
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-goggles
+  :config
+  (evil-goggles-mode))
+;; (evil-goggles-use-diff-faces)
+
+(use-package evil-commentary
+  :config
+  (evil-commentary-mode))
+(general-nmap
+  "<leader>c" 'evil-commentary-line)
+(general-vmap
+  "<leader>c" 'evil-commentary)
+
+(evil-set-leader nil (kbd "SPC"))
+
+(evil-select-search-module 'evil-search-module 'evil-search)
+(general-nmap
+  "<leader>SPC" 'evil-ex-nohighlight)
+
+(evil-define-key 'normal global-map (kbd "<up>") 'ignore)
+(evil-define-key 'normal global-map (kbd "<down>") 'ignore)
+(evil-define-key 'normal global-map (kbd "<left>") 'ignore)
+(evil-define-key 'normal global-map (kbd "<right>") 'ignore)
+(evil-define-key 'insert global-map (kbd "<up>") 'ignore)
+(evil-define-key 'insert global-map (kbd "<down>") 'ignore)
+(evil-define-key 'insert global-map (kbd "<left>") 'ignore)
+(evil-define-key 'insert global-map (kbd "<right>") 'ignore)
+(evil-define-key 'visual global-map (kbd "<up>") 'ignore)
+(evil-define-key 'visual global-map (kbd "<down>") 'ignore)
+(evil-define-key 'visual global-map (kbd "<left>") 'ignore)
+(evil-define-key 'visual global-map (kbd "<right>") 'ignore)
+
+(use-package gcmh
+  :config
+  (gcmh-mode 1))
+
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
 
-;; Profile emacs startup
 (add-hook 'emacs-startup-hook
           (lambda ()
             (message "*** Emacs loaded in %s with %d garbage collections."
@@ -43,486 +343,275 @@
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
 
-;; Silence compiler warnings as they can be pretty disruptive (setq comp-async-report-warnings-errors nil)
+(setq gc-cons-threshold (* 2 1000 1000))
 
-;; Silence compiler warnings as they can be pretty disruptive
-(if (boundp 'comp-deferred-compilation)
-    (setq comp-deferred-compilation nil)
-    (setq native-comp-deferred-compilation nil))
-;; In noninteractive sessions, prioritize non-byte-compiled source files to
-;; prevent the use of stale byte-code. Otherwise, it saves us a little IO time
-;; to skip the mtime checks on every *.elc file.
-(setq load-prefer-newer noninteractive)
+(add-hook
+ 'compilation-finish-functions
+ 'switch-to-buffer-other-window
+ 'compilation)
 
-(use-package all-the-icons)
+(setq compilation-scroll-output 'first-error)
 
-(nvmap :prefix "SPC"
-       "b b"   '(ibuffer :which-key "Ibuffer")
-       "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
-       "b k"   '(kill-current-buffer :which-key "Kill current buffer")
-       "b n"   '(next-buffer :which-key "Next buffer")
-       "b p"   '(previous-buffer :which-key "Previous buffer")
-       "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
-       "b K"   '(kill-buffer :which-key "Kill buffer"))
+(general-nmap compilation-mode-map
+  "<escape>" '(lambda ()
+               (interactive)
+               (bury-buffer)
+               (delete-window (get-buffer-window (get-buffer "*compilation*")))))
 
-(use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
-  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  (setq dashboard-startup-banner "~/.emacs.d/emacs-dash.png")  ;; use custom image as banner
-  (setq dashboard-center-content nil) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 5)
-                          (agenda . 5 )
-                          (bookmarks . 3)
-                          (projects . 3)
-                          (registers . 3)))
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-			      (bookmarks . "book"))))
+(setq compilation-auto-jump-to-first-error t)
 
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
-(delete-selection-mode t)
 
-(use-package elfeed
-  :config
-  (setq elfeed-search-feed-face ":foreground #fff :weight bold"
-        elfeed-feeds (quote
-                       (("https://www.reddit.com/r/linux.rss" reddit linux)
-                        ("https://www.reddit.com/r/commandline.rss" reddit commandline)
-                        ("https://www.reddit.com/r/distrotube.rss" reddit distrotube)
-                        ("https://www.reddit.com/r/emacs.rss" reddit emacs)
-                        ("https://www.gamingonlinux.com/article_rss.php" gaming linux)
-                        ("https://hackaday.com/blog/feed/" hackaday linux)
-                        ("https://opensource.com/feed" opensource linux)
-                        ("https://linux.softpedia.com/backend.xml" softpedia linux)
-                        ("https://itsfoss.com/feed/" itsfoss linux)
-                        ("https://www.zdnet.com/topic/linux/rss.xml" zdnet linux)
-                        ("https://www.phoronix.com/rss.php" phoronix linux)
-                        ("http://feeds.feedburner.com/d0od" omgubuntu linux)
-                        ("https://www.computerworld.com/index.rss" computerworld linux)
-                        ("https://www.networkworld.com/category/linux/index.rss" networkworld linux)
-                        ("https://www.techrepublic.com/rssfeeds/topic/open-source/" techrepublic linux)
-                        ("https://betanews.com/feed" betanews linux)
-                        ("http://lxer.com/module/newswire/headlines.rss" lxer linux)
-                        ("https://distrowatch.com/news/dwd.xml" distrowatch linux)))))
+(use-package evil
 
-(use-package elfeed-goodies
+(use-package haskell-mode)
+
+(general-nmap haskell-mode-map
+  "<f5>" '(lambda ()
+                (interactive)
+                (save-some-buffers t)
+                (setq-local haskell-compile-cabal-build-command "cabal build")
+                (haskell-compile)))
+
+(general-nmap haskell-mode-map
+  "<f7>" '(lambda ()
+                (interactive)
+                (save-some-buffers t)
+                (setq-local haskell-compile-cabal-build-command "cabal test")
+                (haskell-compile)))
+
+(general-nmap haskell-mode-map
+  "<f10>" '(lambda ()
+                (interactive)
+                (projectile-run-async-shell-command-in-root "kitty -e cabal run")))
+
+(add-to-list 'display-buffer-alist
+  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+
+;; (defun compilation-exit-autoclose (status code msg)
+;;   (when (and (eq status 'exit) (zerop code))
+;;     (bury-buffer)
+;;     (delete-window (get-buffer-window (get-buffer "*compilation*"))))
+;;   (cons msg code))
+;; (setq compilation-exit-message-function 'compilation-exit-autoclose)
+
+(use-package nix-mode
+  :hook (nix-mode . lsp-deferred)
+  :ensure t)
+
+(use-package lsp-nix
+  :ensure lsp-mode
+  :after (lsp-mode)
+  :demand t
+  :custom
+  (lsp-nix-nil-formatter ["nixpkgs-fmt"]))
+
+(use-package parinfer-rust-mode
+  :hook emacs-lisp-mode
   :init
-  (elfeed-goodies/setup)
-  :config
-  (setq elfeed-goodies/entry-pane-size 0.5))
+  (setq parinfer-rust-auto-download t))
+(setq parinfer-rust-check-before-enable 'disabled)
 
-(add-hook 'elfeed-show-mode-hook 'visual-line-mode)
-(evil-define-key 'normal elfeed-show-mode-map
-  (kbd "J") 'elfeed-goodies/split-show-next
-  (kbd "K") 'elfeed-goodies/split-show-prev)
-(evil-define-key 'normal elfeed-search-mode-map
-  (kbd "J") 'elfeed-goodies/split-show-next
-  (kbd "K") 'elfeed-goodies/split-show-prev)
+(use-package
+  elisp-autofmt
+  :commands (elisp-autofmt-mode elisp-autofmt-buffer)
+  :config (setq elisp-autofmt-on-save-p 'always)
+  :hook (emacs-lisp-mode . elisp-autofmt-mode))
+
+(use-package rust-mode)
+
+(use-package yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+(add-hook 'yaml-mode-hook
+          '(lambda ()
+           (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
+(use-package markdown-mode
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown"))
+
+(use-package counsel)
+(ivy-mode 1)
+
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
+
+(use-package ivy-prescient
+  :after counsel
+  :custom
+  (ivy-prescient-enable-filtering nil)
+  :config
+  ;; Uncomment the following line to have sorting remembered across sessions.
+  (prescient-persist-mode 1)
+  (ivy-prescient-mode 1))
+
+(use-package yasnippet)
+(yas-global-mode 1)
+(use-package yasnippet-snippets)
+
+(use-package company)
+(add-hook 'after-init-hook 'global-company-mode)
+(use-package company-cabal)
+(add-to-list 'company-backends 'company-cabal)
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+
+(add-hook 'prog-mode-hook 'eglot-ensure)
+(add-hook 'gfm-mode-hook 'eglot-ensure)
+(add-hook 'yaml-mode-hook 'eglot-ensure)
+(setq eglot-confirm-server-initiated-edits nil)
+
+(general-nmap "<leader>d" 'xref-find-definitions)
+(general-nmap "<leader>f" 'eglot-format-buffer)
+(general-nmap "<leader>a" 'eglot-code-actions)
+(general-nmap "<leader>h" 'eldoc-doc-buffer)
+;; (general-nmap "<leader>r" 'eglot-rename)
+
+(use-package git-auto-commit-mode)
+(setq-default gac-automatically-push-p t)
+(setq-default gac-automatically-add-new-files-p t)
+
+(use-package git-modes)
 
 (use-package emojify
   :hook (after-init . global-emojify-mode))
+(setq emojify-point-entered-behaviour 'echo)
 
-(nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-       "e b"   '(eval-buffer :which-key "Eval elisp in buffer")
-       "e d"   '(eval-defun :which-key "Eval defun")
-       "e e"   '(eval-expression :which-key "Eval elisp expression")
-       "e l"   '(eval-last-sexp :which-key "Eval last sexression")
-       "e r"   '(eval-region :which-key "Eval region"))
+(xterm-mouse-mode 1)
 
-(use-package all-the-icons-dired)
-(use-package dired-open)
-(use-package peep-dired)
+(define-globalized-minor-mode global-rainbow-mode rainbow-mode
+  (lambda ()
+    (when (not (memq major-mode
+                (list 'org-agenda-mode)))
+     (rainbow-mode 1))))
+(global-rainbow-mode 1 )
 
-(nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-               "d d" '(dired :which-key "Open dired")
-               "d j" '(dired-jump :which-key "Dired jump to current")
-               "d p" '(peep-dired :which-key "Peep-dired"))
+(use-package flycheck-aspell)
+(add-to-list 'flycheck-checkers 'tex-aspell-dynamic)
+(add-to-list 'flycheck-checkers 'markdown-aspell-dynamic)
+(add-to-list 'flycheck-checkers 'html-aspell-dynamic)
+(add-to-list 'flycheck-checkers 'xml-aspell-dynamic)
+(add-to-list 'flycheck-checkers 'nroff-aspell-dynamic)
+(add-to-list 'flycheck-checkers 'texinfo-aspell-dynamic)
+(add-to-list 'flycheck-checkers 'c-aspell-dynamic)
+(add-to-list 'flycheck-checkers 'mail-aspell-dynamic)
 
-(with-eval-after-load 'dired
-  ;;(define-key dired-mode-map (kbd "M-p") 'peep-dired)
-  (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
-  (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-find-file instead if not using dired-open package
-  (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
-  (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
+(setq ispell-program-name "aspell")
+;; I am not really if its needed at all.
+;; (setq ispell-dictionary "en_US")
+(setq ispell-silently-savep t)
 
-(add-hook 'peep-dired-hook 'evil-normalize-keymaps)
-;; Get file icons in dired
-(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-;; With dired-open plugin, you can launch external programs for certain extensions
-;; For example, I set all .png files to open in 'sxiv' and all .mp4 files to open in 'mpv'
-(setq dired-open-extensions '(("gif" . "sxiv")
-                              ("jpg" . "sxiv")
-                              ("png" . "sxiv")
-                              ("mkv" . "mpv")
-                              ("mp4" . "mpv")))
+(advice-add #'ispell-pdict-save :after #'flycheck-maybe-recheck)
+(defun flycheck-maybe-recheck (_)
+  (when (bound-and-true-p flycheck-mode)
+   (flycheck-buffer)))
 
-(nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-       "."     '(find-file :which-key "Find file")
-       "f f"   '(find-file :which-key "Find file")
-       "f r"   '(counsel-recentf :which-key "Recent files")
-       "f s"   '(save-buffer :which-key "Save file")
-       "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
-       "f y"   '(dt/show-and-copy-buffer-path :which-key "Yank file path")
-       "f C"   '(copy-file :which-key "Copy file")
-       "f D"   '(delete-file :which-key "Delete file")
-       "f R"   '(rename-file :which-key "Rename file")
-       "f S"   '(write-file :which-key "Save file as...")
-       "f U"   '(sudo-edit :which-key "Sudo edit file"))
+(use-package flyspell)
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'flyspell-buffer)
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
-(use-package recentf
-  :config
-  (recentf-mode))
-(use-package sudo-edit) ;; Utilities for opening files with sudo
+(add-to-list 'ispell-skip-region-alist '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:"))
+(add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_SRC" . "#\\+END_SRC"))
 
-(defun dt/show-and-copy-buffer-path ()
-  "Show and copy the full path to the current file in the minibuffer."
+(defun my-save-word ()
   (interactive)
-  ;; list-buffers-directory is the variable set in dired buffers
-  (let ((file-name (or (buffer-file-name) list-buffers-directory)))
-    (if file-name
-        (message (kill-new file-name))
-      (error "Buffer not visiting a file"))))
-(defun dt/show-buffer-path-name ()
-  "Show the full path to the current file in the minibuffer."
-  (interactive)
-  (let ((file-name (buffer-file-name)))
-    (if file-name
-        (progn
-          (message file-name)
-          (kill-new file-name))
-      (error "Buffer not visiting a file"))))
+  (let ((current-location (point))
+         (word (flyspell-get-word)))
+    (when (consp word)    
+      (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))))
 
-(set-face-attribute 'default nil
-  :font "Source Code Pro"
-  :height 110
-  :weight 'medium)
-(set-face-attribute 'variable-pitch nil
-  :font "Ubuntu Nerd Font"
-  :height 120
-  :weight 'medium)
-(set-face-attribute 'fixed-pitch nil
-  :font "Source Code Pro"
-  :height 110
-  :weight 'medium)
-;; Makes commented text and keywords italics.
-;; This is working in emacsclient but not emacs.
-;; Your font must have an italic face available.
-(set-face-attribute 'font-lock-comment-face nil
-  :slant 'italic)
-(set-face-attribute 'font-lock-keyword-face nil
-  :slant 'italic)
+(general-nmap
+  "zg" 'my-save-word)
+(general-nmap
+  "z=" 'flyspell-correct-word-before-point)
 
-;; Uncomment the following line if line spacing needs adjusting.
-(setq-default line-spacing 0.12)
-
-;; Needed if using emacsclient. Otherwise, your fonts will be smaller than expected.
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-11"))
-;; changes certain keywords to symbols, such as lamda!
-(setq global-prettify-symbols-mode t)
-
-;; zoom in/out like we do everywhere else.
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-
-(nvmap :keymaps 'override :prefix "SPC"
-       "SPC"   '(counsel-M-x :which-key "M-x")
-       "c c"   '(compile :which-key "Compile")
-       "c C"   '(recompile :which-key "Recompile")
-       "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
-       "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines"))
-(nvmap :keymaps 'override :prefix "SPC"
-       "m *"   '(org-ctrl-c-star :which-key "Org-ctrl-c-star")
-       "m +"   '(org-ctrl-c-minus :which-key "Org-ctrl-c-minus")
-       "m ."   '(counsel-org-goto :which-key "Counsel org goto")
-       "m e"   '(org-export-dispatch :which-key "Org export dispatch")
-       "m f"   '(org-footnote-new :which-key "Org footnote new")
-       "m h"   '(org-toggle-heading :which-key "Org toggle heading")
-       "m i"   '(org-toggle-item :which-key "Org toggle item")
-       "m n"   '(org-store-link :which-key "Org store link")
-       "m o"   '(org-set-property :which-key "Org set property")
-       "m t"   '(org-todo :which-key "Org todo")
-       "m x"   '(org-toggle-checkbox :which-key "Org toggle checkbox")
-       "m B"   '(org-babel-tangle :which-key "Org babel tangle")
-       "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
-       "m T"   '(org-todo-list :which-key "Org todo list")
-       "o a"   '(org-agenda :which-key "Org agenda")
-       )
-
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
-(global-display-line-numbers-mode 1)
-(global-visual-line-mode t)
-
-(use-package doom-modeline)
-(doom-modeline-mode 1)
-
-(use-package counsel
-  :after ivy
-  :config (counsel-mode))
-(use-package ivy
-  :defer 0.1
-  :diminish
+(use-package helpful
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
   :bind
-  (("C-c C-r" . ivy-resume)
-   ("C-x B" . ivy-switch-buffer-other-window))
-  :custom
-  (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  :config
-  (ivy-mode))
-(use-package ivy-rich
-  :after ivy
-  :custom
-  (ivy-virtual-abbreviate 'full
-   ivy-rich-switch-buffer-align-virtual-buffer t
-   ivy-rich-path-style 'abbrev)
-  :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-                               'ivy-rich-switch-buffer-transformer)
-  (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
-(use-package swiper
-  :after ivy
-  :bind (("C-s" . swiper)
-         ("C-r" . swiper)))
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
 
-(setq ivy-initial-inputs-alist nil)
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package smex)
-(smex-initialize)
+(use-package eterm-256color
+  :hook (term-mode . eterm-256color-mode))
 
-(use-package ivy-posframe
-  :init
-  (setq ivy-posframe-display-functions-alist
-    '((swiper                     . ivy-posframe-display-at-point)
-      (complete-symbol            . ivy-posframe-display-at-point)
-      (counsel-M-x                . ivy-display-function-fallback)
-      (counsel-esh-history        . ivy-posframe-display-at-window-center)
-      (counsel-describe-function  . ivy-display-function-fallback)
-      (counsel-describe-variable  . ivy-display-function-fallback)
-      (counsel-find-file          . ivy-display-function-fallback)
-      (counsel-recentf            . ivy-display-function-fallback)
-      (counsel-register           . ivy-posframe-display-at-frame-bottom-window-center)
-      (dmenu                      . ivy-posframe-display-at-frame-top-center)
-      (nil                        . ivy-posframe-display))
-    ivy-posframe-height-alist
-    '((swiper . 20)
-      (dmenu . 20)
-      (t . 10)))
-  :config
-  (ivy-posframe-mode 1)) ; 1 enables posframe-mode, 0 disables it.
-
-(use-package haskell-mode)
-(use-package lua-mode)
-(use-package markdown-mode)
-
-(setq bare-git-dir (concat "--git-dir=" (expand-file-name "~/.dotfiles")))
-(setq bare-work-tree (concat "--work-tree=" (expand-file-name "~")))
-;; use maggit on git bare repos like dotfiles repos, don't forget to change `bare-git-dir' and `bare-work-tree' to your needs
-(defun me/magit-status-bare ()
-  "set --git-dir and --work-tree in `magit-git-global-arguments' to `bare-git-dir' and `bare-work-tree' and calls `magit-status'"
-  (interactive)
-  (require 'magit-git)
-  (add-to-list 'magit-git-global-arguments bare-git-dir)
-  (add-to-list 'magit-git-global-arguments bare-work-tree)
-  (call-interactively 'magit-status))
-
-;; if you use `me/magit-status-bare' you cant use `magit-status' on other other repos you have to unset `--git-dir' and `--work-tree'
-;; use `me/magit-status' insted it unsets those before calling `magit-status'
-(defun me/magit-status ()
-  "removes --git-dir and --work-tree in `magit-git-global-arguments' and calls `magit-status'"
-  (interactive)
-  (require 'magit-git)
-  (setq magit-git-global-arguments (remove bare-git-dir magit-git-global-arguments))
-  (setq magit-git-global-arguments (remove bare-work-tree magit-git-global-arguments))
-  (call-interactively 'magit-status))
-
-(use-package magit)
-
-;; Function for setting a fixed width for neotree.
-;; Defaults to 25 but I make it a bit longer (35) in the 'use-package neotree'.
-(defcustom neo-window-width 25
-  "*Specifies the width of the NeoTree window."
-  :type 'integer
-  :group 'neotree)
-
-(use-package neotree
-  :config
-  (setq neo-smart-open t
-        neo-window-width 30
-        neo-theme (if (display-graphic-p) 'icons 'arrow)
-        ;;neo-window-fixed-size nil
-        inhibit-compacting-font-caches t
-        projectile-switch-project-action 'neotree-projectile-action) 
-        ;; truncate long file names in neotree
-        (add-hook 'neo-after-create-hook
-           #'(lambda (_)
-               (with-current-buffer (get-buffer neo-buffer-name)
-                 (setq truncate-lines t)
-                 (setq word-wrap nil)
-                 (make-local-variable 'auto-hscroll-mode)
-                 (setq auto-hscroll-mode nil)))))
-
-;; show hidden files
-(setq-default neo-show-hidden-files t)
-
-(nvmap :prefix "SPC"
-       "t n"   '(neotree-toggle :which-key "Toggle neotree file viewer")
-       "d n"   '(neotree-dir :which-key "Open directory in neotree"))
-
-(add-hook 'org-mode-hook 'org-indent-mode)
-(setq org-directory "~/Org/"
-      org-agenda-files '("~/Org/agenda.org")
-      org-default-notes-file (expand-file-name "notes.org" org-directory)
-      org-ellipsis " ▼ "
-      org-log-done 'time
-      org-journal-dir "~/Org/journal/"
-      org-journal-date-format "%B %d, %Y (%A) "
-      org-journal-file-format "%Y-%m-%d.org"
-      org-hide-emphasis-markers t)
-(setq org-src-preserve-indentation nil
-      org-src-tab-acts-natively t
-      org-edit-src-content-indentation 0)
-
-(use-package org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-;; An example of how this works.
-;; [[arch-wiki:Name_of_Page][Description]]
-(setq org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
-        '(("google" . "http://www.google.com/search?q=")
-          ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
-          ("ddg" . "https://duckduckgo.com/?q=")
-          ("wiki" . "https://en.wikipedia.org/wiki/")))
-
-(setq org-todo-keywords        ; This overwrites the default Doom org-todo-keywords
-        '((sequence
-           "TODO(t)"           ; A task that is ready to be tackled
-           "BLOG(b)"           ; Blog writing assignments
-           "GYM(g)"            ; Things to accomplish at the gym
-           "PROJ(p)"           ; A project that contains other tasks
-           "VIDEO(v)"          ; Video assignments
-           "WAIT(w)"           ; Something is holding up this task
-           "|"                 ; The pipe necessary to separate "active" states and "inactive" states
-           "DONE(d)"           ; Task has been completed
-           "CANCELLED(c)" )))  ; Task has been cancelled
-
-(use-package org-tempo
-  :ensure nil) ;; tell use-package not to try to install org-tempo since it's already there.
-
-(setq org-src-fontify-natively t
-    org-src-tab-acts-natively t
-    org-confirm-babel-evaluate nil
-    org-edit-src-content-indentation 0)
-
-(use-package toc-org
-  :commands toc-org-enable
-  :init (add-hook 'org-mode-hook 'toc-org-enable))
-
-(setq org-blank-before-new-entry (quote ((heading . nil)
-                                         (plain-list-item . nil))))
-
-(use-package ox-man
+(use-package dired
   :ensure nil)
+(use-package all-the-icons-dired)
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
-(use-package perspective
-  :bind
-  ("C-x C-b" . persp-list-buffers)   ; or use a nicer switcher, see below
-  :config
-  (persp-mode))
+(use-package diff-hl)
+(global-diff-hl-mode)
 
-(use-package projectile
-  :config
-  (projectile-global-mode 1))
+(diff-hl-dired-mode)
+(diff-hl-margin-mode)
+(diff-hl-flydiff-mode)
 
-(nvmap :prefix "SPC"
-       "r c"   '(copy-to-register :which-key "Copy to register")
-       "r f"   '(frameset-to-register :which-key "Frameset to register")
-       "r i"   '(insert-register :which-key "Insert register")
-       "r j"   '(jump-to-register :which-key "Jump to register")
-       "r l"   '(list-registers :which-key "List registers")
-       "r n"   '(number-to-register :which-key "Number to register")
-       "r r"   '(counsel-register :which-key "Choose a register")
-       "r v"   '(view-register :which-key "View a register")
-       "r w"   '(window-configuration-to-register :which-key "Window configuration to register")
-       "r +"   '(increment-register :which-key "Increment register")
-       "r SPC" '(point-to-register :which-key "Point to register"))
+(defun my/org-mode/load-prettify-symbols ()
+  (interactive)
+  (setq prettify-symbols-alist
+    '(("lambda" . ?λ)))
+  (prettify-symbols-mode 1))
+(add-hook 'org-mode-hook 'my/org-mode/load-prettify-symbols)
 
-(setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; how many lines at a time
-(setq mouse-wheel-progressive-speed t) ;; accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(use-package aggressive-indent)
+(global-aggressive-indent-mode 1)
 
-(nvmap :prefix "SPC"
-       "e h"   '(counsel-esh-history :which-key "Eshell history")
-       "e s"   '(eshell :which-key "Eshell"))
+(add-to-list
+ 'aggressive-indent-dont-indent-if
+ '(and (derived-mode-p 'c++-mode)
+       (null (string-match "\\([;{}]\\|\\b\\(if\\|for\\|while\\)\\b\\)"
+                           (thing-at-point 'line)))))
 
-(use-package eshell-syntax-highlighting
-  :after esh-mode
-  :config
-  (eshell-syntax-highlighting-global-mode +1))
+(use-package solaire-mode)
+(solaire-global-mode +1)
 
-(setq eshell-rc-script (concat user-emacs-directory "eshell/profile")
-      eshell-aliases-file (concat user-emacs-directory "eshell/aliases")
-      eshell-history-size 5000
-      eshell-buffer-maximum-lines 5000
-      eshell-hist-ignoredups t
-      eshell-scroll-to-bottom-on-input t
-      eshell-destroy-buffer-when-process-dies t
-      eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh"))
+(use-package hl-todo)
+(global-hl-todo-mode)
 
-(use-package vterm)
-(setq shell-file-name "/bin/fish"
-      vterm-max-scrollback 5000)
+(defun find-all-todos ()
+  "Find all TODOs"
+  (interactive)
+  (projectile-grep "-- TODO"))
 
-(winner-mode 1)
-(nvmap :prefix "SPC"
-       ;; Window splits
-       "w c"   '(evil-window-delete :which-key "Close window")
-       "w n"   '(evil-window-new :which-key "New window")
-       "w s"   '(evil-window-split :which-key "Horizontal split window")
-       "w v"   '(evil-window-vsplit :which-key "Vertical split window")
-       ;; Window motions
-       "w h"   '(evil-window-left :which-key "Window left")
-       "w j"   '(evil-window-down :which-key "Window down")
-       "w k"   '(evil-window-up :which-key "Window up")
-       "w l"   '(evil-window-right :which-key "Window right")
-       "w w"   '(evil-window-next :which-key "Goto next window")
-       ;; winner mode
-       "w <left>"  '(winner-undo :which-key "Winner undo")
-       "w <right>" '(winner-redo :which-key "Winner redo"))
+(general-nmap "<leader>lt" 'find-all-todos)
 
-(use-package doom-themes)
-(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-      doom-themes-enable-italic t) ; if nil, italics is universally disabled
-(load-theme 'doom-one t)
+(use-package moom
+  :init (moom-mode 1))
 
-(use-package which-key
-  :init
-  (setq which-key-side-window-location 'bottom
-        which-key-sort-order #'which-key-key-order-alpha
-        which-key-sort-uppercase-first nil
-        which-key-add-column-padding 1
-        which-key-max-display-columns nil
-        which-key-min-display-lines 6
-        which-key-side-window-slot -10
-        which-key-side-window-max-height 0.25
-        which-key-idle-delay 0.8
-        which-key-max-description-length 25
-        which-key-allow-imprecise-window-fit t
-        which-key-separator " → " ))
-(which-key-mode)
+(use-package org-tree-slide
+  :hook ((org-tree-slide-play . (lambda() (moom-toggle-frame-maximized)))
+         (org-tree-slide-stop . (lambda() (moom-toggle-frame-maximized))))
+  :custom
+  (org-tree-slide-cursor-init)
+  (org-image-actual-width nil))
+(general-nmap "<leader>p" 'org-tree-slide-mode)
+(general-nmap "<leader>vm" 'view-mode)
+(define-key org-tree-slide-mode-map (kbd "C-<down>") 'org-tree-slide-move-next-tree)
+(define-key org-tree-slide-mode-map (kbd "C-<up>") 'org-tree-slide-move-previous-tree)
 
-;; Make gc pauses faster by decreasing the threshold.
-(setq gc-cons-threshold (* 2 1000 1000))
+(defun my-add-slide-number ()
+  (add-to-list 'global-mode-string
+               '(:eval (concat "" (org-tree-slide--update-modeline) " "))))
+(defun my-remove-slide-number ()
+  (setq global-mode-string
+        (remove '(:eval (concat "" (org-tree-slide--update-modeline) " "))
+                global-mode-string)))
+(add-hook 'org-tree-slide-play-hook #'my-add-slide-number)
+(add-hook 'org-tree-slide-stop-hook #'my-remove-slide-number)
 
-(use-package writeroom-mode)
+
