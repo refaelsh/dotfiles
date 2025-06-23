@@ -360,9 +360,7 @@
 
 (setq compilation-auto-jump-to-first-error t)
 
-
-
-(use-package evil
+(use-package evil)
 
 (use-package haskell-mode)
 

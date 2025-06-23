@@ -554,10 +554,7 @@ Make GC pauses faster by decreasing the threshold.
 #+end_src
 * Magit
 #+begin_src emacs-lisp
-
-#+end_src
-#+begin_src elisp
-  (use-package evil
+  (use-package evil)
 #+end_src
 * Languages
 ** Haskell
