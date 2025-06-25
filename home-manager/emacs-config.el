@@ -84,6 +84,10 @@
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
 (add-hook 'org-mode-hook 'org-indent-mode)
+;; (add-hook 'org-mode-hook
+;; 	  (general-nmap "<leader>f" 'eglot-format-buffer))
+(general-nmap :keymaps 'org-mode-map
+  "<leader>f" 'org-cycle)
 
 (setq org-src-preserve-indentation nil
       org-src-tab-acts-natively t
@@ -98,11 +102,11 @@
       org-agenda-tags-column 0
       org-agenda-block-separator ?─
       org-agenda-time-grid
-        '((daily today require-timed)
-          (800 1000 1200 1400 1600 1800 2000)
-          " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+      '((daily today require-timed)
+        (800 1000 1200 1400 1600 1800 2000)
+        " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
       org-agenda-current-time-string
-        "⭠ now ─────────────────────────────────────────────────")
+      "⭠ now ─────────────────────────────────────────────────")
 (global-org-modern-mode)
 
 ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
@@ -117,7 +121,7 @@
   :init (add-hook 'org-mode-hook 'toc-org-enable))
 
 (use-package org-tempo
-:ensure nil)
+  :ensure nil)
 
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
@@ -134,10 +138,10 @@
 (use-package restart-emacs)
 (general-nmap
   "<leader>re" '(lambda ()
-    (interactive)
-    (save-some-buffers t)
-    (org-babel-tangle)
-    (restart-emacs)))
+		  (interactive)
+		  (save-some-buffers t)
+		  (org-babel-tangle)
+		  (restart-emacs)))
 (setq confirm-kill-processes nil)
 
 (set-face-attribute 'default nil
@@ -371,37 +375,37 @@
 
 (general-nmap compilation-mode-map
   "<escape>" '(lambda ()
-               (interactive)
-               (bury-buffer)
-               (delete-window (get-buffer-window (get-buffer "*compilation*")))))
+		(interactive)
+		(bury-buffer)
+		(delete-window (get-buffer-window (get-buffer "*compilation*")))))
 
 (setq compilation-auto-jump-to-first-error t)
 
-(use-package evil)
+(use-package magit)
 
 (use-package haskell-mode)
 
 (general-nmap haskell-mode-map
   "<f5>" '(lambda ()
-                (interactive)
-                (save-some-buffers t)
-                (setq-local haskell-compile-cabal-build-command "cabal build")
-                (haskell-compile)))
+            (interactive)
+            (save-some-buffers t)
+            (setq-local haskell-compile-cabal-build-command "cabal build")
+            (haskell-compile)))
 
 (general-nmap haskell-mode-map
   "<f7>" '(lambda ()
-                (interactive)
-                (save-some-buffers t)
-                (setq-local haskell-compile-cabal-build-command "cabal test")
-                (haskell-compile)))
+            (interactive)
+            (save-some-buffers t)
+            (setq-local haskell-compile-cabal-build-command "cabal test")
+            (haskell-compile)))
 
 (general-nmap haskell-mode-map
   "<f10>" '(lambda ()
-                (interactive)
-                (projectile-run-async-shell-command-in-root "kitty -e cabal run")))
+             (interactive)
+             (projectile-run-async-shell-command-in-root "kitty -e cabal run")))
 
 (add-to-list 'display-buffer-alist
-  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+	     (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 
 ;; (defun compilation-exit-autoclose (status code msg)
 ;;   (when (and (eq status 'exit) (zerop code))
@@ -421,9 +425,9 @@
   (lsp-nix-nil-formatter ["nixpkgs-fmt"]))
 
 ;;(use-package parinfer-rust-mode
-  ;;:hook emacs-lisp-mode
-  ;;:init
-  ;;(setq parinfer-rust-auto-download t))
+;;:hook emacs-lisp-mode
+;;:init
+;;(setq parinfer-rust-auto-download t))
 ;;(setq parinfer-rust-check-before-enable 'disabled)
 
 (use-package
@@ -439,7 +443,7 @@
 (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
 (add-hook 'yaml-mode-hook
           '(lambda ()
-           (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 (use-package markdown-mode
   :mode ("README\\.md\\'" . gfm-mode)
@@ -520,7 +524,7 @@
 (advice-add #'ispell-pdict-save :after #'flycheck-maybe-recheck)
 (defun flycheck-maybe-recheck (_)
   (when (bound-and-true-p flycheck-mode)
-   (flycheck-buffer)))
+    (flycheck-buffer)))
 
 (use-package flyspell)
 (add-hook 'text-mode-hook 'flyspell-mode)
@@ -534,7 +538,7 @@
 (defun my-save-word ()
   (interactive)
   (let ((current-location (point))
-         (word (flyspell-get-word)))
+        (word (flyspell-get-word)))
     (when (consp word)    
       (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))))
 
@@ -574,7 +578,7 @@
 (defun my/org-mode/load-prettify-symbols ()
   (interactive)
   (setq prettify-symbols-alist
-    '(("lambda" . ?λ)))
+	'(("lambda" . ?λ)))
   (prettify-symbols-mode 1))
 (add-hook 'org-mode-hook 'my/org-mode/load-prettify-symbols)
 
