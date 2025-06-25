@@ -35,4 +35,6 @@ in
     ./brave.nix
     ./nyxt.nix
   ];
+
+  home.pointerCursor.gtk.enable = true;
 }

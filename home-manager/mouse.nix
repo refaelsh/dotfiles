@@ -1,3 +1,3 @@
 {
-  home.pointerCursor.gtk.enable = true;
+  # home.pointerCursor.gtk.enable = true;
 }
