@@ -41,12 +41,13 @@
 (save-place-mode 1)
 (setq desktop-load-locked-desktop nil)
 #+end_src
-# ** Restore last opened file
-# #+begin_src emacs-lisp
-#   (setq desktop-save t)
-#   (setq desktop-path '("~/")) 
-#   (desktop-save-mode 1)
-# #+end_src
+** Restore last opened file
+#+begin_src emacs-lisp
+  (setq desktop-save t)
+  ;; (setq desktop-path '("~/.emacs.d/desktop/")) 
+  (setq desktop-restore-frames t)
+  (desktop-save-mode 1)
+#+end_src
 ** Maximize new buffers
 #+begin_src emacs-lisp
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -360,7 +361,7 @@ Here are some templates:
     :config
     (load-theme 'doom-dracula t)
     (doom-themes-visual-bell-config)
-    ;; (doom-themes-neotree-config)
+    (doom-themes-neotree-config)
     (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
     (doom-themes-treemacs-config)
     (doom-themes-org-config))
@@ -395,17 +396,19 @@ To use it, do the following: ~M-x bug-hunter-file~ and point to init.el and not 
     :config
     (undohist-initialize))
 #+end_src
-* Beautify L^
+* Beautify
 #+begin_src emacs-lisp
   (use-package page-break-lines)
   (global-page-break-lines-mode)
 #+end_src
 * Projectile
 #+begin_src emacs-lisp
-(use-package projectile
-  :config
-  (projectile-global-mode 1)
-  :ensure t)
+  (use-package projectile
+    :config
+    (projectile-global-mode 1)
+    :ensure t)
+  (setq projectile-enable-caching t)
+  (add-hook 'emacs-startup-hook #'projectile-load-last-known-project)
 #+end_src
 * Neotree
 #+begin_src emacs-lisp
