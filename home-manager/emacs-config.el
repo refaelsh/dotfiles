@@ -93,6 +93,7 @@
       org-catch-invisible-edits 'show-and-error)
 
 (use-package org-modern)
+(setq org-modern-star 'replace)
 (setq org-pretty-entities t
       org-agenda-tags-column 0
       org-agenda-block-separator ?─

@@ -172,6 +172,7 @@ TODO: it is now a built in thingy in Emacs. But I cant find the official documen
 ** Pretty symbols
 #+begin_src emacs-lisp
   (use-package org-modern)
+  (setq org-modern-star 'replace)
   (setq org-pretty-entities t
         org-agenda-tags-column 0
         org-agenda-block-separator ?─
