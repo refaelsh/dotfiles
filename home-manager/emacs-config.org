@@ -43,10 +43,10 @@
 #+end_src
 ** Restore last opened file
 #+begin_src emacs-lisp
-  (setq desktop-save t)
-  ;; (setq desktop-path '("~/.emacs.d/desktop/")) 
-  (setq desktop-restore-frames t)
-  (desktop-save-mode 1)
+  ;; (setq desktop-save t)
+  ;; ;; (setq desktop-path '("~/.emacs.d/desktop/")) 
+  ;; (setq desktop-restore-frames t)
+  ;; (desktop-save-mode 1)
 #+end_src
 ** Maximize new buffers
 #+begin_src emacs-lisp
@@ -359,7 +359,7 @@ Here are some templates:
 #+begin_src emacs-lisp
   (use-package doom-themes
     :config
-    (load-theme 'doom-dracula t)
+    (load-theme 'doom-one t)
     (doom-themes-visual-bell-config)
     (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
     (doom-themes-treemacs-config)

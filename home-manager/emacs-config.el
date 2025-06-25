@@ -24,10 +24,10 @@
 (save-place-mode 1)
 (setq desktop-load-locked-desktop nil)
 
-(setq desktop-save t)
-;; (setq desktop-path '("~/.emacs.d/desktop/")) 
-(setq desktop-restore-frames t)
-(desktop-save-mode 1)
+;; (setq desktop-save t)
+;; ;; (setq desktop-path '("~/.emacs.d/desktop/")) 
+;; (setq desktop-restore-frames t)
+;; (desktop-save-mode 1)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -231,7 +231,7 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-dracula t)
+  (load-theme 'doom-one t)
   (doom-themes-visual-bell-config)
   (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
   (doom-themes-treemacs-config)
