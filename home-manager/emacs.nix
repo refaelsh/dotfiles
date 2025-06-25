@@ -3,10 +3,9 @@
     text = # lisp
       ''
         (org-babel-load-file
-         ; (expand-file-name
+         (expand-file-name
           "~/repos/dotfiles/home-manager/emacs-config.org"
-      ; user-emacs-directory)
-      )
+          user-emacs-directory))
       '';
   };
   home.file.".emacs.d/early-init.el" = {
