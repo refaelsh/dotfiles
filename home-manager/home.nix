@@ -40,7 +40,7 @@ in
     gtk.enable = true;
     x11.enable = true;
     name = "Adwaita";
-    size = 28;
+    size = 8;
     package = pkgs.adwaita-icon-theme;
   };
 }
