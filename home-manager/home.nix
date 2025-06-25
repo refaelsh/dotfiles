@@ -40,7 +40,7 @@ in
     gtk.enable = true;
     x11.enable = true;
     name = "Vanilla-DMZ";
-    size = 48;
+    size = 38;
     package = pkgs.vanilla-dmz;
   };
 }
