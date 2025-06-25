@@ -39,8 +39,8 @@ in
   home.pointerCursor = {
     gtk.enable = true;
     x11.enable = true;
-    name = "Vanilla-DMZ";
+    name = "Adwaita";
     size = 38;
-    package = pkgs.vanilla-dmz;
+    package = pkgs.gnome.adwaita-icon-theme;
   };
 }
