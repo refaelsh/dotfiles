@@ -233,7 +233,6 @@
   :config
   (load-theme 'doom-dracula t)
   (doom-themes-visual-bell-config)
-  (doom-themes-neotree-config)
   (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
@@ -260,7 +259,6 @@
   (projectile-global-mode 1)
   :ensure t)
 (setq projectile-enable-caching t)
-(add-hook 'emacs-startup-hook #'projectile-load-last-known-project)
 
 (use-package neotree)
 (setq-default neo-show-hidden-files t)
