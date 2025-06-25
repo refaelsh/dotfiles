@@ -36,5 +36,11 @@ in
     ./nyxt.nix
   ];
 
-  home.pointerCursor.gtk.enable = true;
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    name = "Vanilla-DMZ";
+    size = 48;
+    package = pkgs.vanilla-dmz;
+  };
 }
