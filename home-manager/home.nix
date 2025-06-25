@@ -41,6 +41,6 @@ in
     x11.enable = true;
     name = "Adwaita";
     size = 38;
-    package = pkgs.gnome.adwaita-icon-theme;
+    package = pkgs.adwaita-icon-theme;
   };
 }
