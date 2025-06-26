@@ -86,15 +86,17 @@
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-;; (add-hook 'org-mode-hook 'org-indent-mode)
-;; (setq org-startup-indented t)
+(add-hook 'org-mode-hook 'org-indent-mode)
+(setq org-startup-indented t)
 
 (setq org-src-preserve-indentation nil
       org-src-tab-acts-natively t
+      org-src-fontify-natively t
       org-hide-emphasis-markers t
       org-agenda-tags-column 0
       org-pretty-entities t
       org-ellipsis "…"
+      org-confirm-babel-evaluate nil
       org-edit-src-content-indentation 2
       org-catch-invisible-edits 'show-and-error)
 
@@ -105,10 +107,6 @@
 
 ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
 ;; (custom-set-variables '(org-modern-table nil))
-
-(setq org-src-fontify-natively t
-      org-src-tab-acts-natively t
-      org-confirm-babel-evaluate nil)
 
 (use-package toc-org
   :commands toc-org-enable
