@@ -81,13 +81,13 @@
 
 (setq flymake-no-changes-timeout 0.1)
 
-;; (use-package tree-sitter)
-;; (use-package tree-sitter-langs)
+(use-package tree-sitter)
+(use-package tree-sitter-langs)
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-(add-hook 'org-mode-hook 'org-indent-mode)
-(setq org-startup-indented t)
+;; (add-hook 'org-mode-hook 'org-indent-mode)
+;; (setq org-startup-indented t)
 
 (setq org-src-preserve-indentation nil
       org-src-tab-acts-natively t
@@ -125,7 +125,7 @@
 (general-nmap
   "<leader>t" 'org-babel-tangle)
 
-(setq org-startup-numerated t)
+;; (setq org-startup-numerated t)
 
 (setq org-startup-with-inline-images t)
 

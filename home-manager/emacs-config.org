@@ -163,8 +163,8 @@ TODO: it is now a built in thingy in Emacs. But I cant find the official documen
 * Org Mode
 ** Auto indentation Org Mode style
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (setq org-startup-indented t)
+  ;; (add-hook 'org-mode-hook 'org-indent-mode)
+  ;; (setq org-startup-indented t)
 #+end_src
 # ** Org modern indent
 # #+begin_src emacs-lisp
@@ -178,10 +178,12 @@ TODO: it is now a built in thingy in Emacs. But I cant find the official documen
 #+begin_src emacs-lisp
   (setq org-src-preserve-indentation nil
         org-src-tab-acts-natively t
+        org-src-fontify-natively t
         org-hide-emphasis-markers t
         org-agenda-tags-column 0
         org-pretty-entities t
         org-ellipsis "…"
+        org-confirm-babel-evaluate nil
         org-edit-src-content-indentation 2
         org-catch-invisible-edits 'show-and-error)
 #+end_src
@@ -196,12 +198,6 @@ If needed, this will tell ~org-modern~ to leave org tables as is:
 #+begin_src emacs-lisp
   ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
   ;; (custom-set-variables '(org-modern-table nil))
-#+end_src
-** Source code blocks syntax highlighting
-#+begin_src emacs-lisp
-  (setq org-src-fontify-natively t
-        org-src-tab-acts-natively t
-        org-confirm-babel-evaluate nil)
 #+end_src
 ** Enable table of contents
 #+begin_src emacs-lisp
@@ -245,7 +241,7 @@ Here are some templates:
 #+end_src
 ** Enumerate headings
 #+begin_src emacs-lisp
-  (setq org-startup-numerated t)
+  ;; (setq org-startup-numerated t)
 #+end_src
 ** Images inlining
 #+begin_src emacs-lisp
