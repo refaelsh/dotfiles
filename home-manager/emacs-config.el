@@ -101,7 +101,7 @@
       org-catch-invisible-edits 'show-and-error)
 
 (use-package org-modern)
-(setq org-modern-hide-stars t
+(setq ;org-modern-hide-stars t
       org-modern-star 'replace)
 (global-org-modern-mode)
 
