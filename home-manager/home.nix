@@ -18,7 +18,6 @@ in
   imports = [
     ./alacritty.nix
     ./bat.nix
-    ./mouse.nix
     ./eza.nix
     ./emacs.nix
     ./git.nix
@@ -26,6 +25,7 @@ in
     ./lf.nix
     ./kitty.nix
     ./mangohud.nix
+    ./mouse.nix
     ./starship.nix
     ./termonad.nix
     ./wezterm.nix

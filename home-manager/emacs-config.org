@@ -158,32 +158,32 @@ TODO: it is now a built in thingy in Emacs. But I cant find the official documen
 * Org Mode
 ** Auto indentation Org Mode style
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (general-nmap :keymaps 'org-mode-map
-    "<leader>f" 'org-cycle)
+  ;; (add-hook 'org-mode-hook 'org-indent-mode)
+  #+end_src
+** Org modern indent
+#+begin_src emacs-lisp
+    ;; (add-hook 'org-mode-hook 'org-indent-mode)
+  (setq org-startup-indented t)
+  (use-package org-modern-indent
+    ;; :config 
+    ;; (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
+    :ensure t)
   #+end_src
 ** Various little settings
 #+begin_src emacs-lisp
   (setq org-src-preserve-indentation nil
         org-src-tab-acts-natively t
         org-hide-emphasis-markers t
+        org-agenda-tags-column 0
+        org-pretty-entities t
         org-ellipsis "…"
         org-edit-src-content-indentation 2
         org-catch-invisible-edits 'show-and-error)
 #+end_src
-** Pretty symbols
+** Org Modern
 #+begin_src emacs-lisp
   (use-package org-modern)
   (setq org-modern-star 'replace)
-  (setq org-pretty-entities t
-        org-agenda-tags-column 0
-        org-agenda-block-separator ?─
-        org-agenda-time-grid
-        '((daily today require-timed)
-          (800 1000 1200 1400 1600 1800 2000)
-          " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-        org-agenda-current-time-string
-        "⭠ now ─────────────────────────────────────────────────")
   (global-org-modern-mode)
 #+end_src
 If needed, this will tell ~org-modern~ to leave org tables as is:
@@ -918,5 +918,6 @@ This solves an issue with slide numbers in Doom mode line. Taken from here: http
 #+end_src
 * Games
 #+begin_src emacs-lisp
-
+  (setq custom-file "~/.emacs.d/custom.el")
+  (load custom-file 'noerror)
 #+end_src

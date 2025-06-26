@@ -7,6 +7,4 @@
     size = 8;
     package = pkgs.adwaita-icon-theme;
   };
-
-  # home.pointerCursor.gtk.enable = true;
 }

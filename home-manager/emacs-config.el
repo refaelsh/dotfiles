@@ -83,30 +83,26 @@
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-(add-hook 'org-mode-hook 'org-indent-mode)
-;; (add-hook 'org-mode-hook
-;; 	  (general-nmap "<leader>f" 'eglot-format-buffer))
-(general-nmap :keymaps 'org-mode-map
-  "<leader>f" 'org-cycle)
+;; (add-hook 'org-mode-hook 'org-indent-mode)
+
+;; (add-hook 'org-mode-hook 'org-indent-mode)
+(setq org-startup-indented t)
+(use-package org-modern-indent
+  ;; :config 
+  ;; (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
+  :ensure t)
 
 (setq org-src-preserve-indentation nil
       org-src-tab-acts-natively t
       org-hide-emphasis-markers t
+      org-agenda-tags-column 0
+      org-pretty-entities t
       org-ellipsis "…"
       org-edit-src-content-indentation 2
       org-catch-invisible-edits 'show-and-error)
 
 (use-package org-modern)
 (setq org-modern-star 'replace)
-(setq org-pretty-entities t
-      org-agenda-tags-column 0
-      org-agenda-block-separator ?─
-      org-agenda-time-grid
-      '((daily today require-timed)
-        (800 1000 1200 1400 1600 1800 2000)
-        " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-      org-agenda-current-time-string
-      "⭠ now ─────────────────────────────────────────────────")
 (global-org-modern-mode)
 
 ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
@@ -628,4 +624,5 @@
 (add-hook 'org-tree-slide-play-hook #'my-add-slide-number)
 (add-hook 'org-tree-slide-stop-hook #'my-remove-slide-number)
 
-
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
