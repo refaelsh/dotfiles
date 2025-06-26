@@ -1,3 +1,6 @@
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
+
 (require 'package)
 (setq package-archives '(("elpa" . "https://elpa.gnu.org/packages/")
                          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
@@ -78,19 +81,13 @@
 
 (setq flymake-no-changes-timeout 0.1)
 
-(use-package tree-sitter)
-(use-package tree-sitter-langs)
+;; (use-package tree-sitter)
+;; (use-package tree-sitter-langs)
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-;; (add-hook 'org-mode-hook 'org-indent-mode)
-
-;; (add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook 'org-indent-mode)
 (setq org-startup-indented t)
-(use-package org-modern-indent
-  ;; :config 
-  ;; (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
-  :ensure t)
 
 (setq org-src-preserve-indentation nil
       org-src-tab-acts-natively t
@@ -102,7 +99,8 @@
       org-catch-invisible-edits 'show-and-error)
 
 (use-package org-modern)
-(setq org-modern-star 'replace)
+(setq org-modern-hide-stars t
+      org-modern-star 'replace)
 (global-org-modern-mode)
 
 ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
@@ -624,5 +622,4 @@
 (add-hook 'org-tree-slide-play-hook #'my-add-slide-number)
 (add-hook 'org-tree-slide-stop-hook #'my-remove-slide-number)
 
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
+
