@@ -109,8 +109,8 @@
 ;; (custom-set-variables '(org-modern-table nil))
 
 (use-package toc-org
-  :commands toc-org-enable
-  :init (add-hook 'org-mode-hook 'toc-org-enable))
+  :init
+  (add-hook 'org-mode-hook 'toc-org-enable))
 
 (use-package org-tempo
   :ensure nil)
