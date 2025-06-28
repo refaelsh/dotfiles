@@ -574,15 +574,6 @@
   (prettify-symbols-mode 1))
 (add-hook 'org-mode-hook 'my/org-mode/load-prettify-symbols)
 
-(use-package aggressive-indent)
-(global-aggressive-indent-mode 1)
-
-(add-to-list
- 'aggressive-indent-dont-indent-if
- '(and (derived-mode-p 'c++-mode)
-       (null (string-match "\\([;{}]\\|\\b\\(if\\|for\\|while\\)\\b\\)"
-                           (thing-at-point 'line)))))
-
 (use-package solaire-mode)
 (solaire-global-mode +1)
 

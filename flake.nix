@@ -19,31 +19,31 @@
     let
       system = "x86_64-linux";
     in
-      {
-        nixosConfigurations = {
-          myNixos = nixpkgs.lib.nixosSystem {
-            specialArgs = {
-              inherit inputs system;
-            };
-
-            modules = [
-              ./nixos/configuration.nix
-
-              inputs.nixvim.nixosModules.nixvim
-              ./nixvim
-
-              inputs.home-manager.nixosModules.home-manager
-              ./home-manager
-
-              {
-                environment.systemPackages = [
-                  # inputs.nixvim.packages.${system}.default
-                  # inputs.brave.packages.${system}.default
-                  # inputs.zen-browser.packages."${system}".default
-                ];
-              }
-            ];
+    {
+      nixosConfigurations = {
+        myNixos = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs system;
           };
+
+          modules = [
+            ./nixos/configuration.nix
+
+            inputs.nixvim.nixosModules.nixvim
+            ./nixvim
+
+            inputs.home-manager.nixosModules.home-manager
+            ./home-manager
+
+            {
+              environment.systemPackages = [
+                # inputs.nixvim.packages.${system}.default
+                # inputs.brave.packages.${system}.default
+                # inputs.zen-browser.packages."${system}".default
+              ];
+            }
+          ];
         };
       };
+    };
 }
