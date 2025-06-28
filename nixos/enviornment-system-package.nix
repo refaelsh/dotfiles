@@ -143,6 +143,7 @@
       discord
       # nyxt
       emacs
+      sbcl
       # (st.overrideAttrs (oldAttrs: rec {
       #   buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       #   patches = [
