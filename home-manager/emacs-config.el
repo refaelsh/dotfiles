@@ -441,6 +441,12 @@
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown"))
 
+(use-package slime)
+(setq inferior-lisp-program "sbcl")
+
+(use-package paredit)
+(add-hook 'lisp-mode-hook #'enable-paredit-mode)
+
 (use-package counsel)
 (ivy-mode 1)
 
@@ -471,6 +477,9 @@
 
 (use-package company-box
   :hook (company-mode . company-box-mode))
+
+(use-package slime-company)
+(slime-setup '(slime-fancy slime-company))
 
 (add-hook 'prog-mode-hook 'eglot-ensure)
 (add-hook 'gfm-mode-hook 'eglot-ensure)

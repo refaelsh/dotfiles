@@ -77,6 +77,7 @@
   - [[#rust][Rust]]
   - [[#yaml][Yaml]]
   - [[#markdown][Markdown]]
+  - [[#common-lisp][Common Lisp]]
 - [[#ivy][Ivy]]
 - [[#snippets][Snippets]]
 - [[#completion][Completion]]
@@ -860,6 +861,16 @@ For auto formatting:
     :mode ("README\\.md\\'" . gfm-mode)
     :init (setq markdown-command "multimarkdown"))
 #+end_src
+
+** Common Lisp
+#+begin_src emacs-lisp
+  (use-package slime)
+  (setq inferior-lisp-program "sbcl")
+
+  (use-package paredit)
+  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+#+end_src
+
 * Ivy
 Ivy is split into three packages: ivy, swiper and counsel.
 By installing counsel, the other two are brought in as dependencies.
@@ -914,6 +925,13 @@ A company front-end with icons.
   (use-package company-box
     :hook (company-mode . company-box-mode))
 #+end_src
+
+For Common List
+#+begin_src emacs-lisp
+  (use-package slime-company)
+  (slime-setup '(slime-fancy slime-company))
+#+end_src
+
 * LSP
 ** General LSP config
 #+begin_src emacs-lisp

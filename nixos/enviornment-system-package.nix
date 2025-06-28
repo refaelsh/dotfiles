@@ -141,7 +141,7 @@
       xwayland-satellite
       fuzzel
       discord
-      # nyxt
+      nyxt
       emacs
       sbcl
       # (st.overrideAttrs (oldAttrs: rec {
