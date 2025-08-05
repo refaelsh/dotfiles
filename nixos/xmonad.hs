@@ -33,6 +33,7 @@ myStartupHook = do
   spawn "amixer set Master 5%-"
   spawn "amixer set Master 5%+"
   spawnOnOnce "1" "brave"
+  spawnOnOnce "8" "discord"
   spawnOnOnce "9" "signal-desktop"
   spawnOnOnce "0" "cd ~/repos/dotfiles/ && neovide flake.nix -- -c \"NvimTreeOpen\""
   spawnOnOnce "0" myTerminal
