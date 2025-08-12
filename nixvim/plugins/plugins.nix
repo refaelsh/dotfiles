@@ -35,7 +35,7 @@
         enable = true;
         ignore = false;
       };
-      actions.openFile.resizeWindow = true;
+      settings.actions.openFile.resizeWindow = true;
     };
   };
 }
