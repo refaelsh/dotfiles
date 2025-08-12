@@ -31,11 +31,13 @@
 
     nvim-tree = {
       enable = true;
-      git = {
-        enable = true;
-        ignore = false;
+      settings = {
+        git = {
+          enable = true;
+          ignore = false;
+        };
+        actions.openFile.resizeWindow = true;
       };
-      settings.actions.openFile.resizeWindow = true;
     };
   };
 }
