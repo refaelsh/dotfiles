@@ -132,11 +132,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1749305544,
-        "narHash": "sha256-oOirTCpU4t78XSfKMbom6K5K9v3jIRcABvFl+aFTpQ4=",
+        "lastModified": 1756392827,
+        "narHash": "sha256-t9nW+d44WP9+qHOO0ozQZ7Ml7Cjm99+x0jppKkzkI6o=",
         "ref": "refs/heads/master",
-        "rev": "14516547f320217e10af53cbe02d44772177a6f7",
-        "revCount": 1939,
+        "rev": "9bb8a1e15c5676bbb13c5dfada01f482959949b4",
+        "revCount": 1941,
         "type": "git",
         "url": "https://codeberg.org/xmobar/xmobar.git/"
       },
