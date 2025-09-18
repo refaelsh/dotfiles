@@ -23,7 +23,7 @@
       xclip
       notepadqq
       git
-      kdiff3
+      # kdiff3
       bitwarden
       # bitwarden-cli
       alacritty
