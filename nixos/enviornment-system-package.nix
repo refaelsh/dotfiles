@@ -21,9 +21,9 @@
       wget
       go
       xclip
-      notepadqq
+      # notepadqq
       git
-      # kdiff3
+      kdiff3
       bitwarden
       # bitwarden-cli
       alacritty
