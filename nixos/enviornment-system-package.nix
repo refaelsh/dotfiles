@@ -161,7 +161,7 @@
       #   postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
       # }))
       proton-pass
-      notepadqq
+      # notepadqq
     ];
   };
 }
