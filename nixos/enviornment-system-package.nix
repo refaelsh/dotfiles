@@ -21,7 +21,6 @@
       wget
       go
       xclip
-      # notepadqq
       git
       kdiff3
       bitwarden
@@ -162,6 +161,7 @@
       #   postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
       # }))
       proton-pass
+      # notepadqq
     ];
   };
 }
