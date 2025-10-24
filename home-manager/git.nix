@@ -8,8 +8,8 @@
       show = "show --color-moved";
       ch = "checkout";
     };
-    settings = {};
-    userEmail = "refaelsh@pm.me";
+    # settings = {};
+    settings.userEmail = "refaelsh@pm.me";
     userName = "refaelsh";
     extraConfig = {
       safe = {
