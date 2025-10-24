@@ -1,16 +1,18 @@
 {
   programs.git = {
     enable = true;
-    aliases = {
-      lg = "log --date-order --color-moved --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all";
-      st = "status";
-      diff = "diff --color-moved --submodule";
-      show = "show --color-moved";
-      ch = "checkout";
-    };
-    userEmail = "refaelsh@pm.me";
-    userName = "refaelsh";
-    extraConfig = {
+    settings = {
+      alias = {
+        lg = "log --date-order --color-moved --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all";
+        st = "status";
+        diff = "diff --color-moved --submodule";
+        show = "show --color-moved";
+        ch = "checkout";
+      };
+      user = {
+        email = "refaelsh@pm.me";
+        name = "refaelsh";
+      };
       safe = {
         directory = "*";
       };
@@ -20,13 +22,13 @@
       init = {
         defaultBranch = "master";
       };
-      color.branch = {
+      "color.branch" = {
         current = "cyan bold reverse";
         local = "white";
         plain = "";
         remote = "cyan";
       };
-      color.diff = {
+      "color.diff" = {
         commit = "";
         func = "cyan";
         plain = "";
@@ -36,7 +38,7 @@
         old = "red";
         new = "green";
       };
-      color.grep = {
+      "color.grep" = {
         context = "";
         filename = "";
         function = "";
@@ -45,13 +47,13 @@
         selected = "";
         separator = "";
       };
-      color.interactive = {
+      "color.interactive" = {
         error = "";
         header = "";
         help = "";
         prompt = "";
       };
-      color.status = {
+      "color.status" = {
         added = "green";
         changed = "yellow";
         header = "";
