@@ -92,7 +92,7 @@
       pciutils
       steam-run
       nixpkgs-fmt
-      microcodeIntel
+      microcode-intel
       lshw
       transmission_4
       transmission_4-gtk
