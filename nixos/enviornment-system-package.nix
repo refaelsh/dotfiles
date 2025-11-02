@@ -13,7 +13,7 @@
       lua-language-server
       nodePackages.yaml-language-server
       nodePackages.bash-language-server
-      taplo-lsp
+      taplo
       wget
       google-chrome
       glib
