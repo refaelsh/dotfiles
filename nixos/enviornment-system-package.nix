@@ -23,7 +23,7 @@
       xclip
       git
       kdiff3
-      bitwarden
+      bitwarden-desktop
       # bitwarden-cli
       alacritty
       dracula-theme
