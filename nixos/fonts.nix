@@ -19,7 +19,7 @@
       font-awesome_4
       line-awesome
       powerline-fonts
-      ubuntu_font_family
+      ubuntu-classic
       mononoki
       unifont
       dejavu_fonts
