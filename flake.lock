@@ -86,11 +86,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1761481019,
-        "narHash": "sha256-aOurSUS6G9h9AKfbtBTcLDx79FCKJPRRw0qmSgwHl5U=",
+        "lastModified": 1766062696,
+        "narHash": "sha256-AKD6zlR0fzDpTqii6WjExhYl6cXVfuPZW6CHKtOq3B0=",
         "ref": "refs/heads/master",
-        "rev": "0495a8c0e453b0d29e3eb24f38491a9d534c5e94",
-        "revCount": 1943,
+        "rev": "825af42c2539e4bf47c03e7e81b07dc081a43cb1",
+        "revCount": 1944,
         "type": "git",
         "url": "https://codeberg.org/xmobar/xmobar.git/"
       },
@@ -155,11 +155,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1766065187,
-        "narHash": "sha256-1d6+VDO26pJzibS5xtANeD6C0e39W07xO4GUPsIwTpk=",
+        "lastModified": 1766148816,
+        "narHash": "sha256-rcyaKzrFhkMHCQlC/dm5dR3vwIAGvUXOXoEZRIPGo0I=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "2a1f48e701bb11297432864ba4cadee3b886eba3",
+        "rev": "0ef5923c84d74ff03914940190a8ab167c2db724",
         "type": "github"
       },
       "original": {
