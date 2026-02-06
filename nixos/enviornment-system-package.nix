@@ -139,7 +139,7 @@
       cachix
       xwayland-satellite
       fuzzel
-      discord
+      # discord
       nyxt
       emacs
       sbcl
