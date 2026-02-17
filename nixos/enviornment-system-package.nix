@@ -37,7 +37,7 @@
       flameshot
       signal-desktop
       kbdd
-      xorg.setxkbmap
+      setxkbmap
       glow
       jq
       nvd
@@ -53,7 +53,7 @@
       gdb
       lm_sensors
       python3Packages.psutil
-      xorg.xmessage
+      xmessage
       haskellPackages.cabal-fmt
       cabal-install
       haskellPackages.fourmolu
@@ -80,7 +80,7 @@
       zk
       man-pages
       man-pages-posix
-      xorg.xdpyinfo
+      xdpyinfo
       haskellPackages.hoogle
       proselint
       aspell
@@ -120,7 +120,7 @@
       # nawk
       lxappearance
       git-extras
-      nixfmt-rfc-style
+      nixfmt
       ghc
       speedtest-cli
       numlockx
