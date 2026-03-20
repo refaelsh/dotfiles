@@ -42,6 +42,22 @@
                 # inputs.zen-browser.packages."${system}".default
               ];
             }
+            # === KBDD FIX STARTS HERE ===
+            {
+              nixpkgs.overlays = [
+                (final: prev: {
+                  kbdd = prev.kbdd.overrideAttrs (old: {
+                    src = prev.fetchFromGitHub {
+                      owner = "qnikst";
+                      repo = "kbdd";
+                      rev = "b87e44afd5859157245eee22b11827605bfa09b9"; # upstream fix
+                      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="; # ← temporary fake hash
+                    };
+                  });
+                })
+              ];
+            }
+            # === KBDD FIX ENDS HERE ===
           ];
         };
       };
