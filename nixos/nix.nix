@@ -1,4 +1,8 @@
 {
+nix = {
+            daemonCPUSchedPolicy = "idle";
+            daemonIOSchedClass   = "idle";
+          };
   nix.settings = {
     auto-optimise-store = true;
     experimental-features = [
