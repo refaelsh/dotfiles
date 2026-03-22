@@ -162,6 +162,7 @@
       # }))
       proton-pass
       # notepadqq
+      widelands
     ];
   };
 }

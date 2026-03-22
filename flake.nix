@@ -51,7 +51,7 @@
                       owner = "qnikst";
                       repo = "kbdd";
                       rev = "b87e44afd5859157245eee22b11827605bfa09b9"; # upstream fix
-                      hash = "sha256-cbMcB6jgssfMUjemBOiE06zJK2TbzOWt1Rvt41V33Mo="; 
+                      hash = "sha256-cbMcB6jgssfMUjemBOiE06zJK2TbzOWt1Rvt41V33Mo=";
                     };
                   });
                 })
