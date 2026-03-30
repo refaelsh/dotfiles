@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
-    bla.url = "github:Lassulus/wrappers";
+    wrappers.url = "github:Lassulus/wrappers";
   };
 
   outputs =
