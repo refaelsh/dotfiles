@@ -163,8 +163,7 @@
       proton-pass
       # notepadqq
       widelands
-      scrcpy
-      Ghostty
+      ghostty
     ];
   };
 }
