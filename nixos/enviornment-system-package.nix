@@ -164,6 +164,7 @@
       # notepadqq
       widelands
       scrcpy
+      Ghostty
     ];
   };
 }
