@@ -163,6 +163,7 @@
       proton-pass
       # notepadqq
       widelands
+      scrcpy
     ];
   };
 }
