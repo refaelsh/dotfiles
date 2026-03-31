@@ -2,7 +2,6 @@
 {
   flake.nixosModules.nixvim = { config, lib, pkgs, ... }:
   {
-    # Pull in the official nixvim base module
     imports = [ inputs.nixvim.nixosModules.nixvim ];
 
     programs.nixvim = {
