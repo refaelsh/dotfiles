@@ -10,7 +10,6 @@
       "${inputs.self}/nixos/configuration.nix"
 
       inputs.nixvim.nixosModules.nixvim
-      "${inputs.self}/nixvim"
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
