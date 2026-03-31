@@ -2,15 +2,15 @@
 {
   flake.nixosModules.nixvim = { config, lib, pkgs, ... }:
   {
-    # Pull in the official nixvim base module (so programs.nixvim option exists)
+    # Pull in the official nixvim base module
     imports = [ inputs.nixvim.nixosModules.nixvim ];
 
     programs.nixvim = {
       imports = [
-        ./nixvim/_config/auto-cmd.nix
-        ./nixvim/_config/keymaps.nix
-        ./nixvim/_config/opts.nix
-        ./nixvim/_config/plugins
+        "${inputs.self}/modules/nixvim/_config/auto-cmd.nix"
+        "${inputs.self}/modules/nixvim/_config/keymaps.nix"
+        "${inputs.self}/modules/nixvim/_config/opts.nix"
+        "${inputs.self}/modules/nixvim/_config/plugins"
       ];
 
       enable = true;
