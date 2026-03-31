@@ -1,8 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 {
-  # ←←← UNCOMMENT THE LINE YOU NEED (depends on whether you use Home-Manager or NixOS)
-  # imports = [ inputs.nixvim.homeManagerModules.nixvim ];   # ← for home-manager
-  imports = [ inputs.nixvim.nixosModules.nixvim ];          # ← for NixOS (most likely what you want)
+  # This line now works because we added `inputs` to the module arguments
+  imports = [ inputs.nixvim.nixosModules.nixvim ]; # NixOS version (you were using this)
 
   programs.nixvim = {
     imports = [
