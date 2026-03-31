@@ -1,9 +1,15 @@
-{ pkgs, ... }:
+{ inputs, ... }:
 {
+  # Correct flake-parts wrapper (this is what makes it dendritic)
   flake.nixosModules.brave =
-    { config, lib, ... }:
     {
-      # Exact same flags you had in Home-Manager, but now as a proper NixOS dendritic feature
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      # Brave with your exact flags — works perfectly on pure NixOS
       environment.systemPackages = [
         (pkgs.brave.override {
           commandLineArgs = [
