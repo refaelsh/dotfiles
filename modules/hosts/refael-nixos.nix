@@ -9,7 +9,7 @@
     modules = [
       "${inputs.self}/nixos/configuration.nix"
 
-      inputs.nixvim.nixosModules.nixvim
+      ./modules/nixos/nixvim.nix
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
