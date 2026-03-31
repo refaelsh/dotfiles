@@ -7,10 +7,10 @@
 
     programs.nixvim = {
       imports = [
-        "${inputs.self}/modules/nixvim/_config/auto-cmd.nix"
-        "${inputs.self}/modules/nixvim/_config/keymaps.nix"
-        "${inputs.self}/modules/nixvim/_config/opts.nix"
-        "${inputs.self}/modules/nixvim/_config/_plugins"
+        "${inputs.self}/modules/nixvim/_auto-cmd.nix"
+        "${inputs.self}/modules/nixvim/_keymaps.nix"
+        "${inputs.self}/modules/nixvim/_opts.nix"
+        "${inputs.self}/modules/nixvim/_plugins"
       ];
 
       enable = true;
