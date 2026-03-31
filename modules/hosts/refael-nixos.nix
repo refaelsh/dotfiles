@@ -2,20 +2,16 @@
 {
   flake.nixosConfigurations.myNixos = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
-    specialArgs = {
-      inherit inputs;
-    };
+    specialArgs = { inherit inputs; };
 
     modules = [
-      "${inputs.self}/nixos/configuration.nix"
-
-      # ←←← NEW: our dendritic nixvim feature (includes the base nixvim module)
-      inputs.self.nixosModules.nixvim
+      # ← Only ONE line needed from now on!
+      inputs.self.nixosModules.nixos
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
 
-      # === KBDD FIX (unchanged) ===
+      # KBDD overlay (kept as-is)
       {
         nixpkgs.overlays = [
           (final: prev: {
