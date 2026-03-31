@@ -2,12 +2,11 @@
 {
   programs.nixvim = {
     imports = [
-      ./auto-cmd.nix
-      ./keymaps.nix
-      ./opts.nix
-      ./plugins
+      ./_nixvim/auto-cmd.nix
+      ./_nixvim/keymaps.nix
+      ./_nixvim/opts.nix
+      ./_nixvim/plugins
     ];
-
     enable = true;
     defaultEditor = true;
     vimAlias = true;
@@ -21,36 +20,19 @@
       nvimRuntime = true;
       plugins = true;
     };
-
     globals = {
       mapleader = " ";
       maplocalleader = " ";
       have_nerd_font = true;
     };
-
-    # extraPlugins = with pkgs.vimPlugins; [
-    #   nvim-colorizer-lua
-    #   nui-nvim
-    #   (pkgs.vimUtils.buildVimPlugin {
-    #     name = "org-bullets.nvim";
-    #     src = pkgs.fetchFromGitHub {
-    #       owner = "nvim-orgmode";
-    #       repo = "org-bullets.nvim";
-    #       rev = "main";
-    #       sha1 = "M9oUlEa5z7CyQWYFNlW7Am5y+P0=";
-    #     };
-    #   })
-    # ];
-
     extraPlugins = with pkgs.vimPlugins; [
       vim-nix
     ];
-
     extraConfigLua = # lua
       ''
         -- require('org-bullets').setup()
         -- require('colorizer').setup({
-        --   -- mode = 'background'
+        -- -- mode = 'background'
         -- })
       '';
   };
