@@ -15,15 +15,6 @@
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
 
-      # Your previous inline config / packages can stay here (uncomment/adjust if needed)
-      {
-        environment.systemPackages = [
-          # inputs.nixvim.packages.${system}.default
-          # inputs.brave.packages.${system}.default
-          # inputs.zen-browser.packages."${system}".default
-        ];
-      }
-
       # === KBDD FIX (unchanged) ===
       {
         nixpkgs.overlays = [
