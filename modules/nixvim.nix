@@ -1,8 +1,5 @@
-{ inputs, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
-  # This line now works because we added `inputs` to the module arguments
-  imports = [ inputs.nixvim.nixosModules.nixvim ]; # NixOS version (you were using this)
-
   programs.nixvim = {
     imports = [
       ./nixvim/_config/auto-cmd.nix
