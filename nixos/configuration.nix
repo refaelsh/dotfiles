@@ -27,6 +27,7 @@
     ./hardware.nix
     ./networking.nix
     ./nix.nix
+    ./nixvim.nix
     ./power-management.nix
     ./programs.nix
     ./scriptology.nix
