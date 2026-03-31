@@ -32,7 +32,6 @@ in
     inputs.nixmobar.homeModules.mainmodule
     ./nixmobar.nix
     ./zsh.nix
-    ./brave.nix
     ./nyxt.nix
   ];
 }
