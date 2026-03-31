@@ -9,8 +9,8 @@
     modules = [
       "${inputs.self}/nixos/configuration.nix"
 
-      inputs.nixvim.nixosModules.nixvim
-      "${inputs.self}/nixvim"
+      # ←←← NEW: our dendritic nixvim feature (includes the base nixvim module)
+      inputs.self.nixosModules.nixvim
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
