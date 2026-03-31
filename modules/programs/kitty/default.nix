@@ -23,11 +23,6 @@
           allow_remote_control = true;
           shell_integration = "enabled";
         };
-
-        # Extra config if you had any in extraConfig
-        extraConfig = ''
-          # Put any extra kitty.conf lines here if you had them
-        '';
       };
     };
 }
