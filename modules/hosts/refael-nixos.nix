@@ -7,15 +7,15 @@
     };
 
     modules = [
-      ../nixos/configuration.nix
+      "${inputs.self}/nixos/configuration.nix"
 
       inputs.nixvim.nixosModules.nixvim
-      ../nixvim
+      "${inputs.self}/nixvim"
 
       inputs.home-manager.nixosModules.home-manager
-      ../home-manager
+      "${inputs.self}/home-manager"
 
-      # Your previous inline config (you can split these out later)
+      # Your previous inline config / packages can stay here (uncomment/adjust if needed)
       {
         environment.systemPackages = [
           # inputs.nixvim.packages.${system}.default
@@ -24,7 +24,7 @@
         ];
       }
 
-      # === KBDD FIX (moved here; you can extract to modules/overlays/kbdd.nix later) ===
+      # === KBDD FIX (unchanged) ===
       {
         nixpkgs.overlays = [
           (final: prev: {
