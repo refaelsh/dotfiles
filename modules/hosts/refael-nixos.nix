@@ -1,21 +1,21 @@
-{ inputs, ... }:
+{ lib, inputs, ... }:
 {
   flake.nixosConfigurations.myNixos = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
     specialArgs = {
       inherit inputs;
-      system = "x86_64-linux";
     };
 
     modules = [
-      ../../nixos/configuration.nix
+      ../nixos/configuration.nix
 
       inputs.nixvim.nixosModules.nixvim
-      ../../nixvim
+      ../nixvim
 
       inputs.home-manager.nixosModules.home-manager
-      ../../home-manager
+      ../home-manager
 
-      # === your original inline bits ===
+      # Your previous inline config (you can split these out later)
       {
         environment.systemPackages = [
           # inputs.nixvim.packages.${system}.default
@@ -24,7 +24,7 @@
         ];
       }
 
-      # === KBDD FIX ===
+      # === KBDD FIX (moved here; you can extract to modules/overlays/kbdd.nix later) ===
       {
         nixpkgs.overlays = [
           (final: prev: {
@@ -32,7 +32,7 @@
               src = prev.fetchFromGitHub {
                 owner = "qnikst";
                 repo = "kbdd";
-                rev = "b87e44afd5859157245eee22b11827605bfa09b9"; # upstream fix
+                rev = "b87e44afd5859157245eee22b11827605bfa09b9";
                 hash = "sha256-cbMcB6jgssfMUjemBOiE06zJK2TbzOWt1Rvt41V33Mo=";
               };
             });

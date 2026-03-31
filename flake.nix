@@ -3,34 +3,35 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
+    wrappers.url = "github:Lassulus/wrappers";
 
-    # Dendritic pattern dependencies
+    # ── Dendritic additions ─────────────────────────────────────
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     import-tree.url = "github:vic/import-tree";
-
-    wrappers.url = "github:Lassulus/wrappers";
   };
 
   outputs =
     inputs:
-    inputs.flake-parts.lib.mkFlake {
-      inherit inputs;
-    } (inputs.import-tree ./modules);
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        (inputs.import-tree ./modules)
+      ];
+
+      # Required by flake-parts
+      systems = [ "x86_64-linux" ];
+    };
 }
 # {
 #   description = "NixOS flake";
