@@ -7,9 +7,9 @@
 
     programs.nixvim = {
       imports = [
-        ./auto-cmd.nix
-        ./keymaps.nix
-        ./opts.nix
+        ./_auto-cmd.nix
+        ./_keymaps.nix
+        ./_opts.nix
         ./plugins
       ];
 
