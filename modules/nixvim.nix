@@ -1,9 +1,8 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
-  # If you haven't already enabled the nixvim module elsewhere,
-  # you can add it here (uncomment the line you need):
-  # imports = [ inputs.nixvim.homeManagerModules.nixvim ]; # most likely what you want
-  # imports = [ inputs.nixvim.nixosModules.nixvim ];      # if you prefer system-wide
+  # ←←← UNCOMMENT THE LINE YOU NEED (depends on whether you use Home-Manager or NixOS)
+  # imports = [ inputs.nixvim.homeManagerModules.nixvim ];   # ← for home-manager
+  imports = [ inputs.nixvim.nixosModules.nixvim ];          # ← for NixOS (most likely what you want)
 
   programs.nixvim = {
     imports = [
