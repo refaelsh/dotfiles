@@ -3,13 +3,13 @@
   flake.nixosModules.brave =
     { config, lib, ... }:
     {
-      # This is exactly the same as your old Home-Manager brave config,
-      # but now as a NixOS module (dendritic style)
+      # Exact same Brave config you had in Home-Manager, but now as a NixOS dendritic module
       programs.chromium = {
         enable = true;
-        package = pkgs.brave; # ← uses the standard Brave from nixpkgs
+        package = pkgs.brave;
 
-        commandLineArgs = [
+        # ← This is the NixOS name (was commandLineArgs in Home-Manager)
+        extraArgs = [
           "--disable-background-networking"
           "--disable-default-apps"
           "--disable-features=TranslateUI"
