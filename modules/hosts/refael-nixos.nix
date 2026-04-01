@@ -1,6 +1,6 @@
 { lib, inputs, ... }:
 {
-  # ── Automatic dendritic aggregator ──
+  # ── Automatic dendritic aggregator (no manual imports ever again) ──
   flake.nixosModules.nixos = { config, lib, pkgs, ... }:
   {
     imports = lib.attrValues (removeAttrs inputs.self.nixosModules [ "nixos" ]);
@@ -12,21 +12,13 @@
     specialArgs = { inherit inputs; };
 
     modules = [
-      # One line that pulls in ALL dendritic features automatically
+      # One line = all your features (brave, kitty, nixvim, future stuff) are pulled in automatically
       inputs.self.nixosModules.nixos
+
+      "${inputs.self}/nixos/configuration.nix"
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
-
-      # === USER DECLARATION — MUST be inside this list ===
-      {
-        users.users.refaelsh = {
-          isNormalUser = true;
-          description = "refaelsh";
-          extraGroups = [ "wheel" "networkmanager" "audio" "video" "input" ];
-          shell = pkgs.zsh;
-        };
-      }
 
       # KBDD overlay
       {
