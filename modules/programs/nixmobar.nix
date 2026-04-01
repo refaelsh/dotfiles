@@ -1,7 +1,5 @@
 { inputs, ... }:
 {
-  # Simple dendritic feature — exactly like mangohud
-  # Pure NixOS, no Home-Manager, no custom flake
   flake.nixosModules.nixmobar =
     { pkgs, ... }:
     {
