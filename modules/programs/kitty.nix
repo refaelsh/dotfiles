@@ -1,21 +1,24 @@
-{
-  inputs,
-  pkgs,
-  lib,
-  ...
-}:
+{ inputs, ... }:
 
-let
-  # Official Dracula theme — fetched once, never inlined in your dotfiles
-  draculaTheme = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/dracula/kitty/master/dracula.conf";
-    sha256 = lib.fakeSha256; # ← Nix will tell you the correct hash on first build
-  };
-in
 {
   # Correct flake-parts wrapper (this is what makes it dendritic)
   flake.nixosModules.kitty =
-    { pkgs, ... }:
+    { lib, pkgs, ... }:
+    let
+      # ── Official Dracula Kitty theme (pinned forever) ─────────────────────────
+      # This repo has been frozen since May 2022 — no updates, no breaking changes.
+      # Kitty will never "need" a newer version of this theme.
+      # If you ever want to update (extremely unlikely), just change the rev and
+      # replace the sha256 with the one Nix prints.
+      draculaRev = "87717a3f00e3dff0fc10c93f5ff535ea4092de70";
+
+      draculaTheme = pkgs.fetchFromGitHub {
+        owner = "dracula";
+        repo = "kitty";
+        rev = draculaRev;
+        sha256 = lib.fakeSha256; # ← Nix will print the correct hash on first build
+      };
+    in
     {
       environment.systemPackages = [
         (inputs.wrappers.wrapperModules.kitty.apply {
@@ -32,8 +35,8 @@ in
             allow_remote_control = "yes";
             shell_integration = "enabled";
 
-            # Absolute include — this is the clean solution
-            include = draculaTheme;
+            # Absolute path to the pinned theme — no missing-file error ever again
+            include = "${draculaTheme}/dracula.conf";
           };
         }).wrapper
       ];
