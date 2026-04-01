@@ -14,77 +14,15 @@
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
-  {
-    # Unified host file now receives both lib and inputs
-    nixosConfigurations.myNixos = (import ./modules/hosts/refael-nixos.nix {
+  let
+    host = import ./modules/hosts/refael-nixos.nix {
       inherit inputs;
       inherit (nixpkgs) lib;
-    }).flake.nixosConfigurations.myNixos;
+    };
+  in
+  {
+    # Both the modules and the configuration now come from the single unified file
+    nixosModules = host.flake.nixosModules;
+    nixosConfigurations = host.flake.nixosConfigurations;
   };
 }
-# {
-#   description = "NixOS flake";
-#
-#   inputs = {
-#     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-#     home-manager = {
-#       url = "github:nix-community/home-manager";
-#       inputs.nixpkgs.follows = "nixpkgs";
-#     };
-#     nixvim = {
-#       url = "github:nix-community/nixvim";
-#       inputs.nixpkgs.follows = "nixpkgs";
-#     };
-#     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
-#     wrappers.url = "github:Lassulus/wrappers";
-#   };
-#
-#   outputs =
-#     { nixpkgs, ... }@inputs:
-#     let
-#       system = "x86_64-linux";
-#     in
-#     {
-#       nixosConfigurations = {
-#         myNixos = nixpkgs.lib.nixosSystem {
-#           specialArgs = {
-#             inherit inputs system;
-#           };
-#
-#           modules = [
-#             ./nixos/configuration.nix
-#
-#             inputs.nixvim.nixosModules.nixvim
-#             ./nixvim
-#
-#             inputs.home-manager.nixosModules.home-manager
-#             ./home-manager
-#
-#             {
-#               environment.systemPackages = [
-#                 # inputs.nixvim.packages.${system}.default
-#                 # inputs.brave.packages.${system}.default
-#                 # inputs.zen-browser.packages."${system}".default
-#               ];
-#             }
-#             # === KBDD FIX STARTS HERE ===
-#             {
-#               nixpkgs.overlays = [
-#                 (final: prev: {
-#                   kbdd = prev.kbdd.overrideAttrs (old: {
-#                     src = prev.fetchFromGitHub {
-#                       owner = "qnikst";
-#                       repo = "kbdd";
-#                       rev = "b87e44afd5859157245eee22b11827605bfa09b9"; # upstream fix
-#                       hash = "sha256-cbMcB6jgssfMUjemBOiE06zJK2TbzOWt1Rvt41V33Mo=";
-#                     };
-#                   });
-#                 })
-#               ];
-#             }
-#             # === KBDD FIX ENDS HERE ===
-#           ];
-#         };
-#       };
-#     };
-# }

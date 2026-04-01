@@ -1,18 +1,18 @@
 { lib, inputs, ... }:
 {
-  # Automatic dendritic aggregator — no manual list ever again
+  # ── Automatic dendritic aggregator (no manual imports ever again) ──
   flake.nixosModules.nixos = { config, lib, pkgs, ... }:
   {
     imports = lib.attrValues (removeAttrs inputs.self.nixosModules [ "nixos" ]);
   };
 
-  # The actual NixOS configuration
+  # ── The actual NixOS host ──
   flake.nixosConfigurations.myNixos = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
 
     modules = [
-      # One line that pulls in brave, kitty, nixvim, and every future feature
+      # One line = all your features (brave, kitty, nixvim, future stuff) are pulled in automatically
       inputs.self.nixosModules.nixos
 
       inputs.home-manager.nixosModules.home-manager
