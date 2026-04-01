@@ -15,8 +15,11 @@
 
   outputs = { self, nixpkgs, ... }@inputs:
   {
-    # Everything NixOS is now defined in this one file
-    nixosConfigurations.myNixos = (import ./modules/hosts/refael-nixos.nix { inherit inputs; }).flake.nixosConfigurations.myNixos;
+    # Unified host file now receives both lib and inputs
+    nixosConfigurations.myNixos = (import ./modules/hosts/refael-nixos.nix {
+      inherit inputs;
+      inherit (nixpkgs) lib;
+    }).flake.nixosConfigurations.myNixos;
   };
 }
 # {
