@@ -11,6 +11,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    brave.url = "github:refaelsh/nix-brave";
     # zen-browser.url = "github:0xc000022070/zen-browser-flake"; # uncomment when needed
   };
 
