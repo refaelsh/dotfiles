@@ -12,13 +12,13 @@
     specialArgs = { inherit inputs; };
 
     modules = [
-      # One line that automatically includes ALL your dendritic features
+      # One line that automatically includes brave, kitty, nixvim, etc.
       inputs.self.nixosModules.nixos
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
 
-      # === USER DECLARATION (moved inside modules list so pkgs is available) ===
+      # === USER DECLARATION (must be inside the modules list) ===
       {
         users.users.refaelsh = {
           isNormalUser = true;
@@ -28,7 +28,7 @@
         };
       }
 
-      # KBDD overlay (unchanged)
+      # KBDD overlay
       {
         nixpkgs.overlays = [
           (final: prev: {
