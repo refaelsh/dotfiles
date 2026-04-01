@@ -1,17 +1,18 @@
 { inputs, ... }:
+
 {
   # Pure NixOS dendritic feature — exactly like mangohud
-  # Uses your exact nixmobar flake input + your full config
+  # Uses your exact nixmobar flake input
   flake.nixosModules.nixmobar =
     { pkgs, ... }:
     let
-      # xmobar package from your specific flake
-      xmobarPkg = inputs.nixmobar.packages.${pkgs.system}.defaultPackage;
+      # Correct package path from your nixmobar flake (git+https://codeberg.org/xmobar/xmobar.git/?dir=nix)
+      xmobarPkg = inputs.nixmobar.packages.${pkgs.system}.xmobar;
     in
     {
       environment.systemPackages = [ xmobarPkg ];
 
-      # Your exact config, now system-wide (xmobar will read this file)
+      # Your exact xmobar config, now system-wide
       environment.etc."xdg/xmobar/xmobarrc".text = ''
         Config {
           font            = "Fira Code 13"
