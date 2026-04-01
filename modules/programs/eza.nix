@@ -12,7 +12,7 @@
         owner = "eza-community";
         repo = "eza-themes";
         rev = draculaRev;
-        sha256 = lib.fakeSha256; # ← Nix will print the correct hash on first build
+        sha256 = "sha256-toqj3bv2kCC2FHbGfeFpS3g9DoxQeZ7cwPYVpD8cfgg=";
       };
     in
     {
