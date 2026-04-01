@@ -14,13 +14,9 @@
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
-  let
-    inherit (nixpkgs.lib) importTree;
-    modules = importTree ./modules;
-  in
   {
-    # The host is now defined inside modules/hosts/refael-nixos.nix
-    nixosConfigurations = modules.hosts or {};
+    # Everything NixOS is now defined in this one file
+    nixosConfigurations.myNixos = (import ./modules/hosts/refael-nixos.nix { inherit inputs; }).flake.nixosConfigurations.myNixos;
   };
 }
 # {
