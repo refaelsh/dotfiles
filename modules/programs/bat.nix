@@ -1,9 +1,9 @@
 { inputs, ... }:
+
 {
   # Correct flake-parts wrapper (this is what makes it dendritic)
   flake.nixosModules.bat =
     { pkgs, ... }:
-    let
       bat-wrapped = inputs.wrappers.lib.wrapPackage {
         inherit pkgs;
 
@@ -12,13 +12,6 @@
         # Defaults (you can still override any of these in your Home-Manager config)
         env = {
           BAT_THEME = "Dracula"; # matches your Kitty theme
-          BAT_PAGING = "auto"; # or "never" / "always" if you prefer
         };
-      };
-    in
-    {
-      # This makes Home-Manager use the wrapped bat while keeping **all** your
-      # existing programs.bat.* settings, themes, extraConfig, etc. exactly as-is
-      home-manager.users.refaelsh.programs.bat.package = bat-wrapped;
-    };
+    }
 }
