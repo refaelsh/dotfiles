@@ -1,6 +1,6 @@
 { lib, inputs, ... }:
 {
-  # ── Automatic dendritic aggregator (no manual imports ever again) ──
+  # ── Automatic dendritic aggregator ──
   flake.nixosModules.nixos = { config, lib, pkgs, ... }:
   {
     imports = lib.attrValues (removeAttrs inputs.self.nixosModules [ "nixos" ]);
@@ -12,13 +12,23 @@
     specialArgs = { inherit inputs; };
 
     modules = [
-      # One line = all your features (brave, kitty, nixvim, future stuff) are pulled in automatically
+      # One line that pulls in ALL dendritic features automatically
       inputs.self.nixosModules.nixos
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
 
-      # KBDD overlay
+      # === MISSING USER DECLARATION (this fixes the error) ===
+      {
+        users.users.refaelsh = {
+          isNormalUser = true;
+          description = "refaelsh";
+          extraGroups = [ "wheel" "networkmanager" "audio" "video" "input" ];
+          shell = pkgs.zsh;   # change if you use a different shell
+        };
+      }
+
+      # KBDD overlay (unchanged)
       {
         nixpkgs.overlays = [
           (final: prev: {
