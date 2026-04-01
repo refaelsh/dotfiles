@@ -12,13 +12,13 @@
     specialArgs = { inherit inputs; };
 
     modules = [
-      # One line that pulls in ALL dendritic features automatically
+      # One line that automatically includes ALL your dendritic features
       inputs.self.nixosModules.nixos
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
 
-      # === MISSING USER DECLARATION (this fixes the error) ===
+      # === USER DECLARATION (moved inside modules list so pkgs is available) ===
       {
         users.users.refaelsh = {
           isNormalUser = true;
