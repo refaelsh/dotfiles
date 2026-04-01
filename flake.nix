@@ -1,8 +1,8 @@
 {
-  description = "NixOS flake (dendritic pattern)";
+  description = "Refael's dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -11,27 +11,20 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
-    wrappers.url = "github:Lassulus/wrappers";
-
-    # ── Dendritic additions ─────────────────────────────────────
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
-    import-tree.url = "github:vic/import-tree";
+    brave.url = "github:refaelsh/nix-brave";
+    # zen-browser.url = "github:0xc000022070/zen-browser-flake"; # uncomment when needed
   };
 
-  outputs =
-    inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [
-        (inputs.import-tree ./modules)
-      ];
-
-      # Required by flake-parts
-      systems = [ "x86_64-linux" ];
-    };
+  outputs = { self, nixpkgs, ... }@inputs:
+  let
+    # Import all modules automatically via import-tree (your existing logic)
+    inherit (inputs.nixpkgs.lib) importTree;
+    modules = importTree ./modules;
+  in
+  {
+    # The host is now defined inside modules/hosts/refael-nixos.nix
+    nixosConfigurations = modules.hosts or {};
+  };
 }
 # {
 #   description = "NixOS flake";

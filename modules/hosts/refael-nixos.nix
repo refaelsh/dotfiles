@@ -1,12 +1,20 @@
 { lib, inputs, ... }:
 {
+  # ── Automatic dendritic aggregator ──
+  # Any new file you drop in modules/*.nix that exports flake.nixosModules.<name>
+  # will be automatically included. No editing ever again.
+  flake.nixosModules.nixos = { config, lib, pkgs, ... }:
+  {
+    imports = lib.attrValues (removeAttrs inputs.self.nixosModules [ "nixos" ]);
+  };
+
+  # ── The actual NixOS host configuration ──
   flake.nixosConfigurations.myNixos = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
 
     modules = [
-      # Core config + the single automatic aggregator
-      "${inputs.self}/nixos/configuration.nix"
+      # Just this one line pulls in EVERY dendritic feature automatically
       inputs.self.nixosModules.nixos
 
       inputs.home-manager.nixosModules.home-manager
