@@ -25,8 +25,6 @@ in
     ./starship.nix
     ./termonad.nix
     ./wezterm.nix
-    inputs.nixmobar.homeModules.mainmodule
-    ./nixmobar.nix
     ./zsh.nix
     ./nyxt.nix
   ];
