@@ -11,6 +11,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
