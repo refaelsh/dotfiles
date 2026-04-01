@@ -1,12 +1,12 @@
-{ pkgs, ... }:
+{ inputs, ... }:
 {
-  flake.nixosModules.kitty = { config, lib, ... }:
+  # Correct dendritic pattern
+  flake.nixosModules.kitty = { config, lib, pkgs, ... }:
   {
     # 1. Install Kitty system-wide
     environment.systemPackages = [ pkgs.kitty ];
 
     # 2. Full config (exact same as your old Home-Manager version)
-    #    This creates /etc/xdg/kitty/kitty.conf for every user
     environment.etc."xdg/kitty/kitty.conf".text = ''
       font_family      FiraCode Nerd Font
       font_size        12
