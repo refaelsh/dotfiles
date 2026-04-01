@@ -1,24 +1,36 @@
 { inputs, ... }:
+let
+  # Bring wrappers into scope for the module below
+  wrappers = inputs.wrappers;
+in
 {
   # Correct flake-parts wrapper (this is what makes it dendritic)
-  flake.nixosModules.bat =
-    { pkgs, ... }:
+  flake.nixosModules.brave =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
-      bat-wrapped = inputs.wrappers.lib.wrapPackage {
+      brave-wrapped = wrappers.lib.wrapPackage {
         inherit pkgs;
 
-        package = pkgs.bat;
+        package = pkgs.brave;
 
-        # Defaults (you can still override any of these in your Home-Manager config)
-        env = {
-          BAT_THEME = "Dracula"; # matches your Kitty theme
-          BAT_PAGING = "auto"; # or "never" / "always" if you prefer
+        # Exact equivalent of your original commandLineArgs
+        flags = {
+          "--disable-background-networking" = true;
+          "--disable-default-apps" = true;
+          "--disable-features" = "TranslateUI";
         };
+
+        # Brave (and many Chromium-based browsers) expect --flag=value syntax
+        flagSeparator = "=";
       };
     in
     {
-      # This makes Home-Manager use the wrapped bat while keeping **all** your
-      # existing programs.bat.* settings, themes, extraConfig, etc. exactly as-is
-      home-manager.users.refaelsh.programs.bat.package = bat-wrapped;
+      # Brave with your exact flags — now using the wrappers library
+      environment.systemPackages = [ brave-wrapped ];
     };
 }
