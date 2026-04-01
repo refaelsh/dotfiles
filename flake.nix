@@ -11,14 +11,12 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    brave.url = "github:refaelsh/nix-brave";
-    # zen-browser.url = "github:0xc000022070/zen-browser-flake"; # uncomment when needed
+    # No brave input needed anymore
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
   let
-    # Import all modules automatically via import-tree (your existing logic)
-    inherit (inputs.nixpkgs.lib) importTree;
+    inherit (nixpkgs.lib) importTree;
     modules = importTree ./modules;
   in
   {
