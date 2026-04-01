@@ -1,16 +1,13 @@
 { inputs, ... }:
-
 {
-  # Pure NixOS dendritic feature — exactly like mangohud
-  # Uses your exact nixmobar flake input
+  # Simple dendritic feature — exactly like mangohud
+  # Pure NixOS, no Home-Manager, no custom flake
   flake.nixosModules.nixmobar =
     { pkgs, ... }:
-    let
-      # Correct package path from your nixmobar flake (git+https://codeberg.org/xmobar/xmobar.git/?dir=nix)
-      xmobarPkg = inputs.nixmobar.packages.${pkgs.system}.xmobar;
-    in
     {
-      environment.systemPackages = [ xmobarPkg ];
+      environment.systemPackages = with pkgs; [
+        xmobar
+      ];
 
       # Your exact xmobar config, now system-wide
       environment.etc."xdg/xmobar/xmobarrc".text = ''
