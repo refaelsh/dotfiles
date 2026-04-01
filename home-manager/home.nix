@@ -23,7 +23,6 @@ in
     ./git.nix
     ./fzf.nix
     ./lf.nix
-    ./kitty.nix
     ./mangohud.nix
     ./mouse.nix
     ./starship.nix
