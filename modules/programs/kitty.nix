@@ -16,7 +16,7 @@
         owner = "dracula";
         repo = "kitty";
         rev = draculaRev;
-        sha256 = lib.fakeSha256; # ← Nix will print the correct hash on first build
+        sha256 = "sha256-78PTH9wE6ktuxeIxrPp0ZgRI8ST+eZ3Ok2vW6BCIZkc=";
       };
     in
     {
