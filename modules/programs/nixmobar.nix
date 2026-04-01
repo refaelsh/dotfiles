@@ -1,17 +1,17 @@
 { inputs, ... }:
 {
-  # Pure NixOS dendritic feature — no Home-Manager
+  # Pure NixOS dendritic feature — exactly like mangohud
+  # Uses your exact nixmobar flake input + your full config
   flake.nixosModules.nixmobar =
     { pkgs, ... }:
     let
-      # Use the exact xmobar package from your flake input
-      xmobarPkg = inputs.nixmobar.packages.${pkgs.system}.default;
+      # xmobar package from your specific flake
+      xmobarPkg = inputs.nixmobar.packages.${pkgs.system}.defaultPackage;
     in
     {
       environment.systemPackages = [ xmobarPkg ];
 
-      # Your exact config, now placed as a system-wide file
-      # (xmobar will read it from here; your xmonad can point to it or you can symlink if you prefer)
+      # Your exact config, now system-wide (xmobar will read this file)
       environment.etc."xdg/xmobar/xmobarrc".text = ''
         Config {
           font            = "Fira Code 13"
