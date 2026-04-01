@@ -12,19 +12,19 @@
     specialArgs = { inherit inputs; };
 
     modules = [
-      # One line that automatically includes brave, kitty, nixvim, etc.
+      # One line that pulls in ALL dendritic features automatically
       inputs.self.nixosModules.nixos
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
 
-      # === USER DECLARATION (must be INSIDE the modules list) ===
+      # === USER DECLARATION — MUST be inside this list ===
       {
         users.users.refaelsh = {
           isNormalUser = true;
           description = "refaelsh";
           extraGroups = [ "wheel" "networkmanager" "audio" "video" "input" ];
-          shell = pkgs.zsh;   # change if you use a different shell
+          shell = pkgs.zsh;
         };
       }
 
