@@ -5,13 +5,14 @@
     specialArgs = { inherit inputs; };
 
     modules = [
-      # ← Only ONE line needed from now on!
+      # Core config + the single automatic aggregator
+      "${inputs.self}/nixos/configuration.nix"
       inputs.self.nixosModules.nixos
 
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
 
-      # KBDD overlay (kept as-is)
+      # KBDD overlay (unchanged)
       {
         nixpkgs.overlays = [
           (final: prev: {
