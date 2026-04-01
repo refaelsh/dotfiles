@@ -1,24 +1,27 @@
 { pkgs, ... }:
 {
-  flake.nixosModules.kitty =
-    { config, lib, ... }:
-    {
-      programs.kitty = {
-        enable = true;
-        font = {
-          name = "FiraCode Nerd Font";
-          size = 12;
-        };
-        theme = "Dracula";
-        settings = {
-          confirm_os_window_close = 0;
-          enable_audio_bell = false;
-          cursor_shape = "beam";
-          cursor_blink_interval = 0;
-          scrollback_lines = 10000;
-          allow_remote_control = true;
-          shell_integration = "enabled";
-        };
-      };
-    };
+  flake.nixosModules.kitty = { config, lib, ... }:
+  {
+    # 1. Install Kitty system-wide
+    environment.systemPackages = [ pkgs.kitty ];
+
+    # 2. Full config (exact same as your old Home-Manager version)
+    #    This creates /etc/xdg/kitty/kitty.conf for every user
+    environment.etc."xdg/kitty/kitty.conf".text = ''
+      font_family      FiraCode Nerd Font
+      font_size        12
+
+      # Theme (Dracula is shipped with Kitty)
+      include dracula.conf
+
+      # Your settings
+      confirm_os_window_close 0
+      enable_audio_bell       no
+      cursor_shape            beam
+      cursor_blink_interval   0
+      scrollback_lines        10000
+      allow_remote_control    yes
+      shell_integration       enabled
+    '';
+  };
 }
