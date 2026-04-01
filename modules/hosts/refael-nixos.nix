@@ -18,7 +18,7 @@
       inputs.home-manager.nixosModules.home-manager
       "${inputs.self}/home-manager"
 
-      # === USER DECLARATION (must be inside the modules list) ===
+      # === USER DECLARATION (must be INSIDE the modules list) ===
       {
         users.users.refaelsh = {
           isNormalUser = true;
