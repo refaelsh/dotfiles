@@ -17,7 +17,6 @@ in
 
   imports = [
     ./alacritty.nix
-    ./bat.nix
     ./eza.nix
     ./emacs.nix
     ./git.nix

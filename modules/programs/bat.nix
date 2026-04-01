@@ -12,7 +12,6 @@
         # Defaults that match your Kitty Dracula theme
         env = {
           BAT_THEME = "Dracula";
-          BAT_PAGING = "auto"; # or "never" / "always" if you prefer
         };
       };
     in
