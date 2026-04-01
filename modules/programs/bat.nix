@@ -9,7 +9,6 @@
 
         package = pkgs.bat;
 
-        # Defaults that match your Kitty Dracula theme
         env = {
           BAT_THEME = "Dracula";
         };
