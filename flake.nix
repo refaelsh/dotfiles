@@ -18,9 +18,12 @@
     };
 
     nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
+
+    wrappers.url = "github:Lassulus/wrappers";
   };
 
-  outputs = inputs:
+  outputs =
+    inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [ (inputs.import-tree ./modules) ];
 
