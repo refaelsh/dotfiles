@@ -19,7 +19,6 @@ in
     ./alacritty.nix
     ./emacs.nix
     ./git.nix
-    ./fzf.nix
     ./lf.nix
     ./mangohud.nix
     ./mouse.nix
