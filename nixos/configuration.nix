@@ -25,7 +25,6 @@
     ./networking.nix
     ./nix.nix
     ./power-management.nix
-    ./programs.nix
     ./scriptology.nix
     ./security.nix
     ./systemd-services.nix
