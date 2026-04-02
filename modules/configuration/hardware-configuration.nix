@@ -1,7 +1,6 @@
 { inputs, ... }:
 
 {
-  # Dendritic feature — exactly matches your old hardware-configuration.nix
   flake.nixosModules.hardware-configuration = { config, lib, pkgs, ... }:
     {
       imports = [ "${pkgs.path}/nixos/modules/installer/scan/not-detected.nix" ];
