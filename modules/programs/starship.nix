@@ -6,7 +6,6 @@
     {
       programs.starship = {
         enable = true;
-        enableZshIntegration = true;
 
         settings = {
           package = {
@@ -41,7 +40,7 @@
             truncation_length = 8;
             truncation_symbol = "…/";
           };
-          # Dracula theme (exact match to your old config)
+          # Dracula theme (exact match to your old Home-Manager config)
           aws.style = "bold #ffb86c";
           cmd_duration.style = "bold #f1fa8c";
           directory.style = "bold #50fa7b";
