@@ -20,7 +20,6 @@
   imports = [
     ./hardware-configuration.nix
     ./default-applications.nix
-    ./enviornment-system-package.nix
     ./environment-variables.nix
     ./hardware.nix
     ./networking.nix
