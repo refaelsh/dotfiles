@@ -5,14 +5,13 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
+
     import-tree.url = "github:vic/import-tree";
 
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nixmobar.url = "git+https://codeberg.org/xmobar/xmobar.git/?dir=nix";
 
     wrappers.url = "github:Lassulus/wrappers";
   };

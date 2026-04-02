@@ -19,7 +19,6 @@
 
   imports = [
     ./hardware-configuration.nix
-    ./boot-loader.nix
     ./default-applications.nix
     ./enviornment-system-package.nix
     ./environment-variables.nix
