@@ -1,14 +1,8 @@
+{ inputs, ... }:
 {
-  inputs,
-  lib,
-  pkgs,
-  ...
-}:
-{
-  # Simple dendritic feature — exactly like mangohud
-  # Writes ~/.xmobarrc on every rebuild (touches home directory)
+  # Simple dendritic feature — exactly like mangohud / bat / eza
   flake.nixosModules.nixmobar =
-    { ... }:
+    { lib, pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.xmobar ];
 
