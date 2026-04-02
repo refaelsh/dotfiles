@@ -18,9 +18,7 @@ in
   imports = [
     ./alacritty.nix
     ./emacs.nix
-    ./git.nix
     ./lf.nix
-    ./mangohud.nix
     ./mouse.nix
     ./starship.nix
     ./termonad.nix
