@@ -28,7 +28,6 @@
     ./programs.nix
     ./scriptology.nix
     ./security.nix
-    ./services.nix
     ./systemd-services.nix
     ./users.nix
     ./etc-dotfiles.nix
