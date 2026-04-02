@@ -20,7 +20,6 @@ in
     ./emacs.nix
     ./lf.nix
     ./mouse.nix
-    ./starship.nix
     ./termonad.nix
     ./wezterm.nix
     ./zsh.nix
