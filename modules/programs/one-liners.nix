@@ -27,7 +27,6 @@
         wget
         go
         xclip
-        git
         kdiff3
         bitwarden-desktop
         # bitwarden-cli
