@@ -1,13 +1,13 @@
 { inputs, lib, ... }:
 {
   # Simple dendritic feature — exactly like mangohud
-  # Writes ~/.xmobarrc on every rebuild
+  # Writes ~/.xmobarrc on every rebuild (touches home directory)
   flake.nixosModules.nixmobar =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.xmobar ];
 
-      system.activationScripts.xmobarConfig = lib.stringAfter [ "users" ] ''
+      system.activationScripts.xmobarrc = lib.stringAfter [ "users" ] ''
         cat > /home/refaelsh/.xmobarrc << 'EOF'
         Config {
           font            = "Fira Code 13"
