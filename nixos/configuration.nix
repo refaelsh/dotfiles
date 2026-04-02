@@ -7,6 +7,7 @@
 
   documentation.dev.enable = true;
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.android_sdk.accept_license = true;
   time.timeZone = "Asia/Jerusalem";
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -15,11 +16,8 @@
     pathsToLink = [ "/share/zsh" ];
   };
 
-  nixpkgs.config.android_sdk.accept_license = true;
-
   imports = [
     ./hardware-configuration.nix
-    ./default-applications.nix
     ./environment-variables.nix
     ./hardware.nix
     ./networking.nix
