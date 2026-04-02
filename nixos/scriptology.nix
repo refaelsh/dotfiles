@@ -25,7 +25,7 @@
       text = # bash
         ''
           git.sh || true
-          nix flake update --flake ~/repos/dotfiles
+          nix flake update ~/repos/dotfiles
           flakization.sh
           cabal update
           git.sh
