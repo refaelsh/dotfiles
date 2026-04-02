@@ -1,14 +1,15 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
+  # Simple dendritic feature — exactly like mangohud
+  # Pure NixOS, no Home-Manager, no custom flake
   flake.nixosModules.nixmobar =
     { pkgs, ... }:
     {
-      environment.systemPackages = with pkgs; [
-        xmobar
-      ];
+      environment.systemPackages = [ pkgs.xmobar ];
 
-      # Your exact xmobar config, now system-wide
-      environment.etc."xdg/xmobar/xmobarrc".text = ''
+      # Place config in ~/.xmobarrc (the very first place xmobar checks)
+      system.activationScripts.xmobarrc = lib.stringAfter [ "users" ] ''
+        cat > /home/refaelsh/.xmobarrc << 'EOF'
         Config {
           font            = "Fira Code 13"
         , additionalFonts = ["Fira Code 22"]
@@ -44,6 +45,10 @@
             , Run XPropertyLog "_XMONAD_TRAYPAD"
             ]
         }
+        EOF
+
+        chown refaelsh:users /home/refaelsh/.xmobarrc
+        chmod 644 /home/refaelsh/.xmobarrc
       '';
     };
 }
