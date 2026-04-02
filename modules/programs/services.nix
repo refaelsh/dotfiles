@@ -28,7 +28,6 @@
             user = "refaelsh";
           };
           defaultSession = "none+xmonad";
-          # defaultSession = "niri";
         };
 
         xserver = {
@@ -52,7 +51,8 @@
               haskellPackages.xmonad-contrib
               haskellPackages.xmobar
             ];
-            config = builtins.readFile "${inputs.self}/xmonad.hs";
+            # Now using relative path (xmonad.hs is right next to this file)
+            config = builtins.readFile ./xmonad.hs;
           };
         };
       };
