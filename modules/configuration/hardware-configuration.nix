@@ -1,9 +1,9 @@
 { inputs, ... }:
 
 {
-  flake.nixosModules.hardware-configuration = { config, lib, pkgs, ... }:
+  flake.nixosModules.hardware-configuration = { config, lib, ... }:
     {
-      imports = [ "${pkgs.path}/nixos/modules/installer/scan/not-detected.nix" ];
+      imports = [ (inputs.nixpkgs + "/nixos/modules/installer/scan/not-detected.nix") ];
 
       boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
       boot.initrd.kernelModules = [ ];
