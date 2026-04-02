@@ -1,7 +1,7 @@
 { inputs, ... }:
-
 {
-  flake.nixosModules.hardware = { pkgs, ... }:
+  flake.nixosModules.hardware =
+    { pkgs, ... }:
     {
       hardware = {
         enableRedistributableFirmware = true;

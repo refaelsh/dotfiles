@@ -1,7 +1,7 @@
 { inputs, ... }:
-
 {
-  flake.nixosModules.scriptology = { pkgs, ... }:
+  flake.nixosModules.scriptology =
+    { pkgs, ... }:
     {
       environment.systemPackages = with pkgs; [
         (writeShellApplication {

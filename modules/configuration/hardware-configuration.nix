@@ -1,11 +1,18 @@
 { inputs, ... }:
-
 {
-  flake.nixosModules.hardware-configuration = { config, lib, ... }:
+  flake.nixosModules.hardware-configuration =
+    { config, lib, ... }:
     {
       imports = [ (inputs.nixpkgs + "/nixos/modules/installer/scan/not-detected.nix") ];
 
-      boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+      boot.initrd.availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "nvme"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+      ];
       boot.initrd.kernelModules = [ ];
       boot.kernelModules = [ "kvm-intel" ];
       boot.extraModulePackages = [ ];
@@ -18,7 +25,10 @@
       fileSystems."/boot" = {
         device = "/dev/disk/by-uuid/4800-9EA8";
         fsType = "vfat";
-        options = [ "fmask=0077" "dmask=0077" ];
+        options = [
+          "fmask=0077"
+          "dmask=0077"
+        ];
       };
 
       swapDevices = [ { device = "/dev/disk/by-uuid/6edb503d-8105-4483-9d00-edf430bba983"; } ];

@@ -1,7 +1,7 @@
 { inputs, ... }:
-
 {
-  flake.nixosModules.power-management = { ... }:
+  flake.nixosModules.power-management =
+    { ... }:
     {
       powerManagement = {
         enable = true;

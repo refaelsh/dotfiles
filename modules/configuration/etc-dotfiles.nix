@@ -1,7 +1,7 @@
 { inputs, ... }:
-
 {
-  flake.nixosModules.etc-dotfiles = { ... }:
+  flake.nixosModules.etc-dotfiles =
+    { ... }:
     {
       environment.etc."brave/policies/managed/policies.json".text = ''
         {

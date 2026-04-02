@@ -1,7 +1,7 @@
 { inputs, ... }:
-
 {
-  flake.nixosModules.environment-variables = { ... }:
+  flake.nixosModules.environment-variables =
+    { ... }:
     {
       environment.variables = {
         EDITOR = "nvim";

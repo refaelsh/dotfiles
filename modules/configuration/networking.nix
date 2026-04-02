@@ -1,7 +1,7 @@
 { inputs, ... }:
-
 {
-  flake.nixosModules.networking = { ... }:
+  flake.nixosModules.networking =
+    { ... }:
     {
       networking = {
         hostName = "nixos";

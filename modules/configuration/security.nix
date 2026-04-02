@@ -1,7 +1,7 @@
 { inputs, ... }:
-
 {
-  flake.nixosModules.security = { ... }:
+  flake.nixosModules.security =
+    { ... }:
     {
       security = {
         rtkit.enable = true;
@@ -9,7 +9,12 @@
           extraRules = [
             {
               users = [ "refaelsh" ];
-              commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ];
+              commands = [
+                {
+                  command = "ALL";
+                  options = [ "NOPASSWD" ];
+                }
+              ];
             }
           ];
         };
