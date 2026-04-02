@@ -21,8 +21,6 @@
       # One line = all your features (brave, kitty, starship, git, etc.) are pulled in automatically
       inputs.self.nixosModules.nixos
 
-      "${inputs.self}/nixos/configuration.nix"
-
       # KBDD overlay
       {
         nixpkgs.overlays = [
