@@ -1,0 +1,37 @@
+{ inputs, ... }:
+{
+  # Simple dendritic feature — exactly matches your old nixos/fonts.nix
+  flake.nixosModules.fonts =
+    { pkgs, ... }:
+    {
+      fonts = {
+        fontconfig.enable = true;
+
+        packages = with pkgs; [
+          nerd-fonts.inconsolata
+          nerd-fonts.fira-code
+          nerd-fonts.fira-mono
+          hack-font
+          cascadia-code
+          hasklig
+          fira-code-symbols
+          fira-code
+          cantarell-fonts
+          symbola
+          source-code-pro
+          font-awesome
+          font-awesome_5
+          font-awesome_4
+          line-awesome
+          powerline-fonts
+          ubuntu-classic
+          mononoki
+          unifont
+          dejavu_fonts
+          symbola
+          noto-fonts
+          libertine
+        ];
+      };
+    };
+}
