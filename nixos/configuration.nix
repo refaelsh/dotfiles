@@ -17,16 +17,6 @@
   };
 
   imports = [
-    ./hardware-configuration.nix
-    ./environment-variables.nix
-    ./hardware.nix
-    ./networking.nix
-    ./nix.nix
-    ./power-management.nix
-    ./scriptology.nix
-    ./security.nix
     ./systemd-services.nix
-    ./users.nix
-    ./etc-dotfiles.nix
   ];
 }
