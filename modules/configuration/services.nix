@@ -27,8 +27,8 @@
             enable = true;
             user = "refaelsh";
           };
-          defaultSession = "none+xmonad";
-          # defaultSession = "niri";
+          # defaultSession = "none+xmonad";
+          defaultSession = "niri";
         };
 
         xserver = {
