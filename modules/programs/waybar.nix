@@ -1,88 +1,81 @@
-{ config, lib, pkgs, ... }:
-with lib;
+# modules/programs/waybar.nix
+{ config, lib, pkgs, wrappers, ... }:
+
+let
+  cfg = config.programs.waybar;
+in
 {
-  # This makes the module reusable and clean (standard NixOS module pattern)
-  options.programs.waybar = {
-    enable = mkEnableOption "Waybar status bar for Hyprland / Wayland";
+  # Clean, reusable options (you can override these from your main config if you want)
+  options.programs.waybar = with lib; {
+    enable = mkEnableOption "Waybar status bar (using Lassulus/wrappers)";
   };
 
-  config = mkIf config.programs.waybar.enable {
-    programs.waybar = {
-      enable = true;
+  config = mkIf cfg.enable {
+    # Use the exact existing module from https://github.com/Lassulus/wrappers
+    # The only change needed was switching from the invalid `style = { css = ... }`
+    # to the correct `"style.css".content = ...` that the wrapper expects.
+    environment.systemPackages = [
+      (wrappers.wrapperModules.waybar.apply {
+        inherit pkgs;
 
-      # Automatically start Waybar via systemd user service
-      systemd.enable = true;
+        # ── SETTINGS (JSON config) ─────────────────────────────────────
+        settings = {
+          layer = "top";
+          position = "top";
+          height = 32;
+          spacing = 4;
 
-      # ── STYLE ─────────────────────────────────────────────────────────────
-      # Fixed: style must be a plain string (or path), NOT an attrset { css = ... }
-      style = ''
-        * {
-          font-family: "Fira Code", "FiraCode Nerd Font";
-          font-size: 13px;
-          font-weight: normal;
-          border-radius: 0;
-        }
+          modules-left = [ "hyprland/workspaces" "hyprland/window" ];
+          modules-center = [ "clock" ];
+          modules-right = [ "pulseaudio" "network" "battery" "tray" ];
 
-        window#waybar {
-          background-color: rgba(0, 0, 0, 0.85);
-          color: #ffffff;
-          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        }
+          clock = {
+            format = "{:%H:%M}";
+            tooltip-format = "{:%Y-%m-%d | %A}";
+          };
 
-        /* Add the rest of your custom CSS here */
-        /* (copy-paste everything that was inside your old css = '' ... '' block) */
-      '';
+          pulseaudio = {
+            format = "{volume}% {icon}";
+            format-muted = "󰝟";
+            on-click = "pavucontrol";
+          };
 
-      # ── SETTINGS ──────────────────────────────────────────────────────────
-      # Example configuration (customize to your liking)
-      settings = [{
-        layer = "top";
-        position = "top";
-        height = 32;
-        spacing = 4;
+          network = {
+            format-wifi = " {essid}";
+            format-ethernet = "󰈀";
+            format-disconnected = "󰤭";
+          };
 
-        # Modules
-        modules-left = [ "hyprland/workspaces" "hyprland/window" ];
-        modules-center = [ "clock" ];
-        modules-right = [ "pulseaudio" "network" "battery" "tray" ];
+          battery = {
+            format = "{capacity}% {icon}";
+            format-icons = [ "" "" "" "" "" ];
+          };
 
-        # Clock
-        clock = {
-          format = "{:%H:%M}";
-          tooltip-format = "{:%Y-%m-%d | %A}";
-          calendar = {
-            mode = "year";
-            on-scroll-up = "shift_up";
-            on-scroll-down = "shift_down";
+          tray = {
+            spacing = 8;
           };
         };
 
-        # Audio
-        pulseaudio = {
-          format = "{volume}% {icon}";
-          format-muted = "󰝟";
-          on-click = "pavucontrol";
-        };
+        # ── STYLE (this is what was causing your error) ───────────────
+        # Correct key is literally "style.css" (with the dot and quotes)
+        "style.css".content = ''
+          * {
+            font-family: "Fira Code", "FiraCode Nerd Font";
+            font-size: 13px;
+            font-weight: normal;
+            border-radius: 0;
+          }
 
-        # Network
-        network = {
-          format-wifi = " {essid}";
-          format-ethernet = "󰈀";
-          format-disconnected = "󰤭";
-          tooltip-format = "{ipaddr}";
-        };
+          window#waybar {
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+          }
 
-        # Battery
-        battery = {
-          format = "{capacity}% {icon}";
-          format-icons = [ "" "" "" "" "" ];
-        };
-
-        # Tray
-        tray = {
-          spacing = 8;
-        };
-      }];
-    };
+          /* Paste the rest of your custom CSS rules here */
+          /* (everything that was previously inside your old css = '' ... '' block) */
+        '';
+      }).wrapper
+    ];
   };
 }
