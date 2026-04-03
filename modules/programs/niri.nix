@@ -16,6 +16,13 @@
               # "swaybg -i /path/to/wallpaper.jpg"
             ];
 
+            # Default terminal: kitty on Mod + Enter
+            binds = {
+              "Mod+Enter" = {
+                spawn = [ "kitty" ];
+              };
+            };
+
             # input.keyboard.xkb = {
             #   layout = "us";
             # };
