@@ -57,7 +57,7 @@ in
         };
 
         # ── STYLE (this is what was causing your error) ───────────────
-        # Correct key is literally "style.css" (with the dot and quotes)
+        # Correct key for the Lassulus wrapper is literally "style.css".content
         "style.css".content = ''
           * {
             font-family: "Fira Code", "FiraCode Nerd Font";
@@ -72,8 +72,7 @@ in
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
           }
 
-          /* Paste the rest of your custom CSS rules here */
-          /* (everything that was previously inside your old css = '' ... '' block) */
+          /* Add your additional custom CSS rules below this line */
         '';
       }).wrapper
     ];
