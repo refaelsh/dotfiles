@@ -1,5 +1,11 @@
 # modules/programs/waybar.nix
-{ config, lib, pkgs, wrappers, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   cfg = config.programs.waybar;
@@ -13,7 +19,7 @@ in
   config = lib.mkIf cfg.enable {
     # Use the exact existing module from https://github.com/Lassulus/wrappers
     environment.systemPackages = [
-      (wrappers.wrapperModules.waybar.apply {
+      (inputs.wrappers.wrapperModules.waybar.apply {
         inherit pkgs;
 
         # ── SETTINGS (JSON config) ─────────────────────────────────────
@@ -23,9 +29,17 @@ in
           height = 32;
           spacing = 4;
 
-          modules-left = [ "hyprland/workspaces" "hyprland/window" ];
+          modules-left = [
+            "hyprland/workspaces"
+            "hyprland/window"
+          ];
           modules-center = [ "clock" ];
-          modules-right = [ "pulseaudio" "network" "battery" "tray" ];
+          modules-right = [
+            "pulseaudio"
+            "network"
+            "battery"
+            "tray"
+          ];
 
           clock = {
             format = "{:%H:%M}";
@@ -46,7 +60,13 @@ in
 
           battery = {
             format = "{capacity}% {icon}";
-            format-icons = [ "" "" "" "" "" ];
+            format-icons = [
+              ""
+              ""
+              ""
+              ""
+              ""
+            ];
           };
 
           tray = {
