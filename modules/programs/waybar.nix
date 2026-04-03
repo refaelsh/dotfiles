@@ -5,15 +5,13 @@ let
   cfg = config.programs.waybar;
 in
 {
-  # Clean, reusable options (you can override these from your main config if you want)
-  options.programs.waybar = with lib; {
-    enable = mkEnableOption "Waybar status bar (using Lassulus/wrappers)";
+  # Options so you can enable/disable it cleanly from your main config
+  options.programs.waybar = {
+    enable = lib.mkEnableOption "Waybar status bar (using Lassulus/wrappers)";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Use the exact existing module from https://github.com/Lassulus/wrappers
-    # The only change needed was switching from the invalid `style = { css = ... }`
-    # to the correct `"style.css".content = ...` that the wrapper expects.
     environment.systemPackages = [
       (wrappers.wrapperModules.waybar.apply {
         inherit pkgs;
@@ -56,8 +54,8 @@ in
           };
         };
 
-        # ── STYLE (this is what was causing your error) ───────────────
-        # Correct key for the Lassulus wrapper is literally "style.css".content
+        # ── STYLE ─────────────────────────────────────────────────────
+        # This is the exact key the Lassulus wrapper expects
         "style.css".content = ''
           * {
             font-family: "Fira Code", "FiraCode Nerd Font";
@@ -72,7 +70,7 @@ in
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
           }
 
-          /* Add your additional custom CSS rules below this line */
+          /* Add the rest of your custom CSS rules here */
         '';
       }).wrapper
     ];
