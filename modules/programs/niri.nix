@@ -25,7 +25,7 @@
 
           # Mod + Enter opens kitty
           binds = {
-            "Mod+Enter" = {
+            "mod+enter" = {
               spawn = [ "kitty" ];
             };
           };
