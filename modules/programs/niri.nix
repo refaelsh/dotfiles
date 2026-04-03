@@ -1,37 +1,35 @@
 { inputs, ... }:
 {
-  # Dendritic feature for niri (Wayland compositor)
+  # Dendritic feature using the official Lassulus/wrappers niri module
   flake.nixosModules.niri =
     { pkgs, ... }:
+    let
+      niri-wrapped =
+        (inputs.wrappers.wrapperModules.niri.apply {
+          inherit pkgs;
+
+          # Your niri configuration (KDL syntax as string)
+          settings = ''
+            spawn-at-startup = [
+              "waybar"
+              # "dunst"
+              # "swaybg -i /path/to/wallpaper.jpg"
+            ]
+
+            input "keyboard" {
+              xkb {
+                layout = "us"
+              }
+            }
+
+            prefer-no-csd = true
+            cursor {
+              hide-when-typing = true
+            }
+          '';
+        }).wrapper;
+    in
     {
-      programs.niri = {
-        enable = true;
-
-        # Optional: your niri config (you can expand this)
-        settings = {
-          # Example minimal config - customize as needed
-          spawn-at-startup = [
-            "waybar"
-            # "dunst"
-            # "swaybg -i /path/to/wallpaper.jpg"
-          ];
-
-          # Keyboard layout
-          input.keyboard.xkb = {
-            layout = "us";
-            # variant = "";
-          };
-
-          # General preferences
-          prefer-no-csd = true;
-          cursor.hide-when-typing = true;
-        };
-      };
-
-      # Required for niri to work nicely
-      environment.systemPackages = with pkgs; [
-        niri
-        xwayland-satellite # for X11 apps
-      ];
+      environment.systemPackages = [ niri-wrapped ];
     };
 }
