@@ -8,21 +8,17 @@
         (inputs.wrappers.wrapperModules.waybar.apply {
           inherit pkgs;
 
-          # Your Waybar JSON config goes here
+          # Your Waybar JSON config
           settings = {
             mainBar = {
               layer = "top";
               position = "top";
               height = 30;
-              # Add your modules here (workspaces, clock, battery, etc.)
-              # Example:
-              # modules-left = [ "hyprland/workspaces" ];
-              # modules-center = [ "clock" ];
-              # modules-right = [ "pulseaudio" "network" "battery" "tray" ];
+              # Add your modules here (workspaces, clock, etc.)
             };
           };
 
-          # Your Waybar CSS style (this was the missing piece)
+          # ← This is the correct option name
           style.css = ''
             * {
               font-family: "Fira Code", "FiraCode Nerd Font";
@@ -31,7 +27,6 @@
             window#waybar {
               background: #282A36;
               color: #F8F8F2;
-              border-bottom: 2px solid #bd93f9;
             }
             /* Add the rest of your CSS here */
           '';
