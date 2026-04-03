@@ -1,39 +1,36 @@
 { inputs, ... }:
+
 {
   # Dendritic feature using the official Lassulus/wrappers niri module
-  flake.nixosModules.niri =
-    { pkgs, ... }:
+  # Mod + Enter opens kitty (pure Nix attrset, no raw KDL)
+  flake.nixosModules.niri = { pkgs, ... }:
     let
-      niri-wrapped =
-        (inputs.wrappers.wrapperModules.niri.apply {
-          inherit pkgs;
+      niri-wrapped = (inputs.wrappers.wrapperModules.niri.apply {
+        inherit pkgs;
 
-          # Proper Nix attrset (not a string)
-          settings = {
-            spawn-at-startup = [
-              "waybar"
-              # "dunst"
-              # "swaybg -i /path/to/wallpaper.jpg"
-            ];
+        settings = {
+          spawn-at-startup = [
+            "waybar"
+          ];
 
-            # Default terminal: kitty on Mod + Enter
-            binds = {
-              "Mod+Enter" = {
-                spawn = [ "kitty" ];
-              };
-            };
-
-            # input.keyboard.xkb = {
-            #   layout = "us";
-            # };
-            #
-            # prefer-no-csd = true;
-            #
-            # cursor = {
-            #   hide-when-typing = true;
-            # };
+          input.keyboard.xkb = {
+            layout = "us";
           };
-        }).wrapper;
+
+          prefer-no-csd = true;
+
+          cursor = {
+            hide-when-typing = true;
+          };
+
+          # Mod + Enter opens kitty
+          binds = {
+            "Mod+Enter" = {
+              spawn = [ "kitty" ];
+            };
+          };
+        };
+      }).wrapper;
     in
     {
       environment.systemPackages = [ niri-wrapped ];
