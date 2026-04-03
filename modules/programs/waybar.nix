@@ -17,7 +17,7 @@
           };
         };
 
-        # ← This is the correct option (style.css)
+        # ← CORRECT option name
         style.css = ''
           * {
             font-family: "Fira Code", "FiraCode Nerd Font";
