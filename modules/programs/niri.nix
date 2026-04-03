@@ -16,15 +16,15 @@
               # "swaybg -i /path/to/wallpaper.jpg"
             ];
 
-            input.keyboard.xkb = {
-              layout = "us";
-            };
-
-            prefer-no-csd = true;
-
-            cursor = {
-              hide-when-typing = true;
-            };
+            # input.keyboard.xkb = {
+            #   layout = "us";
+            # };
+            #
+            # prefer-no-csd = true;
+            #
+            # cursor = {
+            #   hide-when-typing = true;
+            # };
           };
         }).wrapper;
     in
