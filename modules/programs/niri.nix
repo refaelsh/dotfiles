@@ -18,6 +18,9 @@
         }).wrapper;
     in
     {
-      environment.systemPackages = [ niri-wrapped ];
+      programs.niri = {
+        enable = true;
+        package = niri-wrapped; # ← this is the important line
+      };
     };
 }
