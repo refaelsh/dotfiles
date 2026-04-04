@@ -193,31 +193,6 @@
               "Mod+Shift+I" = {
                 move-workspace-up = null;
               };
-
-              # Mouse wheel (with cooldown so it doesn't fly)
-              "Mod+WheelScrollDown" = {
-                cooldown-ms = 150;
-                focus-workspace-down = null;
-              };
-              "Mod+WheelScrollUp" = {
-                cooldown-ms = 150;
-                focus-workspace-up = null;
-              };
-              "Mod+Ctrl+WheelScrollDown" = {
-                cooldown-ms = 150;
-                move-column-to-workspace-down = null;
-              };
-              "Mod+Ctrl+WheelScrollUp" = {
-                cooldown-ms = 150;
-                move-column-to-workspace-up = null;
-              };
-
-              "Mod+WheelScrollRight" = {
-                focus-column-right = null;
-              };
-              "Mod+WheelScrollLeft" = {
-                focus-column-left = null;
-              };
             };
           };
         }).wrapper;
