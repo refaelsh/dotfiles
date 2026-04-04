@@ -10,14 +10,18 @@
           show-hotkey-overlay = null;
         };
 
-        # Core important actions
+        # Core important actions (repeat = false moved to _attrs)
         "Mod+Q" = {
-          repeat = false;
           close-window = null;
+          _attrs = {
+            repeat = false;
+          };
         };
         "Mod+O" = {
-          repeat = false;
           toggle-overview = null;
+          _attrs = {
+            repeat = false;
+          };
         };
 
         # Basic navigation (arrows + hjkl)
@@ -97,7 +101,7 @@
           move-column-to-workspace-up = null;
         };
 
-        # Mouse wheel (fixed syntax for the wrapper)
+        # Mouse wheel
         "Mod+WheelScrollDown" = {
           focus-workspace-down = null;
           _attrs = {
