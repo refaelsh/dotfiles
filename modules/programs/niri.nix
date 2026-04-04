@@ -275,7 +275,7 @@
 
       customBinds = {
         "Mod+Return" = {
-          spawn = [ "${pkgs.kitty}/bin/kitty" ];
+          spawn = [ "kitty" ];
           _attrs = {
             hotkey-overlay-title = "Open terminal: kitty";
           };
