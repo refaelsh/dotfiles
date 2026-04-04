@@ -135,7 +135,7 @@
 
       customBinds = {
         "Mod+Return" = {
-          spawn = [ "${pkgs.kitty}/bin/kitty" ];
+          spawn = [ "kitty" ];
         };
       };
 
