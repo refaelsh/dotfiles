@@ -15,7 +15,7 @@
             binds = {
               # Your existing custom bind (kept)
               "Mod+Return" = {
-                spawn = [ "${pkgs.kitty}/bin/kitty" ];
+                spawn = [ "kitty" ];
               };
 
               # ── All the default keybindings from niri (restored) ──
@@ -76,24 +76,6 @@
               "XF86AudioNext" = {
                 allow-when-locked = true;
                 spawn-sh = "playerctl next";
-              };
-              "XF86MonBrightnessUp" = {
-                allow-when-locked = true;
-                spawn = [
-                  "brightnessctl"
-                  "--class=backlight"
-                  "set"
-                  "+10%"
-                ];
-              };
-              "XF86MonBrightnessDown" = {
-                allow-when-locked = true;
-                spawn = [
-                  "brightnessctl"
-                  "--class=backlight"
-                  "set"
-                  "10%-"
-                ];
               };
 
               "Mod+O" = {
