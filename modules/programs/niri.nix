@@ -147,31 +147,34 @@
         };
       };
 
-      # ── Numeric workspace keys (Mod+1 … Mod+9) ──
-      numericBinds = lib.genAttrs (map toString (lib.range 1 9)) (
-        n:
-        let
-          num = lib.toInt n;
-        in
-        {
-          "Mod+${n}" = {
-            focus-workspace = num;
-          };
-          "Mod+Ctrl+${n}" = {
-            move-column-to-workspace = num;
-          };
-          "Mod+Ctrl+Shift+${n}" = {
-            move-window-to-workspace = num;
-          };
-        }
+      # ── Numeric workspace keys (Mod+1 … Mod+9) ── (now flat, no more build error)
+      numericBinds = lib.mergeAttrsList (
+        map (
+          n:
+          let
+            s = toString n;
+          in
+          {
+            "Mod+${s}" = {
+              focus-workspace = n;
+            };
+            "Mod+Ctrl+${s}" = {
+              move-column-to-workspace = n;
+            };
+            "Mod+Ctrl+Shift+${s}" = {
+              move-window-to-workspace = n;
+            };
+          }
+        ) (lib.range 1 9)
       );
 
       customBinds = {
         "Mod+Return" = {
           spawn = [ "${pkgs.kitty}/bin/kitty" ];
+          hotkey-overlay-title = "Open terminal: kitty"; # ← appears in Mod+Shift+/
         };
 
-        # Restart niri (new – reloads your config instantly)
+        # Restart niri
         "Mod+Shift+R" = {
           spawn = [
             "niri"
@@ -179,6 +182,7 @@
             "action"
             "restart"
           ];
+          hotkey-overlay-title = "Restart niri"; # ← appears in Mod+Shift+/
         };
       };
 
