@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   flake.nixosModules.niri =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     let
       # ── Only the "important hotkeys" from niri's default-config.kdl ──
       importantBinds = {
@@ -75,7 +75,7 @@
           move-window-up = null;
         };
 
-        # WORKSPACE / DESKTOP SWITCHING & MOVING (column level)
+        # WORKSPACE / DESKTOP SWITCHING & MOVING (relative)
         "Mod+Page_Down" = {
           focus-workspace-down = null;
         };
@@ -101,7 +101,7 @@
           move-column-to-workspace-up = null;
         };
 
-        # NEW: Move individual WINDOW to different workspace/desktop
+        # Move individual WINDOW to different workspace/desktop (relative)
         "Mod+Ctrl+Shift+Page_Down" = {
           move-window-to-workspace-down = null;
         };
@@ -147,9 +147,38 @@
         };
       };
 
+      # ── Numeric workspace keys (Mod+1 … Mod+9) ──
+      numericBinds = lib.genAttrs (map toString (lib.range 1 9)) (
+        n:
+        let
+          num = lib.toInt n;
+        in
+        {
+          "Mod+${n}" = {
+            focus-workspace = num;
+          };
+          "Mod+Ctrl+${n}" = {
+            move-column-to-workspace = num;
+          };
+          "Mod+Ctrl+Shift+${n}" = {
+            move-window-to-workspace = num;
+          };
+        }
+      );
+
       customBinds = {
         "Mod+Return" = {
           spawn = [ "${pkgs.kitty}/bin/kitty" ];
+        };
+
+        # Restart niri (new – reloads your config instantly)
+        "Mod+Shift+R" = {
+          spawn = [
+            "niri"
+            "msg"
+            "action"
+            "restart"
+          ];
         };
       };
 
@@ -158,7 +187,7 @@
           inherit pkgs;
           settings = {
             spawn-at-startup = [ "waybar" ];
-            binds = importantBinds // customBinds;
+            binds = importantBinds // numericBinds // customBinds;
           };
         }).wrapper;
     in
