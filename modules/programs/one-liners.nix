@@ -6,6 +6,7 @@
     { pkgs, ... }:
     {
       programs = {
+        zsh.enable = true;
         nm-applet.enable = true;
         dconf.enable = true;
         gamemode.enable = true;
