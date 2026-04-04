@@ -1,7 +1,5 @@
 { inputs, ... }:
 {
-  # Dendritic feature using the official Lassulus/wrappers niri module
-  # Mod + Enter opens kitty (pure Nix attrset, no raw KDL)
   flake.nixosModules.niri =
     { pkgs, ... }:
     let
@@ -16,7 +14,7 @@
 
             binds = {
               "Mod+Return" = {
-                spawn = [ "kitty" ];
+                spawn = "kitty";
               };
             };
           };
