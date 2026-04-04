@@ -13,7 +13,7 @@
             ];
 
             binds."Mod+Return" = {
-              spawn-sh = "kitty";
+              spawn = "kitty";
             };
           };
         }).wrapper;
