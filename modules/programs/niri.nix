@@ -204,36 +204,6 @@
           };
         };
 
-        # Mouse wheel
-        "Mod+WheelScrollDown" = {
-          focus-workspace-down = null;
-          _attrs = {
-            cooldown-ms = 150;
-            hotkey-overlay-title = "Focus workspace down (wheel)";
-          };
-        };
-        "Mod+WheelScrollUp" = {
-          focus-workspace-up = null;
-          _attrs = {
-            cooldown-ms = 150;
-            hotkey-overlay-title = "Focus workspace up (wheel)";
-          };
-        };
-        "Mod+Ctrl+WheelScrollDown" = {
-          move-column-to-workspace-down = null;
-          _attrs = {
-            cooldown-ms = 150;
-            hotkey-overlay-title = "Move column to workspace down (wheel)";
-          };
-        };
-        "Mod+Ctrl+WheelScrollUp" = {
-          move-column-to-workspace-up = null;
-          _attrs = {
-            cooldown-ms = 150;
-            hotkey-overlay-title = "Move column to workspace up (wheel)";
-          };
-        };
-
         # Launcher
         "Mod+D" = {
           spawn = [ "fuzzel" ];
