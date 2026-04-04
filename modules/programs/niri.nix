@@ -12,15 +12,12 @@
               "waybar"
             ];
 
-            # binds."Mod+Return".spawn = "${pkgs.kitty}/bin/kitty";
-            # inside your niri feature
-            settings.extraConfig = ''
-              binds {
-                  Mod+Return {
-                      spawn "${pkgs.kitty}/bin/kitty";
-                  }
-              }
-            '';
+            # In your dendritic niri feature/module
+            settings.binds."Mod+Return" = {
+              spawn = [ "${pkgs.kitty}/bin/kitty" ]; # ← list, not string
+              # optional but nice for the hotkey overlay
+              hotkey-overlay-title = "Open terminal";
+            };
           };
         }).wrapper;
     in
