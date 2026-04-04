@@ -147,7 +147,7 @@
         };
       };
 
-      # ── Numeric workspace keys (Mod+1 … Mod+9) ── (now flat, no more build error)
+      # ── Numeric workspace keys (Mod+1 … Mod+9) ──
       numericBinds = lib.mergeAttrsList (
         map (
           n:
@@ -171,7 +171,9 @@
       customBinds = {
         "Mod+Return" = {
           spawn = [ "${pkgs.kitty}/bin/kitty" ];
-          hotkey-overlay-title = "Open terminal: kitty"; # ← appears in Mod+Shift+/
+          _attrs = {
+            hotkey-overlay-title = "Open terminal: kitty";
+          }; # ← now shows in overlay
         };
 
         # Restart niri
@@ -182,7 +184,9 @@
             "action"
             "restart"
           ];
-          hotkey-overlay-title = "Restart niri"; # ← appears in Mod+Shift+/
+          _attrs = {
+            hotkey-overlay-title = "Restart niri";
+          }; # ← now shows in overlay
         };
       };
 
