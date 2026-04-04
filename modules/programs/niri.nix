@@ -13,7 +13,7 @@
             ];
 
             # In your dendritic niri feature/module
-            settings.binds."Mod+Return" = {
+            binds."Mod+Return" = {
               spawn = [ "${pkgs.kitty}/bin/kitty" ]; # ← list, not string
               # optional but nice for the hotkey overlay
               hotkey-overlay-title = "Open terminal";
