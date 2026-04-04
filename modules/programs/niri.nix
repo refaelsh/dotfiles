@@ -12,9 +12,7 @@
               "waybar"
             ];
 
-            binds."Mod+Return" = {
-              spawn = "kitty";
-            };
+            binds."Mod+Return".spawn = "${pkgs.kitty}/bin/kitty";
           };
         }).wrapper;
     in
