@@ -290,12 +290,12 @@
           };
         };
 
-        # Window maximize / unmaximize
+        # Window maximize / unmaximize (action first, then _attrs — this fixes the build)
         "Mod+F" = {
+          toggle-window-maximized = null;
           _attrs = {
             hotkey-overlay-title = "Toggle window maximized";
           };
-          toggle-window-maximized = null;
         };
       };
 
