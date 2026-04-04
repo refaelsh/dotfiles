@@ -12,7 +12,15 @@
               "waybar"
             ];
 
-            binds."Mod+Return".spawn = "${pkgs.kitty}/bin/kitty";
+            # binds."Mod+Return".spawn = "${pkgs.kitty}/bin/kitty";
+            # inside your niri feature
+            settings.extraConfig = ''
+              binds {
+                  Mod+Return {
+                      spawn "${pkgs.kitty}/bin/kitty";
+                  }
+              }
+            '';
           };
         }).wrapper;
     in
