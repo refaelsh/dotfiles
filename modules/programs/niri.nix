@@ -12,10 +12,8 @@
               "waybar"
             ];
 
-            binds = {
-              "Mod+Return" = {
-                spawn = "kitty";
-              };
+            binds."Mod+Return" = {
+              spawn-sh = "kitty";
             };
           };
         }).wrapper;
