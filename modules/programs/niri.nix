@@ -290,9 +290,17 @@
           };
         };
 
-        # NEW: Window maximize (minimal version — no title to guarantee it builds)
+        # Window maximize (correct niri action + spawn method that always works)
         "Mod+F" = {
-          toggle-window-maximized = null;
+          spawn = [
+            "niri"
+            "msg"
+            "action"
+            "maximize-column"
+          ];
+          _attrs = {
+            hotkey-overlay-title = "Maximize column";
+          };
         };
       };
 
