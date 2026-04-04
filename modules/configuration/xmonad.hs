@@ -20,7 +20,7 @@ import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce
 
 myTerminal :: String
-myTerminal = "wezterm"
+myTerminal = "kitty"
 
 myStartupHook :: X ()
 myStartupHook = do
