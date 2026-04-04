@@ -290,17 +290,10 @@
           };
         };
 
-        # Window maximize (correct niri action + spawn method that always works)
+        # Window/column maximize — direct niri action (this is the correct one)
         "Mod+F" = {
-          spawn = [
-            "niri"
-            "msg"
-            "action"
-            "maximize-column"
-          ];
-          _attrs = {
-            hotkey-overlay-title = "Maximize column";
-          };
+          maximize-column = null;
+          hotkey-overlay-title = "Maximize column";
         };
       };
 
