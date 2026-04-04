@@ -290,10 +290,9 @@
           };
         };
 
-        # Window maximize / unmaximize (correct syntax for the wrapper)
+        # NEW: Window maximize (minimal version — no title to guarantee it builds)
         "Mod+F" = {
           toggle-window-maximized = null;
-          hotkey-overlay-title = "Toggle window maximized";
         };
       };
 
