@@ -275,26 +275,22 @@
 
       customBinds = {
         "Mod+Return" = {
-          spawn = [ "${pkgs.kitty}/bin/kitty" ];
+          spawn = [ "kitty" ];
           _attrs = {
             hotkey-overlay-title = "Open terminal: kitty";
           };
         };
 
-        # Restart niri
+        # Restart niri (now with spawn-sh + repeat=false for maximum reliability)
         "Mod+Shift+R" = {
-          spawn = [
-            "niri"
-            "msg"
-            "action"
-            "restart"
-          ];
+          spawn-sh = "niri msg action restart";
           _attrs = {
+            repeat = false;
             hotkey-overlay-title = "Restart niri";
           };
         };
 
-        # NEW: Window maximize / unmaximize
+        # Window maximize
         "Mod+F" = {
           toggle-window-maximized = null;
           _attrs = {
