@@ -10,7 +10,7 @@
           show-hotkey-overlay = null;
         };
 
-        # Core important actions (repeat = false moved to _attrs)
+        # Core important actions
         "Mod+Q" = {
           close-window = null;
           _attrs = {
@@ -75,7 +75,7 @@
           move-window-up = null;
         };
 
-        # WORKSPACE / DESKTOP SWITCHING & MOVING
+        # WORKSPACE / DESKTOP SWITCHING & MOVING (column level)
         "Mod+Page_Down" = {
           focus-workspace-down = null;
         };
@@ -99,6 +99,20 @@
         };
         "Mod+Ctrl+I" = {
           move-column-to-workspace-up = null;
+        };
+
+        # NEW: Move individual WINDOW to different workspace/desktop
+        "Mod+Ctrl+Shift+Page_Down" = {
+          move-window-to-workspace-down = null;
+        };
+        "Mod+Ctrl+Shift+Page_Up" = {
+          move-window-to-workspace-up = null;
+        };
+        "Mod+Ctrl+Shift+U" = {
+          move-window-to-workspace-down = null;
+        };
+        "Mod+Ctrl+Shift+I" = {
+          move-window-to-workspace-up = null;
         };
 
         # Mouse wheel
@@ -135,7 +149,7 @@
 
       customBinds = {
         "Mod+Return" = {
-          spawn = [ "kitty" ];
+          spawn = [ "${pkgs.kitty}/bin/kitty" ];
         };
       };
 
