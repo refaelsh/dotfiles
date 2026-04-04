@@ -281,16 +281,21 @@
           };
         };
 
-        # Restart niri
+        # Restart niri — the better/official way
         "Mod+Shift+R" = {
-          spawn-sh = "niri msg action restart";
+          spawn = [
+            "niri"
+            "msg"
+            "action"
+            "restart"
+          ];
           _attrs = {
             repeat = false;
             hotkey-overlay-title = "Restart niri";
           };
         };
 
-        # Window/column maximize (correct niri action + wrapper-compatible syntax)
+        # Window/column maximize
         "Mod+F" = {
           maximize-column = null;
           _attrs = {
