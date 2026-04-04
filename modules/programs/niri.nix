@@ -71,7 +71,7 @@
           move-window-up = null;
         };
 
-        # WORKSPACE / DESKTOP SWITCHING & MOVING (the part you needed)
+        # WORKSPACE / DESKTOP SWITCHING & MOVING
         "Mod+Page_Down" = {
           focus-workspace-down = null;
         };
@@ -97,25 +97,33 @@
           move-column-to-workspace-up = null;
         };
 
-        # Mouse wheel
+        # Mouse wheel (fixed syntax for the wrapper)
         "Mod+WheelScrollDown" = {
-          cooldown-ms = 150;
           focus-workspace-down = null;
+          _attrs = {
+            cooldown-ms = 150;
+          };
         };
         "Mod+WheelScrollUp" = {
-          cooldown-ms = 150;
           focus-workspace-up = null;
+          _attrs = {
+            cooldown-ms = 150;
+          };
         };
         "Mod+Ctrl+WheelScrollDown" = {
-          cooldown-ms = 150;
           move-column-to-workspace-down = null;
+          _attrs = {
+            cooldown-ms = 150;
+          };
         };
         "Mod+Ctrl+WheelScrollUp" = {
-          cooldown-ms = 150;
           move-column-to-workspace-up = null;
+          _attrs = {
+            cooldown-ms = 150;
+          };
         };
 
-        # Launcher (important one)
+        # Launcher
         "Mod+D" = {
           spawn = [ "fuzzel" ];
         };
