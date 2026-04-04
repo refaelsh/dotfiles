@@ -12,7 +12,6 @@
         gamemode.enable = true;
         # adb.enable = true;
         xwayland.enable = true;
-        niri.enable = true;
       };
       environment.systemPackages = with pkgs; [
         delta
