@@ -5,8 +5,8 @@
     {
       environment.variables = {
         EDITOR = "nvim";
-        TERM = "wezterm";
-        TERMINAL = "wezterm";
+        TERM = "kitty";
+        TERMINAL = "kitty";
         NIXOS_OZONE_WL = "1";
       };
     };
