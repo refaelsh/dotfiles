@@ -26,7 +26,6 @@
               };
 
               "Mod+D" = {
-                hotkey-overlay-title = "Run an Application: fuzzel";
                 spawn = [ "fuzzel" ];
               };
 
@@ -35,7 +34,6 @@
               };
 
               "Mod+Q" = {
-                repeat = false;
                 close-window = null;
               };
 
