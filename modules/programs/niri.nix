@@ -17,7 +17,7 @@
             settings.extraConfig = ''
               binds {
                   Mod+Return {
-                      spawn "kitty";
+                      spawn "${pkgs.kitty}/bin/kitty";
                   }
               }
             '';
