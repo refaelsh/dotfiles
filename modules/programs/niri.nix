@@ -31,7 +31,6 @@
               };
 
               "Mod+O" = {
-                repeat = false;
                 toggle-overview = null;
               };
 
