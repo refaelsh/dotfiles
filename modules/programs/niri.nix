@@ -290,10 +290,12 @@
           };
         };
 
-        # Window/column maximize — direct niri action (this is the correct one)
+        # Window/column maximize (correct niri action + wrapper-compatible syntax)
         "Mod+F" = {
           maximize-column = null;
-          hotkey-overlay-title = "Maximize column";
+          _attrs = {
+            hotkey-overlay-title = "Maximize column";
+          };
         };
       };
 
