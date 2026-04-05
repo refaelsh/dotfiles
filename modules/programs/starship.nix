@@ -58,14 +58,13 @@
               error_symbol = "[λ](bold #ff5555)";
             };
             continuation_prompt = "▶▶ ";
-            transientPrompt = true;
-            sdfsdf = true;
           };
         }).wrapper;
     in
     {
       programs.starship = {
         enable = true;
+        enableBashIntegration = true;   # or let your starship.nix handle it
         package = starship-wrapped;
       };
     };
