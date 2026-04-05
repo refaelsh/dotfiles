@@ -14,7 +14,6 @@
         xwayland.enable = true;
       };
       environment.systemPackages = with pkgs; [
-        delta
         fzf
         kbd
         neovide
