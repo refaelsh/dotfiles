@@ -64,7 +64,7 @@
     {
       programs.starship = {
         enable = true;
-        package = [ starship-wrapped ];
+        package = starship-wrapped;
       };
     };
 }
