@@ -70,9 +70,6 @@
       programs.starship = {
         enable = true;
         package = starship-wrapped;
-        bash.interactiveShellInit = lib.mkIf config.programs.starship.enable ''
-          eval "$(starship init bash)"
-        '';
       };
     };
 }
