@@ -1,5 +1,4 @@
 { inputs, pkgs, ... }:
-
 {
   # Dendritic flake-parts wrapper (Lassulus style)
   flake.nixosModules.kitty =
@@ -33,8 +32,9 @@
             # Keep Kitty features but let Starship own the prompt
             shell_integration = "enabled no-prompt";
 
-            # ← THIS IS THE FIX: force interactive shell on every new window
-            # (this makes interactiveShellInit run reliably)
+            # ← THIS IS THE FIX (common solution from NixOS/Kitty/Starship reports)
+            # Forces every new Kitty window to launch as interactive shell
+            # → interactiveShellInit now runs reliably
             shell = "${pkgs.bashInteractive}/bin/bash -i";
 
             # Absolute path to the pinned theme
