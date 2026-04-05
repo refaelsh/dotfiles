@@ -34,7 +34,7 @@
             scrollback_lines = 10000;
             allow_remote_control = "yes";
 
-            # ← THIS IS THE FIX: keep everything Kitty gives you EXCEPT the prompt
+            # ← THIS IS THE fix: keep everything Kitty gives you EXCEPT the prompt
             # Starship now owns the prompt cleanly
             shell_integration = "enabled no-prompt";
 
