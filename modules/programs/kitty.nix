@@ -33,7 +33,10 @@
             cursor_blink_interval = 0;
             scrollback_lines = 10000;
             allow_remote_control = "yes";
-            shell_integration = "enabled";
+
+            # ← THIS IS THE FIX: keep everything Kitty gives you EXCEPT the prompt
+            # Starship now owns the prompt cleanly
+            shell_integration = "enabled no-prompt";
 
             # Absolute path to the pinned theme — no missing-file error ever again
             include = "${draculaTheme}/dracula.conf";
