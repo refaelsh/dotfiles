@@ -62,6 +62,9 @@
         }).wrapper;
     in
     {
-      environment.systemPackages = [ starship-wrapped ];
+      programs.starship = {
+        enable = true;
+        package = [ starship-wrapped ];
+      };
     };
 }
