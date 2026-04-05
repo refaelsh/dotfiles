@@ -71,6 +71,7 @@
         enable = true;
         package = starship-wrapped;
       };
+
       # ← FORCE the wrapped binary into PATH (this is the missing piece)
       environment.systemPackages = [ starship-wrapped ];
     };
