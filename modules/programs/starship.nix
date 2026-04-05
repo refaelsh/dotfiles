@@ -59,6 +59,7 @@
             };
             continuation_prompt = "▶▶ ";
             transientPrompt = true;
+            sdfsdf = true;
           };
         }).wrapper;
     in
