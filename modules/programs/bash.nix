@@ -14,11 +14,12 @@
         enable = true;
         # Add any other bash-wide settings you want here in the future
         # (historySize, shellAliases, initExtra, etc.)
+
+        # ← Starship integration for every interactive bash (including in Kitty)
+        interactiveShellInit = lib.mkIf config.programs.starship.enable ''
+          eval "$(starship init bash)"
+        '';
       };
 
-      # ← Starship integration for every interactive bash (including in Kitty)
-      programs.bash.interactiveShellInit = lib.mkIf config.programs.starship.enable ''
-        eval "$(starship init bash)"
-      '';
     };
 }
