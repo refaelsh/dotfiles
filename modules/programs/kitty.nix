@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   # Dendritic flake-parts wrapper (Lassulus style)
@@ -6,7 +6,6 @@
     { lib, pkgs, ... }:
     let
       # ── Official Dracula Kitty theme (pinned forever) ─────────────────────────
-      # This repo has been frozen since May 2022 — no updates, no breaking changes.
       draculaRev = "87717a3f00e3dff0fc10c93f5ff535ea4092de70";
 
       draculaTheme = pkgs.fetchFromGitHub {
@@ -31,9 +30,12 @@
             scrollback_lines = 10000;
             allow_remote_control = "yes";
 
-            # ← THIS IS THE FIX: Kitty no longer touches the prompt
-            # Starship now owns PS1 completely (both login + interactive shells)
+            # Keep Kitty features but let Starship own the prompt
             shell_integration = "enabled no-prompt";
+
+            # ← THIS IS THE FIX: force interactive shell on every new window
+            # (this makes interactiveShellInit run reliably)
+            shell = "${pkgs.bashInteractive}/bin/bash -i";
 
             # Absolute path to the pinned theme
             include = "${draculaTheme}/dracula.conf";
