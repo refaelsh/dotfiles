@@ -3,7 +3,12 @@
   # Dendritic feature using the official Lassulus/wrappers starship module
   # Exact same config as your old Home-Manager starship.nix
   flake.nixosModules.starship =
-    { pkgs, ... }:
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
     let
       starship-wrapped =
         (inputs.wrappers.wrapperModules.starship.apply {
