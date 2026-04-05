@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   # Dendritic bash feature – pure NixOS, no Home-Manager
-  # Uses environment.loginShellInit (top-level, always runs for bash -l) + interactive
+  # Loud debug so we can finally see if loginShellInit (fresh Kitty window) runs at all
   flake.nixosModules.bash =
     { pkgs, lib, ... }:
     {
@@ -10,16 +10,17 @@
         # Add any other bash-wide settings you want here in the future
         # (historySize, shellAliases, initExtra, etc.)
 
-        # Starship for non-login interactive shells (when you type "bash")
+        # Debug + Starship for login shells (fresh Kitty window = bash -l)
+        loginShellInit = lib.mkAfter ''
+          echo "=== STARSHIP LOGIN SHELL INIT RAN (fresh Kitty window) ==="
+          eval "$(starship init bash)"
+        '';
+
+        # Debug + Starship for non-login interactive shells (when you type "bash")
         interactiveShellInit = lib.mkAfter ''
+          echo "=== STARSHIP INTERACTIVE SHELL INIT RAN (typed bash) ==="
           eval "$(starship init bash)"
         '';
       };
-
-      # ← THIS IS THE MISSING PIECE for login shells (fresh Kitty window)
-      # environment.loginShellInit is sourced by every bash -l before PS1 is built
-      environment.loginShellInit = lib.mkAfter ''
-        eval "$(starship init bash)"
-      '';
     };
 }
