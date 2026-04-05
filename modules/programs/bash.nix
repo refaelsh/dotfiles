@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   # Dendritic bash feature – pure NixOS, no Home-Manager
-  # Handles programs.bash + Starship hook (single source of truth)
+  # Starship hook is now unconditional (bypasses any module-order issues)
   flake.nixosModules.bash =
     {
       pkgs,
@@ -12,14 +12,10 @@
     {
       programs.bash = {
         enable = true;
-        # Add any other bash-wide settings you want here in the future
-        # (historySize, shellAliases, initExtra, etc.)
-
-        # ← Starship integration for every interactive bash (including in Kitty)
-        interactiveShellInit = lib.mkIf config.programs.starship.enable ''
+        # ← Starship integration (single source of truth for bash)
+        interactiveShellInit = ''
           eval "$(starship init bash)"
         '';
       };
-
     };
 }
