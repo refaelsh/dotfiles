@@ -58,6 +58,7 @@
               error_symbol = "[λ](bold #ff5555)";
             };
             continuation_prompt = "▶▶ ";
+            transientPromt = true;
           };
         }).wrapper;
     in
