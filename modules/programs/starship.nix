@@ -64,8 +64,10 @@
     {
       programs.starship = {
         enable = true;
-        enableBashIntegration = true;   # or let your starship.nix handle it
         package = starship-wrapped;
+        programs.bash.interactiveShellInit = lib.mkIf config.programs.starship.enable ''
+          eval "$(starship init bash)"
+        '';
       };
     };
 }
