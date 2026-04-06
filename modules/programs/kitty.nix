@@ -32,7 +32,7 @@
             # Keep Kitty features but let Starship own the prompt
             shell_integration = "enabled no-prompt";
 
-            shell = "/run/current-system/sw/bin/bash -i";
+            shell = "bash -i";
 
             # Absolute path to the pinned theme
             include = "${draculaTheme}/dracula.conf";
