@@ -7,6 +7,7 @@
     {
       programs.bash = {
         enable = true;
+        blesh.enable = true;
         # Add any other bash-wide settings you want here in the future
         # (historySize, shellAliases, etc.)
 

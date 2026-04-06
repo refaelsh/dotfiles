@@ -12,7 +12,6 @@
         gamemode.enable = true;
         # adb.enable = true;
         xwayland.enable = true;
-        blesh.enable = true;
       };
       environment.systemPackages = with pkgs; [
         fzf
