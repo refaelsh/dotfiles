@@ -29,8 +29,7 @@
             scrollback_lines = 10000;
             allow_remote_control = "yes";
 
-            # Keep Kitty features but let Starship own the prompt
-            shell_integration = "enabled no-prompt";
+            shell_integration = "disabled";
 
             shell = "bash -i";
 
