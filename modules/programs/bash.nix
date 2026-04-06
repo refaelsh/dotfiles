@@ -13,6 +13,11 @@
         # interactiveShellInit = ''
         #   eval "$(starship init bash)"
         # '';
+
+        interactiveShellInit = ''
+          bind 'set enable-bracketed-paste off'
+        '';
+
       };
     };
 }
