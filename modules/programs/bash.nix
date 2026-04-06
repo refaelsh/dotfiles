@@ -10,9 +10,9 @@
         # Add any other bash-wide settings you want here in the future
         # (historySize, shellAliases, etc.)
 
-        interactiveShellInit = ''
-          eval "$(starship init bash)"
-        '';
+        # interactiveShellInit = ''
+        #   eval "$(starship init bash)"
+        # '';
       };
     };
 }
