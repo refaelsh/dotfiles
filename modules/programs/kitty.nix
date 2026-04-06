@@ -31,7 +31,7 @@
 
             # shell_integration = "disabled";
 
-            shell = "bash -i";
+            # shell = "bash -i";
 
             # Absolute path to the pinned theme
             include = "${draculaTheme}/dracula.conf";
