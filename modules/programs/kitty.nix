@@ -29,7 +29,7 @@
             scrollback_lines = 10000;
             allow_remote_control = "yes";
 
-            shell_integration = "disabled";
+            # shell_integration = "disabled";
 
             shell = "bash -i";
 
