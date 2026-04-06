@@ -26,6 +26,7 @@
 
           flags = {
             "--icons" = "auto";
+            "--color" = "auto"; # fixes --color=tty error from old shell aliases / wrapper
             "--git" = true;
             "-a" = true;
             "-F" = true;
@@ -36,8 +37,6 @@
 
           env.EZA_CONFIG_DIR = ezaConfigDir;
 
-          # Replicates *everything* old Home-Manager programs.eza.enableAliases did
-          # (ls + common variants as symlinks to the wrapped eza)
           aliases = [
             "ls"
             "ll"
