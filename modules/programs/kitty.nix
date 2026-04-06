@@ -36,6 +36,10 @@
             # Absolute path to the pinned theme
             include = "${draculaTheme}/dracula.conf";
           };
+          extraSettings = ''
+            map ctrl+c copy_and_clear_or_interrupt
+            map ctrl+v paste_from_clipboard
+          '';
         }).wrapper
       ];
     };
