@@ -18,35 +18,37 @@
       '';
     in
     {
-      environment.systemPackages = [
-        (inputs.wrappers.lib.wrapPackage {
-          inherit pkgs;
+      environment = {
+        systemPackages = [
+          (inputs.wrappers.lib.wrapPackage {
+            inherit pkgs;
 
-          package = pkgs.eza;
+            package = pkgs.eza;
 
-          flags = {
-            "--icons" = "auto";
-            "--color" = "auto";
-            "--git" = true;
-            "-a" = true;
-            "-F" = true;
-            "--long" = true;
-            "--extended" = true;
-            "--header" = true;
-          };
+            flags = {
+              "--icons" = "auto";
+              "--color" = "auto";
+              "--git" = true;
+              "-a" = true;
+              "-F" = true;
+              "--long" = true;
+              "--extended" = true;
+              "--header" = true;
+            };
 
-          env.EZA_CONFIG_DIR = ezaConfigDir;
+            env.EZA_CONFIG_DIR = ezaConfigDir;
 
-          aliases = [
-            "ls"
-            "ll"
-            "la"
-            "l"
-            "lt"
-          ];
-        })
-      ];
+            aliases = [
+              "ls"
+              "ll"
+              "la"
+              "l"
+              "lt"
+            ];
+          })
+        ];
 
-      environment.shellAliases.ls = null;
+        shellAliases.ls = null;
+      };
     };
 }
