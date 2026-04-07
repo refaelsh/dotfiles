@@ -26,7 +26,7 @@
 
           flags = {
             "--icons" = "auto";
-            "--color" = "auto"; # fixes --color=tty error from old shell aliases / wrapper
+            "--color" = "tty"; # fixes --color=tty error from old shell aliases / wrapper
             "--git" = true;
             "-a" = true;
             "-F" = true;
