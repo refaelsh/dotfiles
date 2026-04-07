@@ -7,13 +7,16 @@
     {
       programs.bash = {
         enable = true;
-        blesh.enable = true;
-        # Add any other bash-wide settings you want here in the future
-        # (historySize, shellAliases, etc.)
 
-        # interactiveShellInit = ''
-        #   eval "$(starship init bash)"
-        # '';
+        blesh.enable = true;
+
+        shellOptions = [
+          "histappend"
+          "cmdhist"
+          "cdspell"
+          "direxpand"
+          "autocd"
+        ];
 
         interactiveShellInit = ''
           bind 'set enable-bracketed-paste off'
