@@ -9,8 +9,10 @@
 
         package = pkgs.bat;
 
-        env = {
-          BAT_THEME = "Dracula";
+        flags = {
+          "--style" = "header,grid,numbers,changes,snip";
+          "--theme" = "Dracula";
+          "--pager" = "less --RAW-CONTROL-CHARS";
         };
       };
     in
