@@ -10,14 +10,6 @@
 
         blesh.enable = true;
 
-        shellOptions = [
-          "histappend"
-          "cmdhist"
-          "cdspell"
-          "direxpand"
-          "autocd"
-        ];
-
         interactiveShellInit = ''
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
