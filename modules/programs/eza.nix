@@ -37,13 +37,7 @@
 
           env.EZA_CONFIG_DIR = ezaConfigDir;
 
-          aliases = [
-            "ls"
-            "ll"
-            "la"
-            "l"
-            "lt"
-          ];
+          environment.shellAliases.ls = null;
         })
       ];
     };
