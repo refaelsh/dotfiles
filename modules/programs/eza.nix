@@ -19,6 +19,8 @@
     in
     {
       environment = {
+        shellAliases.ls = null;
+
         systemPackages = [
           (inputs.wrappers.lib.wrapPackage {
             inherit pkgs;
@@ -47,8 +49,6 @@
             ];
           })
         ];
-
-        shellAliases.ls = null;
       };
     };
 }

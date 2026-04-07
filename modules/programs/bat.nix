@@ -17,6 +17,12 @@
       };
     in
     {
-      environment.systemPackages = [ bat-wrapped ];
+      environment = {
+        shellAliases = {
+          cat = "bat";
+        };
+
+        systemPackages = [ bat-wrapped ];
+      };
     };
 }
