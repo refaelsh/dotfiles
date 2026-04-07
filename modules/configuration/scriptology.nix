@@ -22,7 +22,7 @@
           name = "update.sh";
           text = ''
             git.sh || true
-            nix flake update ~/repos/dotfiles
+            nix flake update
             flakization.sh
             cabal update
             git.sh
