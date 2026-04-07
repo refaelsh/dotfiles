@@ -12,6 +12,7 @@
         gamemode.enable = true;
         # adb.enable = true;
         xwayland.enable = true;
+        bat.enable = true;
       };
       environment.systemPackages = with pkgs; [
         fzf
