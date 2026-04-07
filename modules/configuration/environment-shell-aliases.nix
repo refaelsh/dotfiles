@@ -5,6 +5,5 @@
     {
     environment.shellAliases = {
       ls = null;
-      cat = ["bat"];
     };
 }
