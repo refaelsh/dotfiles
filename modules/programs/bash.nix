@@ -19,6 +19,11 @@
         ];
 
         interactiveShellInit = ''
+          shopt -s histappend
+          shopt -s cmdhist
+          shopt -s cdspell
+          shopt -s direxpand
+          shopt -s autocd
           bind 'set enable-bracketed-paste off'
         '';
       };
