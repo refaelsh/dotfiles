@@ -13,12 +13,6 @@
           '';
         })
         (writeShellApplication {
-          name = "flakization.sh";
-          text = ''
-            sudo nixos-rebuild switch --flake ~/repos/dotfiles/#myNixos --option eval-cache false
-          '';
-        })
-        (writeShellApplication {
           name = "update.sh";
           text = ''
             git.sh || true
@@ -26,6 +20,12 @@
             flakization.sh
             cabal update
             git.sh
+          '';
+        })
+        (writeShellApplication {
+          name = "flakization.sh";
+          text = ''
+            sudo nixos-rebuild switch --flake ~/repos/dotfiles/#myNixos --option eval-cache false
           '';
         })
         (writeShellApplication {
