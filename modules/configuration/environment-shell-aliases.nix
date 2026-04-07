@@ -3,6 +3,8 @@
   flake.nixosModules.environment-shell-aliases =
     { ... }:
     {
-      environment.shellAliases.ls = null;
+    environment.shellAliases = {
+      ls = null;
+      cat = "bat";
     };
 }
