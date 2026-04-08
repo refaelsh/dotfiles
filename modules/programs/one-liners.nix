@@ -29,7 +29,7 @@
         nodePackages.bash-language-server
         taplo
         wget
-        google-chrome-stable
+        google-chrome
         glib
         nnn
         wget
