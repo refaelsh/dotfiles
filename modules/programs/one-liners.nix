@@ -87,7 +87,7 @@
         gitui
         lazygit
         ruby
-        nodePackages.prettier
+        prettier
         gimp
         tig
         zk
