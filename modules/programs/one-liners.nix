@@ -25,8 +25,8 @@
         clang-tools
         cmake-language-server
         lua-language-server
-        nodejs.pkgs.yaml-language-server
-        nodejs.pkgs.bash-language-server
+        yaml-language-server
+        bash-language-server
         taplo
         wget
         google-chrome
