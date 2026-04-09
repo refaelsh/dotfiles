@@ -110,6 +110,10 @@
           name = "zsh";
           priority = 250;
         }
+        {
+          name = "zsh";
+          priority = 250;
+        }
       ];
     };
   };
