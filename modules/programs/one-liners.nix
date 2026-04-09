@@ -178,6 +178,7 @@
         widelands
         ghostty
         beancount
+        fava
       ];
     };
 }
