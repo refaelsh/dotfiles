@@ -177,6 +177,7 @@
         # notepadqq
         widelands
         ghostty
+        beancount
       ];
     };
 }
