@@ -111,7 +111,7 @@
           priority = 250;
         }
         {
-          name = "beancount";
+          name = "beancountiiiiiii";
           priority = 250;
         }
       ];
