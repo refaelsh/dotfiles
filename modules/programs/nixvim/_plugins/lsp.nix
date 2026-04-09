@@ -25,6 +25,7 @@
       jdtls.enable = true;
       lua_ls.enable = true;
       typos_lsp.enable = true;
+      beancount.enable = true;
       hls = {
         enable = true;
         installGhc = false;
