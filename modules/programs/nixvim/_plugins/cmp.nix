@@ -20,8 +20,8 @@
           "cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace })";
       };
       window = {
-        completion.__raw = ''cmp.config.window.bordered()'';
-        documentation.__raw = ''cmp.config.window.bordered()'';
+        completion.__raw = "cmp.config.window.bordered()";
+        documentation.__raw = "cmp.config.window.bordered()";
       };
       snippet.expand = # lua
         "function(args) require('luasnip').lsp_expand(args.body) end";
@@ -111,7 +111,7 @@
           priority = 250;
         }
         {
-          name = "zsh";
+          name = "beancount";
           priority = 250;
         }
       ];
