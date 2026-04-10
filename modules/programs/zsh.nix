@@ -5,7 +5,7 @@
   flake.nixosModules.zsh =
     { pkgs, ... }:
     let
-      zsh-wrapped = 
+      zsh-wrapped =
         (inputs.wrappers.wrapperModules.zsh.apply {
           inherit pkgs;
 
@@ -16,5 +16,5 @@
     in
     {
       environment.systemPackages = [ zsh-wrapped ];
-    }
+    };
 }
