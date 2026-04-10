@@ -15,6 +15,9 @@
               # cat = "bat";
             };
           };
+          extraInit = ''
+            setopt no_global_rcs
+          '';
         }).wrapper;
     in
     {
