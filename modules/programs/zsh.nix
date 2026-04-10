@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   # Dendritic feature — all old home-manager/zsh.nix settings ported
-  # Uses official Lassulus/wrappers.zsh + programs.zsh for everything else
+  # Uses Lassulus/wrappers.zsh + only the NixOS-supported parts of programs.zsh
   flake.nixosModules.zsh =
     { pkgs, ... }:
     let
@@ -18,7 +18,7 @@
             # Matches old autosuggestion / completion / history
             autoSuggestions.enable = true;
             completion.enable = true;
-            completion.extraCompletions = true; # brings in zsh-completions
+            completion.extraCompletions = true;
             history = {
               expireDupsFirst = true;
               expanded = true;
@@ -28,9 +28,29 @@
           };
 
           extraRC = ''
-            # Old initContent port (zprof + fpath + full Dracula theme)
+            # Old initContent port (zprof + fpath + you-should-use)
             zmodload zsh/zprof
-            fpath+=($HOME/.zsh/plugins/zsh-completions/share/zsh/site-functions)
+            fpath+=(${pkgs.zsh-completions}/share/zsh/site-functions)
+            source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
+
+            # oh-my-zsh — full port from your old home-manager config
+            # (plugins list is exactly what you had)
+            export ZSH="${pkgs.oh-my-zsh}/share/oh-my-zsh"
+            plugins=(
+              sudo
+              git
+              git-extras
+              git-escape-magic
+              gitfast
+              zsh-interactive-cd
+              vi-mode
+              colored-man-pages
+              extract
+              cp
+              cabal
+              fzf
+            )
+            source $ZSH/oh-my-zsh.sh
 
             # Everything below is the exact Dracula theme you had for zsh-syntax-highlighting
             typeset -gA ZSH_HIGHLIGHT_STYLES
@@ -89,13 +109,18 @@
         }).wrapper;
     in
     {
-      environment.systemPackages = [ zsh-wrapped ];
+      environment.systemPackages = [
+        zsh-wrapped
+        pkgs.oh-my-zsh
+        pkgs.zsh-you-should-use
+        pkgs.zsh-completions
+      ];
 
       programs.zsh = {
         enable = true;
-        vteIntegration = true; # ← this was the only change (was enableVteIntegration)
+        vteIntegration = true;
 
-        # The parts the wrapper doesn't cover yet
+        # The parts the wrapper doesn't cover yet (these *are* supported in NixOS)
         syntaxHighlighting = {
           enable = true;
           highlighters = [
@@ -106,36 +131,6 @@
             "cursor"
             "root"
             "line"
-          ];
-        };
-
-        plugins = [
-          {
-            name = "zsh-you-should-use";
-            src = pkgs.zsh-you-should-use;
-            file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
-          }
-          {
-            name = "zsh-completions";
-            src = pkgs.zsh-completions;
-          }
-        ];
-
-        ohMyZsh = {
-          enable = true;
-          plugins = [
-            "sudo"
-            "git"
-            "git-extras"
-            "git-escape-magic"
-            "gitfast"
-            "zsh-interactive-cd"
-            "vi-mode"
-            "colored-man-pages"
-            "extract"
-            "cp"
-            "cabal"
-            "fzf"
           ];
         };
       };
