@@ -10,16 +10,16 @@
           inherit pkgs;
 
           settings = {
-            keyMap = "viins";
+            # keyMap = "viins";
             shellAliases = {
               # cat = "bat";
             };
           };
-          extraRC = ''
-            setopt no_global_rcs
-            # silent vi-mode (this is the real fix — overrides the noisy wrapper behaviour)
-            bindkey -v
-          '';
+          # extraRC = ''
+          #   setopt no_global_rcs
+          #   # silent vi-mode (this is the real fix — overrides the noisy wrapper behaviour)
+          #   bindkey -v
+          # '';
         }).wrapper;
     in
     {
