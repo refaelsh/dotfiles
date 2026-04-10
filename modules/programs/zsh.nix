@@ -93,7 +93,7 @@
 
       programs.zsh = {
         enable = true;
-        enableVteIntegration = true;
+        vteIntegration = true; # ← this was the only change (was enableVteIntegration)
 
         # The parts the wrapper doesn't cover yet
         syntaxHighlighting = {
