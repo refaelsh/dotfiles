@@ -1,4 +1,10 @@
-{ pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 let
   # Old initContent from your home-manager zsh.nix (zprof + full Dracula theme)
   oldInitContent = ''
