@@ -13,8 +13,6 @@
             keyMap = "viins";
           };
         }).wrapper
-
-        pkgs.delta # required for the pager
       ];
     };
 }
