@@ -14,7 +14,7 @@
             shellAliases = {
               # cat = "bat";
             };
-            extraInit = ''
+            extraRC = ''
               setopt no_global_rcs
             '';
           };
