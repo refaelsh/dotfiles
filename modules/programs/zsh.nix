@@ -1,4 +1,3 @@
-
 { inputs, ... }:
 {
   # Dendritic feature — exactly matches your old Home-Manager git.nix + delta
@@ -11,21 +10,7 @@
           inherit pkgs;
 
           settings = {
-            # ── Delta (added back) ─────────────────────────────────────────────
-            core = {
-              pager = "delta";
-            };
-            interactive = {
-              diffFilter = "delta --color-only";
-            };
-            delta = {
-              syntax-theme = "Dracula";
-              line-numbers = true;
-              decorations = true;
-              side-by-side = true;
-              navigate = true;
-              light = false;
-            };
+            keyMap = "viins";
           };
         }).wrapper
 
