@@ -17,6 +17,8 @@
           };
           extraRC = ''
             setopt no_global_rcs
+            # silent vi-mode (this is the real fix — overrides the noisy wrapper behaviour)
+            bindkey -v
           '';
         }).wrapper;
     in
