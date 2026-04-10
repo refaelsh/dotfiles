@@ -17,6 +17,6 @@
     {
       environment.systemPackages = [ zsh-wrapped ];
       programs.zsh.enable = true;
-      defaultUserShell = zsh-wrapped;
+      users.defaultUserShell = zsh-wrapped;
     };
 }
