@@ -12,7 +12,7 @@
           settings = {
             keyMap = "viins";
           };
-        }).wrapper
+        }).wrapper;
     in
     {
       environment.systemPackages = [ zsh-wrapped ];
