@@ -14,10 +14,10 @@
             shellAliases = {
               # cat = "bat";
             };
+            extraInit = ''
+              setopt no_global_rcs
+            '';
           };
-          extraInit = ''
-            setopt no_global_rcs
-          '';
         }).wrapper;
     in
     {
