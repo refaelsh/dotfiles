@@ -2,10 +2,10 @@
 {
   # Dendritic feature — exactly matches your old Home-Manager git.nix + delta
   # Uses the official Lassulus/wrappers git module
-  flake.nixosModules.git =
+  flake.nixosModules.zsh =
     { pkgs, ... }:
     {
-      programs.zsh = [
+      myZsh = [
         (inputs.wrappers.wrapperModules.zsh.apply {
           inherit pkgs;
 
@@ -14,5 +14,8 @@
           };
         }).wrapper
       ];
+      programs.zsh.enable = true;
+      # users.users.yourusername.shell = myZsh;
     };
+
 }
