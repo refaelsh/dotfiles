@@ -4,9 +4,8 @@
   # Uses the official Lassulus/wrappers git module
   flake.nixosModules.zsh =
     { pkgs, ... }:
-      let
     {
-      myZsh = [
+      environment.systemPackages = [
         (inputs.wrappers.wrapperModules.zsh.apply {
           inherit pkgs;
 
@@ -15,9 +14,5 @@
           };
         }).wrapper
       ];
-      # programs.zsh.enable = true;
-      # users.users.yourusername.shell = myZsh;
     };
-
-      in{}
 }
