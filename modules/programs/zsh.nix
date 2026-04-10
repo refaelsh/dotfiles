@@ -10,7 +10,7 @@
           inherit pkgs;
 
           settings = {
-            keyMap = "viins";
+            # keyMap = "viins";
             shellAliases = {
               cat = "bat";
             };
