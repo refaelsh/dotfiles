@@ -5,7 +5,7 @@
   flake.nixosModules.git =
     { pkgs, ... }:
     {
-      environment.systemPackages = [
+      programs.zsh = [
         (inputs.wrappers.wrapperModules.zsh.apply {
           inherit pkgs;
 
