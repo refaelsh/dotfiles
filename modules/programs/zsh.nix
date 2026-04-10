@@ -12,7 +12,7 @@
           settings = {
             keyMap = "viins";
             shellAliases = {
-              cat = "bat";
+              # cat = "bat";
             };
           };
         }).wrapper;
