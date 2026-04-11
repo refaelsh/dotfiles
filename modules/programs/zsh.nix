@@ -6,9 +6,7 @@
 
   flake.nixosModules.zsh =
     { pkgs, lib, ... }:
-
     let
-
       # Tiny derivation: pulls the official Dracula zsh theme into the exact oh-my-zsh layout
       # (this replaces the entire huge manual ZSH_HIGHLIGHT_STYLES + oh-my-zsh sourcing block)
       draculaTheme = pkgs.runCommand "dracula-zsh-theme" { } ''
@@ -26,11 +24,13 @@
       zsh-wrapped =
         (inputs.wrappers.wrapperModules.zsh.apply {
           inherit pkgs;
+
           settings = {
             # keyMap = "viins";
             shellAliases = {
               cat = "bat";
             };
+
             # Matches old autosuggestion / completion / history
             autoSuggestions.enable = true;
             completion.enable = true;
@@ -42,19 +42,18 @@
               size = 500;
             };
           };
+
           extraRC = ''
             # Old initContent port (zprof + fpath + you-should-use) — kept exactly as before
             zmodload zsh/zprof
-            fpath+=( ${pkgs.zsh-completions} /share/zsh/site-functions)
-            source ${pkgs.zsh-you-should-use} /share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
+            fpath+=(${pkgs.zsh-completions}/share/zsh/site-functions)
+            source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
 
             # ← everything below this line (the huge oh-my-zsh sourcing + Dracula ZSH_HIGHLIGHT_STYLES block)
             # has been removed and replaced by the clean NixOS ohMyZsh option below
           '';
         }).wrapper;
-
     in
-
     {
       environment.systemPackages = [
         zsh-wrapped
@@ -67,6 +66,7 @@
       programs.zsh = {
         enable = true;
         vteIntegration = true;
+
         # The parts the wrapper doesn't cover yet (these *are* supported in NixOS)
         syntaxHighlighting = {
           enable = true;
@@ -86,7 +86,7 @@
         ohMyZsh = {
           enable = true;
           theme = "dracula";
-          custom = draculaTheme;
+          custom = "${draculaTheme}"; # ← fixed: string path (was causing the type error)
 
           # plugins moved here (exactly what you had before in extraRC)
           plugins = [
@@ -108,5 +108,4 @@
 
       users.defaultUserShell = zsh-wrapped;
     };
-
 }
