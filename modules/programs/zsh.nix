@@ -33,9 +33,9 @@
               share = true;
             };
 
-            autocd = true;
-            keyMap = "viins";
-            integrations.fzf.enable = true; # wrapper-native
+            # autocd = true;
+            # keyMap = "viins";
+            integrations.fzf.enable = true;
           };
 
           extraRC = ''
