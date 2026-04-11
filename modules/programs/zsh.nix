@@ -7,18 +7,21 @@
   flake.nixosModules.zsh =
     { pkgs, lib, ... }:
     let
-      # Tiny derivation: pulls the official Dracula zsh theme into the exact oh-my-zsh layout
-      # (this replaces the entire huge manual ZSH_HIGHLIGHT_STYLES + oh-my-zsh sourcing block)
+      # Fetch the full Dracula repo once (needed for both the theme + the lib/async.zsh it depends on)
+      draculaSrc = pkgs.fetchFromGitHub {
+        owner = "dracula";
+        repo = "zsh";
+        rev = "master"; # you can pin a specific commit later if you want
+        hash = lib.fakeHash; # ← Nix will print the correct sha256 on first build
+      };
+
+      # Fixed derivation: now copies BOTH dracula.zsh-theme AND the entire lib/ folder
+      # so that the relative source "${0:A:h}/lib/async.zsh" inside the theme resolves correctly
+      # (this was the exact cause of the "no such file or directory: …/lib/async.zsh" errors)
       draculaTheme = pkgs.runCommand "dracula-zsh-theme" { } ''
         mkdir -p $out/themes
-        cp ${
-          pkgs.fetchFromGitHub {
-            owner = "dracula";
-            repo = "zsh";
-            rev = "master"; # you can pin a specific commit later if you want
-            hash = "sha256-TuKC1wPdq2OtEeViwnAmitpdaanyXHJmBcqV+rHxy34=; # ← Nix will print the correct sha256 on first build";
-          }
-        }/dracula.zsh-theme $out/themes/dracula.zsh-theme
+        cp ${draculaSrc}/dracula.zsh-theme $out/themes/dracula.zsh-theme
+        cp -r ${draculaSrc}/lib $out/themes/
       '';
 
       zsh-wrapped =
@@ -26,6 +29,7 @@
           inherit pkgs;
 
           settings = {
+            # keyMap = "viins";
             shellAliases = {
               cat = "bat";
             };
@@ -59,7 +63,6 @@
         pkgs.oh-my-zsh
         pkgs.zsh-you-should-use
         pkgs.zsh-completions
-        pkgs.zsh-fzf-tab
       ];
 
       programs.zsh = {
@@ -80,12 +83,12 @@
           ];
         };
 
-        # NEW: clean Dracula theme via pure NixOS options (no more huge extraRC section)
-        # (replaces the manual oh-my-zsh sourcing + entire Dracula ZSH_HIGHLIGHT_STYLES block)
+        # Clean Dracula theme via pure NixOS options (no more huge extraRC section)
+        # (now with the missing lib/async.zsh included → fixes the terminal errors)
         ohMyZsh = {
           enable = true;
           theme = "dracula";
-          custom = "${draculaTheme}"; # ← fixed: string path (was causing the type error)
+          custom = "${draculaTheme}";
 
           # plugins moved here (exactly what you had before in extraRC)
           plugins = [
