@@ -20,7 +20,7 @@
               extraCompletions = true;
               caseInsensitive = true;
               colors = true;
-              fuzzy = true;
+              fuzzySearch = true;
             };
 
             history = {
