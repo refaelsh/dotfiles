@@ -12,7 +12,7 @@
         owner = "dracula";
         repo = "zsh";
         rev = "master"; # you can pin a specific commit later if you want
-        hash = lib.fakeHash; # ← Nix will print the correct sha256 on first build
+        hash = "sha256-TuKC1wPdq2OtEeViwnAmitpdaanyXHJmBcqV+rHxy34=";
       };
 
       # Fixed derivation: now copies BOTH dracula.zsh-theme AND the entire lib/ folder
