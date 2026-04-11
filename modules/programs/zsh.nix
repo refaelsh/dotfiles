@@ -16,7 +16,7 @@
             owner = "dracula";
             repo = "zsh";
             rev = "master"; # you can pin a specific commit later if you want
-            hash = lib.fakeHash; # ← Nix will print the correct sha256 on first build
+            hash = "sha256-TuKC1wPdq2OtEeViwnAmitpdaanyXHJmBcqV+rHxy34=; # ← Nix will print the correct sha256 on first build";
           }
         }/dracula.zsh-theme $out/themes/dracula.zsh-theme
       '';
