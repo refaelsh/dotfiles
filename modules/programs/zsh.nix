@@ -88,7 +88,7 @@
         # (now with the missing lib/async.zsh included → fixes the terminal errors)
         ohMyZsh = {
           enable = true;
-          theme = "agnoster";
+          theme = "robbyrussell";
           # custom = "${draculaTheme}";
 
           # plugins moved here (exactly what you had before in extraRC)
