@@ -63,6 +63,7 @@
         pkgs.oh-my-zsh
         pkgs.zsh-you-should-use
         pkgs.zsh-completions
+        pkgs.zsh-fzf-tab
       ];
 
       programs.zsh = {
@@ -103,7 +104,6 @@
             "extract"
             "cp"
             "cabal"
-            "fzf"
           ];
         };
       };
