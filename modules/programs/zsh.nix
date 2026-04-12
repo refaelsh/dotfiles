@@ -88,8 +88,8 @@
         # (now with the missing lib/async.zsh included → fixes the terminal errors)
         ohMyZsh = {
           enable = true;
-          theme = "robbyrussell";
-          # custom = "${draculaTheme}";
+          theme = "dracula";
+          custom = "${draculaTheme}";
 
           # plugins moved here (exactly what you had before in extraRC)
           plugins = [
@@ -108,6 +108,6 @@
         };
       };
 
-      users.defaultUserShell = pkgs.zsh;
+      users.defaultUserShell = zsh-wrapped;
     };
 }
