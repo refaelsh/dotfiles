@@ -108,6 +108,6 @@
         };
       };
 
-      users.defaultUserShell = zsh-wrapped;
+      users.defaultUserShell = pkgs.zsh;
     };
 }
