@@ -1,61 +1,124 @@
 { inputs, ... }:
 {
-  # Dendritic feature — all old home-manager/zsh.nix settings ported
-  # Uses Lassulus/wrappers.zsh + only the NixOS-supported parts of programs.zsh
-  # (repo re-read on every prompt — current file is modules/programs/zsh.nix on master)
-
   flake.nixosModules.zsh =
-    { pkgs, lib, ... }:
+    { pkgs, ... }:
+
     let
-      # Fetch the full Dracula repo once (needed for both the theme + the lib/async.zsh it depends on)
-      draculaSrc = pkgs.fetchFromGitHub {
-        owner = "dracula";
-        repo = "zsh";
-        rev = "master"; # you can pin a specific commit later if you want
-        hash = "sha256-TuKC1wPdq2OtEeViwnAmitpdaanyXHJmBcqV+rHxy34=";
-      };
-
-      # Fixed derivation: now copies BOTH dracula.zsh-theme AND the entire lib/ folder
-      # so that the relative source "${0:A:h}/lib/async.zsh" inside the theme resolves correctly
-      # (this was the exact cause of the "no such file or directory: …/lib/async.zsh" errors)
-      draculaTheme = pkgs.runCommand "dracula-zsh-theme" { } ''
-        mkdir -p $out/themes
-        cp ${draculaSrc}/dracula.zsh-theme $out/themes/dracula.zsh-theme
-        cp -r ${draculaSrc}/lib $out/themes/
-      '';
-
       zsh-wrapped =
         (inputs.wrappers.wrapperModules.zsh.apply {
           inherit pkgs;
 
           settings = {
-            # keyMap = "viins";
             shellAliases = {
               cat = "bat";
             };
 
-            # Matches old autosuggestion / completion / history
             autoSuggestions.enable = true;
-            completion.enable = true;
-            completion.extraCompletions = true;
+
+            completion = {
+              enable = true;
+              extraCompletions = true;
+              caseInsensitive = true;
+              colors = true;
+              fuzzySearch = true;
+            };
+
             history = {
               expireDupsFirst = true;
               expanded = true;
               save = 500;
               size = 500;
+              ignoreDups = true;
+              ignoreSpace = true;
+              share = true;
             };
+
+            # autocd = true;
+            # keyMap = "viins";
+            integrations.fzf.enable = true;
           };
 
           extraRC = ''
-            # Old initContent port (zprof + fpath + you-should-use) — kept exactly as before
             zmodload zsh/zprof
             fpath+=(${pkgs.zsh-completions}/share/zsh/site-functions)
             source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
 
-            # ← everything below this line (the huge oh-my-zsh sourcing + Dracula ZSH_HIGHLIGHT_STYLES block)
-            # has been removed and replaced by the clean NixOS ohMyZsh option below
+            # Oh-My-Zsh (still the easiest way to keep your exact plugin list)
+            export ZSH="${pkgs.oh-my-zsh}/share/oh-my-zsh"
+            plugins=(
+              sudo git git-extras git-escape-magic gitfast zsh-interactive-cd
+              vi-mode colored-man-pages extract cp cabal
+              # fzf is now handled by the wrapper's integration — you can drop it here if you want
+            )
+
+            source $ZSH/oh-my-zsh.sh
+
+            # Dracula theme for zsh-syntax-highlighting (exact copy of what you had)
+            typeset -gA ZSH_HIGHLIGHT_STYLES
+            ZSH_HIGHLIGHT_STYLES[comment]='fg=#6272A4'
+            ## Constants
+            ## Entitites
+            ## Functions/methods
+            ZSH_HIGHLIGHT_STYLES[alias]='fg=#50FA7B'
+            ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#50FA7B'
+            ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#50FA7B'
+            ZSH_HIGHLIGHT_STYLES[function]='fg=#50FA7B'
+            ZSH_HIGHLIGHT_STYLES[command]='fg=#bd93f9'
+            ZSH_HIGHLIGHT_STYLES[precommand]='fg=#50FA7B,italic'
+            ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#FFB86C,italic'
+            ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#FFB86C'
+            ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#FFB86C'
+            ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#BD93F9'
+            ## Keywords
+            ## Built ins
+            ZSH_HIGHLIGHT_STYLES[builtin]='fg=#8BE9FD'
+            ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#8BE9FD'
+            ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=#8BE9FD'
+            ## Punctuation
+            ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#FF79C6'
+            ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-unquoted]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]='fg=#FF79C6'
+            ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#FF79C6'
+            ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#FF79C6'
+            ## Serializable / Configuration Languages
+            ## Storage
+            ## Strings
+            ZSH_HIGHLIGHT_STYLES[command-substitution-quoted]='fg=#F1FA8C'
+            ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-quoted]='fg=#F1FA8C'
+            ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#F1FA8C'
+            ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]='fg=#FF5555'
+            ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#F1FA8C'
+            ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]='fg=#FF5555'
+            ZSH_HIGHLIGHT_STYLES[rc-quote]='fg=#F1FA8C'
+            ## Variables
+            ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]='fg=#FF5555'
+            ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[assign]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#F8F8F2'
+            ## No category relevant in spec
+            ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#FF5555'
+            ZSH_HIGHLIGHT_STYLES[path]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#FF79C6'
+            ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#FF79C6'
+            ZSH_HIGHLIGHT_STYLES[globbing]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#BD93F9'
+            #ZSH_HIGHLIGHT_STYLES[command-substitution]='fg=?'
+            #ZSH_HIGHLIGHT_STYLES[command-substitution-unquoted]='fg=?'
+            #ZSH_HIGHLIGHT_STYLES[process-substitution]='fg=?'
+            #ZSH_HIGHLIGHT_STYLES[arithmetic-expansion]='fg=?'
+            ZSH_HIGHLIGHT_STYLES[back-quoted-argument-unclosed]='fg=#FF5555'
+            ZSH_HIGHLIGHT_STYLES[redirection]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[arg0]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[default]='fg=#F8F8F2'
+            ZSH_HIGHLIGHT_STYLES[cursor]='standout'
           '';
         }).wrapper;
+
     in
     {
       environment.systemPackages = [
@@ -70,7 +133,6 @@
         enable = true;
         vteIntegration = true;
 
-        # The parts the wrapper doesn't cover yet (these *are* supported in NixOS)
         syntaxHighlighting = {
           enable = true;
           highlighters = [
@@ -81,29 +143,6 @@
             "cursor"
             "root"
             "line"
-          ];
-        };
-
-        # Clean Dracula theme via pure NixOS options (no more huge extraRC section)
-        # (now with the missing lib/async.zsh included → fixes the terminal errors)
-        ohMyZsh = {
-          enable = true;
-          theme = "dracula";
-          custom = "${draculaTheme}";
-
-          # plugins moved here (exactly what you had before in extraRC)
-          plugins = [
-            "sudo"
-            "git"
-            "git-extras"
-            "git-escape-magic"
-            "gitfast"
-            "zsh-interactive-cd"
-            "vi-mode"
-            "colored-man-pages"
-            "extract"
-            "cp"
-            "cabal"
           ];
         };
       };
