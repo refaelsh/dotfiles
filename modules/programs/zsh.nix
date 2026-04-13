@@ -113,7 +113,6 @@
       environment.systemPackages = [
         zsh-wrapped
         pkgs.oh-my-zsh
-        pkgs.zsh-you-should-use
         pkgs.zsh-completions
         pkgs.zsh-fzf-tab
       ];
