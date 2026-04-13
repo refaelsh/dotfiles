@@ -41,7 +41,6 @@
           extraRC = ''
             zmodload zsh/zprof
             fpath+=(${pkgs.zsh-completions}/share/zsh/site-functions)
-            source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
 
             # Dracula theme for zsh-syntax-highlighting (exact copy of what you had)
             typeset -gA ZSH_HIGHLIGHT_STYLES
