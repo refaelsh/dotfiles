@@ -39,7 +39,8 @@
           };
 
           extraRC = ''
-            zmodload zsh/zprof
+            # Needed for debug purposes only.
+            # zmodload zsh/zprof
             fpath+=(${pkgs.zsh-completions}/share/zsh/site-functions)
 
             # Dracula theme for zsh-syntax-highlighting (exact copy of what you had)
