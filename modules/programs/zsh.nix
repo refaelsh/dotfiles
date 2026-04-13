@@ -134,21 +134,20 @@
           ];
         };
 
-        # ← Oh My Zsh is now declarative (moved out of extraRC)
+        # Oh My Zsh is now declarative (moved out of extraRC)
         ohMyZsh = {
           enable = true;
           plugins = [
-            "sudo"
-            "git"
-            "git-extras"
-            "git-escape-magic"
-            "gitfast"
-            "zsh-interactive-cd"
-            "vi-mode"
-            "colored-man-pages"
-            "extract"
-            "cp"
-            "cabal"
+            "sudo" # press ESC twice → prefix last command with sudo
+            "git" # extensive git aliases + completion + status prompt
+            "git-extras" # completions for git-extras utilities (git-undo, git-delete-branch, …)
+            "git-escape-magic" # automatically escapes special chars when you type git commands
+            "gitfast" # much faster git completion (uses official git completion)
+            "zsh-interactive-cd" # interactive selection when cd has multiple matches
+            "colored-man-pages" # adds colors to man pages
+            "extract" # `extract` command to unpack many archive types automatically
+            "cp" # `cpv` command — cp with progress bar (via rsync)
+            "cabal" # Haskell Cabal completion + aliases
           ];
         };
       };
