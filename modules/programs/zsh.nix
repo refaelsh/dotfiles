@@ -42,8 +42,6 @@
             # Needed for debug purposes only.
             # zmodload zsh/zprof
 
-            fpath+=(${pkgs.zsh-completions}/share/zsh/site-functions)
-
             # Dracula theme for zsh-syntax-highlighting (exact copy of what you had)
             typeset -gA ZSH_HIGHLIGHT_STYLES
             ZSH_HIGHLIGHT_STYLES[comment]='fg=#6272A4'
