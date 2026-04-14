@@ -4,6 +4,13 @@
     { pkgs, ... }:
 
     let
+      # Official Dracula zsh-syntax-highlighting theme (exactly the styles you currently have inlined)
+      dracula-syntax = pkgs.fetchFromGitHub {
+        owner = "dracula";
+        repo = "zsh-syntax-highlighting";
+        rev = "c5a5b7e9d2e8f8c8f0e0f0e0f0e0f0e0f0e0f0e0"; # ← update to latest (see below)
+        sha256 = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; # ← will be provided by nix-prefetch
+      };
       zsh-wrapped =
         (inputs.wrappers.wrapperModules.zsh.apply {
           inherit pkgs;
@@ -43,14 +50,6 @@
             ZSH_AUTOSUGGEST_USE_ASYNC = "true"; # async suggestions
             ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE = "20"; # optional
             ZSH_HIGHLIGHT_MAX_LENGTH = "200"; # if you keep syntax highlighting
-          };
-
-          # Official Dracula zsh-syntax-highlighting theme (exactly the styles you currently have inlined)
-          dracula-syntax = pkgs.fetchFromGitHub {
-            owner = "dracula";
-            repo = "zsh-syntax-highlighting";
-            rev = "c5a5b7e9d2e8f8c8f0e0f0e0f0e0f0e0f0e0f0e0"; # ← update to latest (see below)
-            sha256 = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; # ← will be provided by nix-prefetch
           };
 
           extraRC = ''
