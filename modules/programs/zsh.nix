@@ -11,7 +11,7 @@
           settings = {
             shellAliases = {
               cat = "bat";
-              ls = null;
+              ls = ls;
             };
 
             autoSuggestions.enable = true;
