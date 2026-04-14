@@ -134,7 +134,7 @@
         enable = true;
         vteIntegration = true;
 
-        extraConfig = lib.mkAfter ''
+        extraRC = lib.mkAfter ''
           # Dracula syntax highlighting (sourced from upstream, no bloat)
           source ${dracula-syntax}/zsh-syntax-highlighting.sh
         '';
