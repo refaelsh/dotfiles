@@ -1,8 +1,7 @@
 { inputs, ... }:
 {
   flake.nixosModules.zsh =
-    { pkgs, ... }:
-
+    { pkgs, lib, ... }:
     let
       # Official Dracula zsh-syntax-highlighting theme (exactly the styles you currently have inlined)
       dracula-syntax = pkgs.fetchFromGitHub {
@@ -134,6 +133,11 @@
       programs.zsh = {
         enable = true;
         vteIntegration = true;
+
+        extraConfig = lib.mkAfter ''
+          # Dracula syntax highlighting (sourced from upstream, no bloat)
+          source ${dracula-syntax}/zsh-syntax-highlighting.sh
+        '';
 
         syntaxHighlighting = {
           enable = true;
