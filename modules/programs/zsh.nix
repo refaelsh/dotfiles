@@ -38,6 +38,12 @@
             integrations.fzf.enable = true;
           };
 
+          env = {
+            ZSH_AUTOSUGGEST_USE_ASYNC = "true"; # async suggestions
+            ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE = "20"; # optional
+            ZSH_HIGHLIGHT_MAX_LENGTH = "200"; # if you keep syntax highlighting
+          };
+
           extraRC = ''
             # Needed for debug purposes only.
             # zmodload zsh/zprof
@@ -138,7 +144,7 @@
         ohMyZsh = {
           enable = true;
           plugins = [
-            "sudo" # press ESC twice → prefix last command with sudo
+            # "sudo" # press ESC twice → prefix last command with sudo
             "git" # extensive git aliases + completion + status prompt
             "git-extras" # completions for git-extras utilities (git-undo, git-delete-branch, …)
             "git-escape-magic" # automatically escapes special chars when you type git commands
