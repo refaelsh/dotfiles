@@ -55,6 +55,10 @@
             # Needed for debug purposes only.
             # zmodload zsh/zprof
 
+            # Dracula syntax highlighting — clean upstream, no 50-line monster
+            # (sourced *before* zsh-syntax-highlighting activates, exactly as your old block did)
+            source ${dracula-syntax}/zsh-syntax-highlighting.sh
+
             # Dracula theme for zsh-syntax-highlighting (exact copy of what you had)
             typeset -gA ZSH_HIGHLIGHT_STYLES
             ZSH_HIGHLIGHT_STYLES[comment]='fg=#6272A4'
@@ -133,11 +137,6 @@
       programs.zsh = {
         enable = true;
         vteIntegration = true;
-
-        extraRC = lib.mkAfter ''
-          # Dracula syntax highlighting (sourced from upstream, no bloat)
-          source ${dracula-syntax}/zsh-syntax-highlighting.sh
-        '';
 
         syntaxHighlighting = {
           enable = true;
