@@ -1,15 +1,9 @@
 { inputs, ... }:
 {
   flake.nixosModules.zsh =
-    { pkgs, lib, ... }:
+    { pkgs, ... }:
+
     let
-      # Official Dracula zsh-syntax-highlighting theme (exactly the styles you currently have inlined)
-      dracula-syntax = pkgs.fetchFromGitHub {
-        owner = "dracula";
-        repo = "zsh-syntax-highlighting";
-        rev = "c5a5b7e9d2e8f8c8f0e0f0e0f0e0f0e0f0e0f0e0"; # ← update to latest (see below)
-        sha256 = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; # ← will be provided by nix-prefetch
-      };
       zsh-wrapped =
         (inputs.wrappers.wrapperModules.zsh.apply {
           inherit pkgs;
@@ -54,10 +48,6 @@
           extraRC = ''
             # Needed for debug purposes only.
             # zmodload zsh/zprof
-
-            # Dracula syntax highlighting — clean upstream, no 50-line monster
-            # (sourced *before* zsh-syntax-highlighting activates, exactly as your old block did)
-            source ${dracula-syntax}/zsh-syntax-highlighting.sh
 
             # Dracula theme for zsh-syntax-highlighting (exact copy of what you had)
             typeset -gA ZSH_HIGHLIGHT_STYLES
