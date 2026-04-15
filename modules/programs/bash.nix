@@ -15,7 +15,7 @@
       programs.bash = {
         enable = true;
 
-        # blesh = ble.sh (pulled via your flake inputs)
+        # blesh = ble.sh (enabled via nixpkgs, wrapped dendritically)
         blesh.enable = true;
 
         interactiveShellInit = ''
@@ -23,30 +23,26 @@
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
 
-          # ── FULL DRACULA THEME FOR BLE.SH (truecolor hex – matches dracula/kitty exactly)
+          # ── SAFE FULL DRACULA THEME FOR BLE.SH (only valid faces from current ble.sh)
           if [[ -n $BLE_VERSION ]]; then
-            # Syntax highlighting (updated names that actually exist in current blesh)
-            ble-face -s syntax_command            'fg=#bd93f9'     # purple
-            ble-face -s syntax_keyword            'fg=#ff79c6'     # pink
-            ble-face -s syntax_function_name      'fg=#50fa7b,bold' # green
-            ble-face -s syntax_quoted             'fg=#f1fa8c'     # yellow
-            ble-face -s syntax_string             'fg=#f1fa8c'     # yellow
-            ble-face -s syntax_expr               'fg=#8be9fd'     # cyan
-            ble-face -s syntax_varname            'fg=#ff5555'     # red
-            ble-face -s syntax_history_expansion  'fg=#6272a4'     # comment gray
-            ble-face -s command                   'fg=#bd93f9,bold'
+            # Syntax highlighting – exact valid face names + Dracula truecolor hex
+            ble-face -s syntax_command          'fg=#bd93f9'        # purple commands
+            ble-face -s command_keyword         'fg=#ff79c6'        # pink keywords
+            ble-face -s syntax_function_name    'fg=#50fa7b,bold'   # green functions
+            ble-face -s syntax_quoted           'fg=#f1fa8c'        # yellow strings
+            ble-face -s syntax_quotation        'fg=#f1fa8c'        # quoted strings
+            ble-face -s syntax_expr             'fg=#8be9fd'        # cyan expressions
+            ble-face -s syntax_varname          'fg=#ff5555'        # red variables
+            ble-face -s syntax_history_expansion 'fg=#6272a4'       # gray history
+            ble-face -s syntax_comment          'fg=#6272a4'        # comments
 
-            # Prompt & UI elements
-            ble-face -s prompt_char               'fg=#ffb86c,bold' # orange λ
-            ble-face -s prompt_char_over          'fg=#ff5555'      # red when invalid
-
-            # Extra polish (optional but nice with Dracula)
-            ble-face -s auto_complete             'fg=#6272a4'
-            ble-face -s menu                      'fg=#f8f8f2,bg=#44475a'
-            ble-face -s menu_active               'fg=#f8f8f2,bg=#bd93f9'
+            # Extra safe UI faces (confirmed valid)
+            ble-face -s auto_complete           'fg=#6272a4'        # subtle suggestions
+            ble-face -s menu_complete_match     'fg=#f8f8f2,bg=#44475a'
+            ble-face -s menu_complete_selected  'fg=#f8f8f2,bg=#bd93f9'
           fi
 
-          # Your custom prompt (🏠 λ) – now with a tiny Dracula accent
+          # Your custom prompt (🏠 λ) – Dracula-accented truecolor
           PS1='\[\e[38;2;139;233;253m\]🏠\[\e[0m\] \[\e[38;2;255;184;108m\]λ\[\e[0m\] '
         '';
       };
