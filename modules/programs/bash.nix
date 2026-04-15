@@ -1,8 +1,8 @@
 # modules/programs/bash.nix
 # Dendritic NixOS module – pure Lassulus/wrappers style (no Home-Manager, ever)
-# Drop this entire file in place of your current one. Rebuild → clean 🏠 λ + full Dracula syntax highlighting in every kitty.
+# Drop this entire file in place of your current one. Rebuild → clean 🏠 λ + full Dracula in every kitty.
 
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   flake.nixosModules.bash =
     {
@@ -15,7 +15,7 @@
       programs.bash = {
         enable = true;
 
-        # blesh = ble.sh (pulled via your flake inputs)
+        # blesh = ble.sh (pulled via your flake inputs + official NixOS module)
         blesh.enable = true;
 
         interactiveShellInit = ''
@@ -23,8 +23,9 @@
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
 
-          # ── Proper ble.sh initialization (this was the missing piece for colors)
-          [[ $- == *i* ]] && source "$(blesh-share)/ble.sh" --attach=none
+          # ── Proper ble.sh initialization using full Nix store path
+          # (this replaces the broken "blesh-share" helper and fixes the sourcing error)
+          [[ $- == *i* ]] && source "${pkgs.blesh}/share/blesh/ble.sh" --attach=none
 
           # ── FULL DRACULA THEME FOR BLE.SH (only valid faces for your version)
           if [[ -n ''${BLE_VERSION-} ]]; then
