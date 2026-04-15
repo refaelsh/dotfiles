@@ -26,8 +26,8 @@
       };
 
       programs.bat = {
-        bat.enable = true;
-        bat.package = bat-wrapped;
+        enable = true;
+        package = bat-wrapped;
       };
     };
 }
