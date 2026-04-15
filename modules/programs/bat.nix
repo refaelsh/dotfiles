@@ -22,7 +22,10 @@
           # cat = "bat";
         };
 
-        systemPackages = [ bat-wrapped ];
+        # systemPackages = [ bat-wrapped ];
       };
+
+      programs.bat.package = bat-wrapped;
+      programs.bat.enable = true;
     };
 }
