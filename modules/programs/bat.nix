@@ -25,7 +25,9 @@
         # systemPackages = [ bat-wrapped ];
       };
 
-      programs.bat.package = bat-wrapped;
-      programs.bat.enable = true;
+      programs.bat = {
+        bat.enable = true;
+        bat.package = bat-wrapped;
+      };
     };
 }
