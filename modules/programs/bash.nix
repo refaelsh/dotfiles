@@ -1,6 +1,6 @@
 # modules/programs/bash.nix
 # Dendritic NixOS module – pure Lassulus/wrappers style (no Home-Manager, ever)
-# Drop this entire file in place of your current one. Rebuild → clean 🏠 λ + full Dracula syntax in every kitty.
+# Drop this entire file in place of your current one. Rebuild → clean 🏠 λ + full Dracula + DEBUG output in every kitty.
 
 { lib, pkgs, ... }:
 {
@@ -15,15 +15,19 @@
       programs.bash = {
         enable = true;
 
-        # blesh = ble.sh (pulled via your flake inputs + official NixOS module)
+        # blesh = ble.sh (we take full control)
         blesh.enable = true;
 
-        # mkForce overrides the NixOS blesh module’s early sourcing completely
-        # so we get full control of --attach=none → faces → ble-attach order
         interactiveShellInit = lib.mkForce ''
           # ── Core shell options (kept exactly as you had them)
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
+
+          # ── DEBUG: tell us what’s really happening
+          echo "=== BLE DEBUG START ==="
+          echo "BLE_VERSION: ''${BLE_VERSION-}"
+          echo "blesh path: ${pkgs.blesh}/share/blesh/ble.sh"
+          echo "=== BLE DEBUG END ==="
 
           # ── Proper ble.sh initialization using full Nix store path
           [[ $- == *i* ]] && source "${pkgs.blesh}/share/blesh/ble.sh" --attach=none
