@@ -2,7 +2,7 @@
 # Dendritic NixOS module – pure Lassulus/wrappers style (no Home-Manager, ever)
 # Drop this entire file in place of your current one. Rebuild → clean 🏠 λ + full Dracula syntax in every kitty.
 
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   flake.nixosModules.bash =
     {
@@ -15,17 +15,21 @@
       programs.bash = {
         enable = true;
 
-        # blesh = ble.sh (let the official NixOS module handle the early sourcing)
+        # blesh = ble.sh (pulled via your flake inputs + official NixOS module)
         blesh.enable = true;
 
-        interactiveShellInit = lib.mkAfter ''
+        # mkForce overrides the NixOS blesh module’s early sourcing completely
+        # so we get full control of --attach=none → faces → ble-attach order
+        interactiveShellInit = lib.mkForce ''
           # ── Core shell options (kept exactly as you had them)
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
 
+          # ── Proper ble.sh initialization using full Nix store path
+          [[ $- == *i* ]] && source "${pkgs.blesh}/share/blesh/ble.sh" --attach=none
+
           # ── FULL DRACULA THEME FOR BLE.SH (only valid faces for your version)
           if [[ -n ''${BLE_VERSION-} ]]; then
-            # Syntax highlighting – Dracula truecolor hex
             ble-face -s syntax_command            'fg=#bd93f9'        # purple commands
             ble-face -s command_keyword           'fg=#ff79c6'        # pink keywords
             ble-face -s syntax_function_name      'fg=#50fa7b,bold'   # green functions
@@ -41,7 +45,7 @@
           # Your custom prompt (🏠 λ) – Dracula-accented truecolor
           PS1='\[\e[38;2;139;233;253m\]🏠\[\e[0m\] \[\e[38;2;255;184;108m\]λ\[\e[0m\] '
 
-          # ── Ensure ble.sh is fully attached (activates syntax + faces)
+          # ── Finally attach ble.sh (activates syntax highlighting + faces)
           [[ ''${BLE_VERSION-} ]] && ble-attach
         '';
       };
