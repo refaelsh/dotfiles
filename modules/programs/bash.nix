@@ -31,10 +31,7 @@
           ble-face -s syntax_history_expansion  'fg=gray'
 
           # (optional extra if you ever used the old syntax_keyword)
-          # ble-face -s command_keyword           'fg=blue,bold'
-
-          # Your custom prompt (🏠 λ) – colored directly in PS1 so no prompt_char needed
-          PS1='\[\e[1;34m\]🏠\[\e[0m\] \[\e[1;33m\]λ\[\e[0m\] '
+          ble-face -s command_keyword           'fg=blue,bold'
         '';
       };
     };
