@@ -23,17 +23,16 @@
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
 
-          # ── Proper ble.sh initialization (exact from upstream README)
+          # ── Proper ble.sh initialization (exact from upstream README for 0.4.0-devel3)
           if [[ $- == *i* ]]; then
             source "${pkgs.blesh}/share/blesh/ble.sh" --attach=none
           fi
 
-          # ── Force truecolor + syntax engine (this was the missing piece for visible colors)
+          # ── FULL DRACULA THEME FOR BLE.SH (only valid faces + options for your version 0.4.0-devel3)
           if [[ -n ''${BLE_VERSION-} ]]; then
-            bleopt term_truecolor=1          # ensure kitty truecolor is used
-            bleopt syntax_enabled=1          # make sure highlighting engine is on
+            bleopt highlight_syntax=1   # force syntax engine on (this was the missing piece)
 
-            # ── FULL DRACULA THEME FOR BLE.SH (only valid faces from 0.4.0-devel3)
+            # Syntax highlighting – Dracula truecolor hex
             ble-face -s syntax_command            'fg=#bd93f9'        # purple commands
             ble-face -s command_keyword           'fg=#ff79c6'        # pink keywords
             ble-face -s syntax_function_name      'fg=#50fa7b,bold'   # green functions
