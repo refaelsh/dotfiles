@@ -1,6 +1,6 @@
 # modules/programs/bash.nix
 # Dendritic NixOS module – pure Lassulus/wrappers style (no Home-Manager, ever)
-# Drop this entire file in place of your current one. Rebuild → clean 🏠 λ + full Dracula syntax in every kitty.
+# Drop this entire file in place of your current one. Rebuild → clean 🏠 λ + FULL Dracula syntax highlighting in every kitty.
 
 { lib, pkgs, ... }:
 {
@@ -28,11 +28,15 @@
             source "${pkgs.blesh}/share/blesh/ble.sh" --attach=none
           fi
 
-          # ── FULL DRACULA THEME FOR BLE.SH (only valid faces + options for your version 0.4.0-devel3)
+          # ── FULL DRACULA THEME FOR BLE.SH + enable syntax engine
           if [[ -n ''${BLE_VERSION-} ]]; then
-            bleopt highlight_syntax=1   # force syntax engine on (this was the missing piece)
+            # Enable the syntax highlighter (this was the missing piece)
+            bleopt highlight_syntax=1
+            bleopt highlight_filename=1
+            bleopt highlight_variable=1
 
-            # Syntax highlighting – Dracula truecolor hex
+            # Syntax highlighting – Dracula truecolor hex (all your faces are already confirmed working)
+            ble-face -s syntax_default            'fg=#f8f8f2'        # normal text
             ble-face -s syntax_command            'fg=#bd93f9'        # purple commands
             ble-face -s command_keyword           'fg=#ff79c6'        # pink keywords
             ble-face -s syntax_function_name      'fg=#50fa7b,bold'   # green functions
@@ -43,6 +47,11 @@
             ble-face -s syntax_history_expansion  'fg=#6272a4'        # gray history
             ble-face -s syntax_comment            'fg=#6272a4'        # comments
             ble-face -s auto_complete             'fg=#6272a4'        # subtle suggestions
+
+            # Extra Dracula polish (matches the faces you already see in ble-face)
+            ble-face -s syntax_brace              'fg=#bd93f9,bold'
+            ble-face -s syntax_delimiter          'fg=#f8f8f2,bold'
+            ble-face -s syntax_tilde              'fg=#8be9fd,bold'
           fi
 
           # Your custom prompt (🏠 λ) – Dracula-accented truecolor
