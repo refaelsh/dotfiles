@@ -23,11 +23,11 @@
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
 
-          # ── Proper ble.sh initialization (this was the missing piece)
+          # ── Proper ble.sh initialization (this was the missing piece for colors)
           [[ $- == *i* ]] && source "$(blesh-share)/ble.sh" --attach=none
 
           # ── FULL DRACULA THEME FOR BLE.SH (only valid faces for your version)
-          if [[ -n $BLE_VERSION ]]; then
+          if [[ -n ''${BLE_VERSION-} ]]; then
             ble-face -s syntax_command            'fg=#bd93f9'        # purple commands
             ble-face -s command_keyword           'fg=#ff79c6'        # pink keywords
             ble-face -s syntax_function_name      'fg=#50fa7b,bold'   # green functions
@@ -44,7 +44,7 @@
           PS1='\[\e[38;2;139;233;253m\]🏠\[\e[0m\] \[\e[38;2;255;184;108m\]λ\[\e[0m\] '
 
           # ── Finally attach ble.sh (activates syntax highlighting + faces)
-          [[ ${BLE_VERSION-} ]] && ble-attach
+          [[ ''${BLE_VERSION-} ]] && ble-attach
         '';
       };
     };
