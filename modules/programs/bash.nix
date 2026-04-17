@@ -1,13 +1,14 @@
 { lib, ... }:
+
 {
 
   # Dendritic bash feature – pure NixOS, no Home-Manager
   # Re-read repo right now: https://github.com/refaelsh/dotfiles/blob/master/modules/programs/bash.nix
-  # (current file still has the old direct ble-face calls → causing the “face not found” spam)
-  # No home-manager, no Lassulus wrappers needed. Fixed with blehook/attach so faces run AFTER blesh fully initializes.
+  # (current file is still the minimal bind+shopt version – no Lassulus wrappers ever needed here)
 
   flake.nixosModules.bash =
     { pkgs, lib, ... }:
+
     {
       programs.bash = {
         enable = true;
@@ -16,11 +17,12 @@
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
 
-          # Dracula theme for ble.sh (blesh) – fixed timing with blehook/attach
-          # Runs AFTER blesh has defined all faces (the root cause of “face 'default' not found” etc.)
+          # Dracula theme for ble.sh (blesh) – fixed with function + blehook/attach
+          # No heredoc = no more "delimited by end-of-file" or "unexpected end of file" errors
+          # Runs AFTER blesh fully initializes (all faces are defined)
           # Exact Dracula palette from https://draculatheme.com
           if [[ -n ''${BLE_VERSION-} ]]; then
-            blehook/attach <<'DRACULA'
+            ble_dracula_theme() {
               ble-face -s default             'fg=#f8f8f2,bg=#282a36'
               ble-face -s region              'bg=#44475a,fg=#f8f8f2'
               ble-face -s region_match        'bg=#ff79c6,fg=#282a36'
@@ -38,7 +40,8 @@
               ble-face -s menu_match          'fg=#ff79c6,bg=#44475a'
               ble-face -s syntax_error        'fg=#ff5555'
               ble-face -s varname             'fg=#8be9fd'
-            DRACULA
+            }
+            blehook/attach ble_dracula_theme
           fi
         '';
       };
