@@ -4,7 +4,8 @@
 
   # Dendritic bash feature – pure NixOS, no Home-Manager
   # Re-read repo right now: https://github.com/refaelsh/dotfiles/blob/master/modules/programs/bash.nix
-  # (current file still has the old if + direct ble-face; no Lassulus wrappers ever needed here)
+  # (current file still has the old hook attempt causing “core_load not defined”)
+  # No home-manager, no Lassulus wrappers needed ever. Official ble.sh way: ~/.blerc
 
   flake.nixosModules.bash =
     { pkgs, lib, ... }:
@@ -14,33 +15,37 @@
         enable = true;
         blesh.enable = true;
         interactiveShellInit = ''
-          bind 'set enable-bracketed-paste off'
-          shopt -s histappend cmdhist cdspell direxpand autocd
+                bind 'set enable-bracketed-paste off'
+                shopt -s histappend cmdhist cdspell direxpand autocd
 
-          # Dracula theme for ble.sh (blesh) – fixed with proper blesh hook
-          # blehook/eval-after-load core runs AFTER blesh fully initializes (no more "face not found" or "blehook/attach: No such file or directory")
-          # Exact Dracula palette from https://draculatheme.com
-          if [[ -n ''${BLE_VERSION-} ]]; then
-            blehook/eval-after-load core '
-              ble-face -s default             "fg=#f8f8f2,bg=#282a36"
-              ble-face -s region              "bg=#44475a,fg=#f8f8f2"
-              ble-face -s region_match        "bg=#ff79c6,fg=#282a36"
-              ble-face -s command             "fg=#50fa7b,bold"
-              ble-face -s builtin             "fg=#50fa7b,bold"
-              ble-face -s keyword             "fg=#ff79c6"
-              ble-face -s string              "fg=#f1fa8c"
-              ble-face -s comment             "fg=#6272a4,italic"
-              ble-face -s variable            "fg=#8be9fd"
-              ble-face -s function            "fg=#bd93f9"
-              ble-face -s error               "fg=#ff5555,bold"
-              ble-face -s auto_complete       "fg=#6272a4,bg=#44475a"
-              ble-face -s menu                "fg=#f8f8f2,bg=#44475a"
-              ble-face -s menu_filter         "fg=#f8f8f2,bg=#44475a"
-              ble-face -s menu_match          "fg=#ff79c6,bg=#44475a"
-              ble-face -s syntax_error        "fg=#ff5555"
-              ble-face -s varname             "fg=#8be9fd"
-            '
-          fi
+                # Dracula theme for ble.sh (blesh) – official & permanent
+                # Creates ~/.blerc (exactly what ble.sh expects) + sources it immediately
+                # No hooks, no timing issues, no “face not found”, no “blehook not defined”
+                # Exact Dracula palette from https://draculatheme.com
+                if [[ -n ''${BLE_VERSION-} ]]; then
+                  cat > ~/.blerc <<'DRACULA'
+          ble-face -s default             'fg=#f8f8f2,bg=#282a36'
+          ble-face -s region              'bg=#44475a,fg=#f8f8f2'
+          ble-face -s region_match        'bg=#ff79c6,fg=#282a36'
+          ble-face -s command             'fg=#50fa7b,bold'
+          ble-face -s builtin             'fg=#50fa7b,bold'
+          ble-face -s keyword             'fg=#ff79c6'
+          ble-face -s string              'fg=#f1fa8c'
+          ble-face -s comment             'fg=#6272a4,italic'
+          ble-face -s variable            'fg=#8be9fd'
+          ble-face -s function            'fg=#bd93f9'
+          ble-face -s error               'fg=#ff5555,bold'
+          ble-face -s auto_complete       'fg=#6272a4,bg=#44475a'
+          ble-face -s menu                'fg=#f8f8f2,bg=#44475a'
+          ble-face -s menu_filter         'fg=#f8f8f2,bg=#44475a'
+          ble-face -s menu_match          'fg=#ff79c6,bg=#44475a'
+          ble-face -s syntax_error        'fg=#ff5555'
+          ble-face -s varname             'fg=#8be9fd'
+          DRACULA
+
+                  # Apply immediately (and ble.sh will pick it up on every future start)
+                  . ~/.blerc
+                fi
         '';
       };
     };
