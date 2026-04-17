@@ -8,7 +8,6 @@
 
   flake.nixosModules.bash =
     { pkgs, lib, ... }:
-
     {
       programs.bash = {
         enable = true;
