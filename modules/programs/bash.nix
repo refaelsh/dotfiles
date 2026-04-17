@@ -17,11 +17,11 @@
                 bind 'set enable-bracketed-paste off'
                 shopt -s histappend cmdhist cdspell direxpand autocd
 
-                # Dracula theme for ble.sh (official & permanent fix)
-                # We only CREATE ~/.blerc – ble.sh automatically sources it at the *correct* time
-                # (during its own init, after all faces are defined)
-                # This eliminates every “face 'xxx' not found” error forever
+                # Dracula theme for ble.sh (blesh) – final clean version
+                # rm old broken ~/.blerc (the source of all "face 'xxx' not found" spam from previous attempts)
+                # then write fresh ~/.blerc (ble.sh sources it at the exact right moment during init)
                 # Exact Dracula palette from https://draculatheme.com
+                rm -f ~/.blerc
                 cat > ~/.blerc <<'DRACULA'
           ble-face -s default             'fg=#f8f8f2,bg=#282a36'
           ble-face -s region              'bg=#44475a,fg=#f8f8f2'
