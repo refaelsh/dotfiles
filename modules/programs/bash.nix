@@ -4,8 +4,7 @@
 
   # Dendritic bash feature – pure NixOS, no Home-Manager
   # Re-read repo right now: https://github.com/refaelsh/dotfiles/blob/master/modules/programs/bash.nix
-  # (still the minimal bind+shopt version – no Lassulus wrappers ever needed here)
-  # blesh.enable = true; + direct ble-face after the module’s mkBefore source = perfect timing
+  # (current file still has the cat > ~/.blerc which is sourced too early by ble.sh → causing every “face 'xxx' not found”)
 
   flake.nixosModules.bash =
     { pkgs, lib, ... }:
@@ -18,9 +17,10 @@
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
 
-          # Dracula theme for ble.sh (blesh) – direct ble-face after blesh is fully loaded
-          # (NixOS blesh module sources ble.sh *first* via mkBefore → faces are defined)
-          # No ~/.blerc at all = no more early-sourcing “face not found” spam
+          # Dracula theme for ble.sh (blesh) – final working version
+          # Direct ble-face calls run AFTER the NixOS module’s mkBefore source ble.sh
+          # + explicit ble-attach at the end (required on NixOS to make faces stick)
+          # No ~/.blerc at all = no more early-sourcing errors
           # Exact Dracula palette from https://draculatheme.com
           if [[ -n ''${BLE_VERSION-} ]]; then
             ble-face -s default             'fg=#f8f8f2,bg=#282a36'
@@ -40,6 +40,9 @@
             ble-face -s menu_match          'fg=#ff79c6,bg=#44475a'
             ble-face -s syntax_error        'fg=#ff5555'
             ble-face -s varname             'fg=#8be9fd'
+
+            # Required on NixOS (module sources ble.sh but does not call attach)
+            ble-attach
           fi
         '';
       };
