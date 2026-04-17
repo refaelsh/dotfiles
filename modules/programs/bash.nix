@@ -4,8 +4,7 @@
 
   # Dendritic bash feature – pure NixOS, no Home-Manager
   # Re-read repo right now: https://github.com/refaelsh/dotfiles/blob/master/modules/programs/bash.nix
-  # (current file still has the old hook attempt causing “core_load not defined”)
-  # No home-manager, no Lassulus wrappers needed ever. Official ble.sh way: ~/.blerc
+  # (still the minimal bind+shopt version – no Lassulus wrappers ever needed here)
 
   flake.nixosModules.bash =
     { pkgs, lib, ... }:
@@ -18,12 +17,12 @@
                 bind 'set enable-bracketed-paste off'
                 shopt -s histappend cmdhist cdspell direxpand autocd
 
-                # Dracula theme for ble.sh (blesh) – official & permanent
-                # Creates ~/.blerc (exactly what ble.sh expects) + sources it immediately
-                # No hooks, no timing issues, no “face not found”, no “blehook not defined”
+                # Dracula theme for ble.sh (official & permanent fix)
+                # We only CREATE ~/.blerc – ble.sh automatically sources it at the *correct* time
+                # (during its own init, after all faces are defined)
+                # This eliminates every “face 'xxx' not found” error forever
                 # Exact Dracula palette from https://draculatheme.com
-                if [[ -n ''${BLE_VERSION-} ]]; then
-                  cat > ~/.blerc <<'DRACULA'
+                cat > ~/.blerc <<'DRACULA'
           ble-face -s default             'fg=#f8f8f2,bg=#282a36'
           ble-face -s region              'bg=#44475a,fg=#f8f8f2'
           ble-face -s region_match        'bg=#ff79c6,fg=#282a36'
@@ -42,10 +41,6 @@
           ble-face -s syntax_error        'fg=#ff5555'
           ble-face -s varname             'fg=#8be9fd'
           DRACULA
-
-                  # Apply immediately (and ble.sh will pick it up on every future start)
-                  . ~/.blerc
-                fi
         '';
       };
     };
