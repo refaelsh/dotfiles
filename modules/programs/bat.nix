@@ -19,10 +19,10 @@
     {
       environment = {
         shellAliases = {
-          # cat = "bat";
+          cat = "bat";
         };
-        # systemPackages = [ bat-wrapped ];
       };
+
       programs.bat = {
         enable = true;
         package = bat-wrapped;
