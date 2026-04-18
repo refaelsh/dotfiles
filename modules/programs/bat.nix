@@ -10,19 +10,19 @@
           "bat-config".content = ''
             # bat configuration (migrated from old wrapPackage flags)
             # see: https://github.com/sharkdp/bat/blob/master/README.md#configuration-file
-            style = header,grid,numbers,changes,snip
-            theme = Dracula
-            pager = "less --RAW-CONTROL-CHARS"
+            --style=header,grid,numbers,changes,snip
+            --theme=Dracula
+            --pager="less --RAW-CONTROL-CHARS"
           '';
         }).wrapper;
     in
     {
       environment = {
         shellAliases = {
-          cat = "bat";
+          # cat = "bat";
         };
+        # systemPackages = [ bat-wrapped ];
       };
-
       programs.bat = {
         enable = true;
         package = bat-wrapped;
