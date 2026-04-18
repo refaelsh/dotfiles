@@ -21,7 +21,7 @@
         shellAliases = {
           # cat = "bat";
         };
-        # systemPackages = [ bat-wrapped ];
+
       };
       programs.bat = {
         enable = true;
