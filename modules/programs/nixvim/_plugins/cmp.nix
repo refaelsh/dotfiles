@@ -94,10 +94,10 @@
           name = "rg";
           priority = 300;
         }
-        {
-          name = "spell";
-          priority = 300;
-        }
+        # {
+        #   name = "spell";
+        #   priority = 300;
+        # }
         {
           name = "treesitter";
           priority = 850;
