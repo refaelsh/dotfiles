@@ -74,10 +74,10 @@
           name = "nvim_lsp";
           priority = 1000;
         }
-        {
-          name = "nvim_lsp_document_symbol";
-          priority = 1000;
-        }
+        # {
+        #   name = "nvim_lsp_document_symbol";
+        #   priority = 1000;
+        # }
         {
           name = "nvim_lsp_signature_help";
           priority = 1000;
