@@ -30,10 +30,10 @@
           name = "buffer";
           priority = 500;
         }
-        {
-          name = "calc";
-          priority = 150;
-        }
+        # {
+        #   name = "calc";
+        #   priority = 150;
+        # }
         {
           name = "conventionalcommits";
           priority = 300;
