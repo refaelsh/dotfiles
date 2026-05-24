@@ -13,7 +13,6 @@
         # adb.enable = true;
         xwayland.enable = true;
         # bat.enable = true;
-        adb.enable = true;
       };
       environment.systemPackages = with pkgs; [
         fzf
@@ -180,6 +179,7 @@
         ghostty
         beancount
         fava
+        android-tools
       ];
     };
 }
