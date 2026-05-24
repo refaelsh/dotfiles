@@ -8,10 +8,7 @@
 
     import-tree.url = "github:vic/import-tree";
 
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixvim = { url = "github:nix-community/nixvim"; };
 
     wrappers.url = "github:Lassulus/wrappers";
 
