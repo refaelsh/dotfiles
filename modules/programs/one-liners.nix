@@ -179,7 +179,6 @@
         ghostty
         beancount
         fava
-        grok
       ];
     };
 }
