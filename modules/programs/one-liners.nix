@@ -180,6 +180,7 @@
         beancount
         fava
         android-tools
+        gh
       ];
     };
 }
