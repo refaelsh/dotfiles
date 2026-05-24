@@ -1,7 +1,12 @@
 { lib, ... }:
 {
   flake.nixosModules.grok-build =
-    { pkgs, lib, ... }:
+    {
+      pkgs,
+      inputs,
+      lib,
+      ...
+    }:
     {
       # programs.bash = {
       #   enable = true;
@@ -13,5 +18,8 @@
       #     shopt -s histappend cmdhist cdspell direxpand autocd
       #   '';
       # };
+      environment.systemPackages = with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; [
+        grok
+      ];
     };
 }
