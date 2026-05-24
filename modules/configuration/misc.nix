@@ -13,7 +13,11 @@
       nixpkgs.config.android_sdk.accept_license = true;
 
       time.timeZone = "Asia/Jerusalem";
-      i18n.defaultLocale = "en_US.UTF-8";
+
+      i18n = {
+        defaultLocale = "en_US.UTF-8";
+        extraLocaleSettings.LC_TIME = "en_GB.UTF-8";
+      };
 
       environment.pathsToLink = [ "/share/zsh" ];
     };
