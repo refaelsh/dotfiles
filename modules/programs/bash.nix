@@ -8,7 +8,7 @@
       programs.bash = {
         enable = true;
 
-        # blesh.enable = true;
+        blesh.enable = true;
 
         interactiveShellInit = ''
           bind 'set enable-bracketed-paste off'
