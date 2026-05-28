@@ -181,6 +181,7 @@
         fava
         android-tools
         gh
+        imagemagick
       ];
     };
 }
