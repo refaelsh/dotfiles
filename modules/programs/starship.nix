@@ -42,7 +42,6 @@
             };
             directory = {
               home_symbol = "🏠";
-              symbol = "";
               truncation_length = 8;
               truncation_symbol = "…/";
               format = "[$path]($style)";
@@ -67,8 +66,12 @@
         }).wrapper;
     in
     {
-      # Only the wrapped binary (with STARSHIP_CONFIG baked in via the wrapper).
-      # Initialization is handled manually in bash.nix.
+      # Explicitly ensure the normal NixOS starship module does nothing.
+      # We fully drive Starship (config + binary + init) via the wrapper.
+      programs.starship.enable = false;
+
+      # The wrapped binary (config is forced via STARSHIP_CONFIG in the wrapper).
+      # Actual `eval "$(starship init ...)"` lives in bash.nix because of blesh.
       environment.systemPackages = [ starship-wrapped ];
     };
 }
