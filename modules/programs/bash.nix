@@ -26,7 +26,7 @@
             eval "$(starship init bash --print-full-init)"
             # If ble.sh is already attached, re-attach so it can re-take control
             # of the prompt after Starship has installed its hooks.
-            [[ ${BLE_VERSION-} ]] && ble-attach 2>/dev/null || true
+            [[ ''${BLE_VERSION-} ]] && ble-attach 2>/dev/null || true
           fi
         '';
       };
