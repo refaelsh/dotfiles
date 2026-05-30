@@ -26,7 +26,12 @@
             enable_audio_bell = "no";
             cursor_shape = "beam";
             cursor_blink_interval = 0;
-            scrollback_lines = 10000;
+            # Reduced from 10000 (2026-05) because the Grok TUI is extremely
+            # verbose (long reasoning traces, subagent output, monitor streams,
+            # per-call terminal capture logs). The real history lives in
+            # ~/.grok/sessions/... anyway. 4000 lines is still very generous
+            # for normal terminal use.
+            scrollback_lines = 4000;
             allow_remote_control = "yes";
 
             # shell_integration = "enabled no-prompt-mark";
