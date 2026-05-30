@@ -7,7 +7,7 @@
 
       # Wrap the grok binary so the entire agent process tree (main + subagents,
       # monitors, background commands, MCP node process) runs at lower CPU
-      # scheduling priority. This keeps the interactive desktop (xmonad, kitty
+      # scheduling priority. This keeps the interactive desktop (xmonad, ghostty
       # rendering the TUI, browser, etc.) more responsive during heavy work.
       # Children usually inherit the niceness.
       #

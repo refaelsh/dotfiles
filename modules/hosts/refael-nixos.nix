@@ -18,7 +18,7 @@
     specialArgs = { inherit inputs; };
 
     modules = [
-      # One line = all your features (brave, kitty, starship, git, etc.) are pulled in automatically
+      # One line = all your features (brave, ghostty, starship, git, etc.) are pulled in automatically
       inputs.self.nixosModules.nixos
 
       # KBDD overlay

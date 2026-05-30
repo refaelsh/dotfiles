@@ -176,7 +176,6 @@
         proton-pass
         # notepadqq
         widelands
-        ghostty
         beancount
         fava
         android-tools

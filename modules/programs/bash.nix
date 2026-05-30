@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   # Dendritic bash feature – pure NixOS, no Home-Manager
-  # interactiveShellInit is now enough because Kitty launches with -i
+  # interactiveShellInit works because Ghostty (and most modern terminals) launch interactive shells.
   flake.nixosModules.bash =
     { pkgs, lib, ... }:
     {

@@ -1,51 +1,12 @@
-{ inputs, pkgs, ... }:
+{ ... }:
 {
-  # Dendritic flake-parts wrapper (Lassulus style)
-  flake.nixosModules.kitty =
-    { lib, pkgs, ... }:
-    let
-      # ── Official Dracula Kitty theme (pinned forever) ─────────────────────────
-      draculaRev = "87717a3f00e3dff0fc10c93f5ff535ea4092de70";
-
-      draculaTheme = pkgs.fetchFromGitHub {
-        owner = "dracula";
-        repo = "kitty";
-        rev = draculaRev;
-        sha256 = "sha256-78PTH9wE6ktuxeIxrPp0ZgRI8ST+eZ3Ok2vW6BCIZkc=";
-      };
-    in
-    {
-      environment.systemPackages = [
-        (inputs.wrappers.wrapperModules.kitty.apply {
-          inherit pkgs;
-
-          settings = {
-            font_family = "FiraCode Nerd Font";
-            font_size = 12;
-            confirm_os_window_close = 0;
-            enable_audio_bell = "no";
-            cursor_shape = "beam";
-            cursor_blink_interval = 0;
-            # Reduced from 10000 (2026-05) because the Grok TUI is extremely
-            # verbose (long reasoning traces, subagent output, monitor streams,
-            # per-call terminal capture logs). The real history lives in
-            # ~/.grok/sessions/... anyway. 4000 lines is still very generous
-            # for normal terminal use.
-            scrollback_lines = 4000;
-            allow_remote_control = "yes";
-
-            # shell_integration = "enabled no-prompt-mark";
-
-            # shell = "bash -i";
-
-            # Absolute path to the pinned theme
-            include = "${draculaTheme}/dracula.conf";
-          };
-          extraSettings = ''
-            map ctrl+c copy_and_clear_or_interrupt
-            map ctrl+v paste_from_clipboard
-          '';
-        }).wrapper
-      ];
-    };
+  # MIGRATED TO GHOSTTY (2026)
+  #
+  # The active terminal configuration now lives in modules/programs/ghostty.nix.
+  # This file is kept as a stub so that import-tree continues to work without error.
+  # The original Kitty wrapper + Dracula pinning + Grok-specific scrollback tuning
+  # has been fully ported (and improved — Ghostty ships its own Dracula theme).
+  #
+  # Safe to `git rm` this file in a follow-up commit once the migration is proven stable.
+  flake.nixosModules.kitty = { ... }: { };
 }
