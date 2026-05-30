@@ -1,14 +1,12 @@
 { inputs, ... }:
 {
-  # Dendritic feature using the official Lassulus/wrappers starship module
-  # Exact same config as your old Home-Manager starship.nix
+  # Dendritic feature using the official Lassulus/wrappers starship module.
+  # We fully drive Starship through the wrapper (config + binary) and do
+  # our own init in bash.nix. This avoids the conflicting NixOS starship
+  # module that was generating a second empty config and fighting over
+  # STARSHIP_CONFIG.
   flake.nixosModules.starship =
-    {
-      pkgs,
-      lib,
-      config,
-      ...
-    }:
+    { pkgs, ... }:
     let
       starship-wrapped =
         (inputs.wrappers.wrapperModules.starship.apply {
@@ -44,8 +42,10 @@
             };
             directory = {
               home_symbol = "🏠";
+              symbol = "";
               truncation_length = 8;
               truncation_symbol = "…/";
+              format = "[$path]($style)";
             };
             # Dracula theme (exact match to your old config)
             aws.style = "bold #ffb86c";
@@ -67,12 +67,8 @@
         }).wrapper;
     in
     {
-      programs.starship = {
-        enable = true;
-        package = starship-wrapped;
-      };
-
-      # ← FORCE the wrapped binary into PATH (this is the missing piece)
+      # Only the wrapped binary (with STARSHIP_CONFIG baked in via the wrapper).
+      # Initialization is handled manually in bash.nix.
       environment.systemPackages = [ starship-wrapped ];
     };
 }

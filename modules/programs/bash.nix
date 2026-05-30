@@ -13,6 +13,14 @@
         interactiveShellInit = ''
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
+
+          # Starship initialization.
+          # We fully rely on the wrappers-wrapped starship binary (which has
+          # STARSHIP_CONFIG forced via the wrapper environment). The NixOS
+          # programs.starship module is intentionally not used.
+          if [[ $TERM != "dumb" ]]; then
+            eval "$(starship init bash --print-full-init)"
+          fi
         '';
       };
     };
