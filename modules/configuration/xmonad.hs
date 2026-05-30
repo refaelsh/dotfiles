@@ -24,7 +24,10 @@ myTerminal = "ghostty"
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawn "keyctl link @u @s"
+  -- Links the user keyring to the session keyring.
+  -- Important for ssh-agent, Bitwarden, and other keyring-dependent tools.
+  -- "2>/dev/null || true" prevents failure if the link already exists.
+  spawn "keyctl link @u @s 2>/dev/null || true"
   spawnOnce "killall trayer; trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282a36"
   spawnOnce "clipmenud"
   spawnOnce "numlockx on"
