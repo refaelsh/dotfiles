@@ -32,10 +32,7 @@
             # for normal terminal use and for Ghostty's byte-based limit.
             scrollback-limit = 64 * 1024 * 1024;  # 64 MiB
 
-            # On classic XMonad + xmobar/trayer the "auto" default is usually the
-            # least surprising. Set to "none" explicitly later if you prefer completely
-            # borderless client-side decorations.
-            # window-decoration = "auto";
+            window-decoration = false;
 
             # Convenient for mouse-driven selection workflows (pairs well with Grok).
             copy-on-select = "clipboard";
