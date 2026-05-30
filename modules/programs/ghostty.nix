@@ -34,6 +34,13 @@
 
             window-decoration = false;
 
+            # Disable Ghostty's built-in shell integration.
+            # We are running a complex custom prompt stack (ble.sh + Starship
+            # driven by the wrapper). Ghostty's integration injects its own
+            # prompt hooks which easily cause double (or triple) rendering of
+            # the prompt, especially the directory module.
+            shell-integration = "none";
+
             # Convenient for mouse-driven selection workflows (pairs well with Grok).
             copy-on-select = "clipboard";
 
