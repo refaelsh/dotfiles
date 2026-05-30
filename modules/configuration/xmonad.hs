@@ -30,8 +30,8 @@ myStartupHook = do
   spawnOnce "numlockx on"
   spawnOnce "setxkbmap -layout us,il -option grp:alt_shift_toggle"
   spawnOnce "kbdd"
-  spawn "amixer set Master 5%-"
-  spawn "amixer set Master 5%+"
+  -- Removed: two amixer calls that did -5% then immediately +5% on every
+  -- startup (and used `spawn` instead of `spawnOnce`). They had no effect.
   spawnOnOnce "1" "brave"
   spawnOnOnce "8" "discord"
   spawnOnOnce "9" "signal-desktop"
