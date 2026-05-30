@@ -13,20 +13,15 @@
         interactiveShellInit = ''
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
+        '';
 
-          # Starship initialization (fully driven by the wrapper).
-          # We intentionally do NOT use programs.starship.enable.
-          #
-          # blesh is also enabled via programs.bash.blesh.enable. The ordering
-          # here matters: Starship init should run late in interactiveShellInit.
-          # After a rebuild you usually need a completely fresh shell (or `exec bash`)
-          # because old hook registrations from the previous NixOS starship module
-          # can still be active in existing shell sessions.
+        # Starship prompt setup.
+        # We do this in promptInit (like the old programs.starship module did)
+        # because it gives better cooperation with blesh.enable = true.
+        # The actual Starship binary + config comes 100% from the wrapper.
+        promptInit = ''
           if [[ $TERM != "dumb" ]]; then
             eval "$(starship init bash --print-full-init)"
-            # If ble.sh is already attached, re-attach so it can re-take control
-            # of the prompt after Starship has installed its hooks.
-            [[ ''${BLE_VERSION-} ]] && ble-attach 2>/dev/null || true
           fi
         '';
       };
