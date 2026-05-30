@@ -8,21 +8,27 @@
       programs.bash = {
         enable = true;
 
-        blesh.enable = true;
+        # We disable the automatic blesh module because its internal prompt
+        # hook management conflicts with Starship and causes the entire prompt
+        # (including the directory module) to render twice.
+        blesh.enable = false;
 
         interactiveShellInit = ''
           bind 'set enable-bracketed-paste off'
           shopt -s histappend cmdhist cdspell direxpand autocd
-        '';
 
-        # Starship prompt setup.
-        # We do this in promptInit (like the old programs.starship module did)
-        # because it gives better cooperation with blesh.enable = true.
-        # The actual Starship binary + config comes 100% from the wrapper.
-        promptInit = ''
+          # === Manual ble.sh + Starship initialization (full control) ===
+          # This ordering is the one recommended by both Starship and ble.sh
+          # documentation to avoid double prompts.
+          source ${pkgs.blesh}/share/blesh/ble.sh --noattach
+
+          # Starship — fully driven by our wrapper (config + binary).
           if [[ $TERM != "dumb" ]]; then
             eval "$(starship init bash --print-full-init)"
           fi
+
+          # Must be the absolute last thing in interactiveShellInit.
+          [[ ''${BLE_VERSION-} ]] && ble-attach
         '';
       };
     };
