@@ -23,12 +23,15 @@
         , alignSep        = "}{"
         , template        = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc>%wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc>%cat0%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc>%kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc>%kernel_version%|%date%|%_XMONAD_TRAYPAD%"
         , commands        = 
+            -- DiskIO, DynNetwork, Memory and Swap updated every 5s (instead of 1s)
+            -- to reduce background CPU wakeups and process spawning.
+            -- Date and MultiCpu kept at 1s for a responsive clock and live per-core CPU display.
             [ Run XMonadLog
             , Run DiskU [("/", "<fc=#bd93f9><fn=1>\xf0a0</fn></fc> <free>")] [] 50
-            , Run DiskIO [("/", "<read><fc=#bd93f9> R</fc> <fc=#bd93f9>W</fc> <write>")] ["-t", "", "-w", "4"] 10
-            , Run DynNetwork ["-t", "<rx>KB/s<fc=#bd93f9><fn=1>\x1F89B</fn></fc><fc=#bd93f9><fn=1>\x1F899</fn></fc><tx>KB/s", "-w", "5"] 10
-            , Run Memory ["-t", "<fc=#bd93f9><fn=1>\xE266</fn></fc><usedratio>%"] 10
-            , Run Swap ["-t", "<fc=#bd93f9>S</fc><usedratio>%"] 10
+            , Run DiskIO [("/", "<read><fc=#bd93f9> R</fc> <fc=#bd93f9>W</fc> <write>")] ["-t", "", "-w", "4"] 50
+            , Run DynNetwork ["-t", "<rx>KB/s<fc=#bd93f9><fn=1>\x1F89B</fn></fc><fc=#bd93f9><fn=1>\x1F899</fn></fc><tx>KB/s", "-w", "5"] 50
+            , Run Memory ["-t", "<fc=#bd93f9><fn=1>\xE266</fn></fc><usedratio>%"] 50
+            , Run Swap ["-t", "<fc=#bd93f9>S</fc><usedratio>%"] 50
             , Run Kbd []
             , Run CpuFreq ["-t", "<avg>GHz"] 50
             , Run MultiCoreTemp ["-t", "<fc=#bd93f9><fn=1>\xf2c9</fn></fc><avg>°", "-L", "60", "-H", "95", "-l", "white", "-n", "white", "-h", "red"] 50
