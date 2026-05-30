@@ -34,6 +34,11 @@
 
             window-decoration = false;
 
+            # Mouse wheel (and trackpad) scrolling was feeling too fast/snappy.
+            # Lower values scroll fewer lines per tick. 0.5 is a common starting
+            # point for people coming from Kitty or wanting more precision.
+            mouse-scroll-multiplier = 0.5;
+
             # Disable Ghostty's built-in shell integration.
             # We are running a complex custom prompt stack (ble.sh + Starship
             # driven by the wrapper). Ghostty's integration injects its own
