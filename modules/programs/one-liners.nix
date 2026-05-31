@@ -32,7 +32,6 @@
         google-chrome
         glib
         nnn
-        wget
         go
         xclip
         kdiff3
@@ -123,7 +122,6 @@
         rclone
         # netflix
         iw
-        usbutils
         udiskie
         udisks
         udisks2
@@ -180,7 +178,6 @@
         fava
         android-tools
         gh
-        imagemagick
       ];
     };
 }

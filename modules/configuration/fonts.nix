@@ -28,7 +28,6 @@
           mononoki
           unifont
           dejavu_fonts
-          symbola
           noto-fonts
           libertine
         ];
