@@ -19,6 +19,11 @@
             # Built-in theme — matches previous Dracula Kitty setup.
             theme = "Dracula";
 
+            # Explicit background is required so Ghostty fills any "remainder" pixels
+            # (right/bottom edges when window size is not a multiple of cell size) with
+            # the theme color instead of a default gray. This is common under tiling WMs.
+            background = "#282a36";
+
             confirm-close-surface = false;
             bell-features = "no-audio,no-attention";
 
