@@ -13,23 +13,10 @@
           nerd-fonts.fira-mono
           hack-font
           cascadia-code
-          hasklig
-          fira-code-symbols
-          fira-code
-          cantarell-fonts
-          symbola
           source-code-pro
           font-awesome
-          font-awesome_5
-          font-awesome_4
-          line-awesome
-          powerline-fonts
-          ubuntu-classic
-          mononoki
-          unifont
-          dejavu_fonts
           noto-fonts
-          libertine
+          dejavu_fonts
         ];
       };
     };
