@@ -31,7 +31,16 @@
         ];
       };
 
-      swapDevices = [ { device = "/dev/disk/by-uuid/6edb503d-8105-4483-9d00-edf430bba983"; } ];
+      # Disk swap is intentionally deprioritized now that zram is active.
+      # zram (in RAM) will be used first. The disk swap only becomes a last-resort
+      # fallback if zram is completely exhausted. This greatly reduces the chance
+      # of the system hitting slow disk I/O during memory pressure.
+      swapDevices = [
+        {
+          device = "/dev/disk/by-uuid/6edb503d-8105-4483-9d00-edf430bba983";
+          priority = -1;   # Very low priority → zram is strongly preferred
+        }
+      ];
 
       networking.useDHCP = lib.mkDefault true;
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
