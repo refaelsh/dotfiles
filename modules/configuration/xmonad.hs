@@ -36,7 +36,8 @@ myStartupHook = do
   -- Removed: two amixer calls that did -5% then immediately +5% on every
   -- startup (and used `spawn` instead of `spawnOnce`). They had no effect.
   spawnOnOnce "1" "brave"
-  spawnOnOnce "8" "discord"
+  -- Commented out (discord package is disabled in one-liners.nix, causing silent launch failure).
+  -- spawnOnOnce "8" "discord"
   spawnOnOnce "9" "signal-desktop"
   spawnOnOnce "0" "cd ~/repos/dotfiles/ && neovide flake.nix -- -c \"NvimTreeOpen\""
   spawnOnOnce "0" myTerminal
