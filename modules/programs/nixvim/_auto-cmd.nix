@@ -3,8 +3,8 @@
     {
       event = [
         "bufenter"
-        "cursorhold"
-        "cursorholdi"
+        -- "cursorhold" and "cursorholdi" removed to stop repeated `checktime`
+        -- calls (disk checks) every few seconds while the cursor is idle.
         "focusgained"
       ];
       pattern = [ "*.*" ];
