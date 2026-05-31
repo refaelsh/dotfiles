@@ -7,7 +7,9 @@
       system.stateVersion = "24.05";
       # copySystemConfiguration = true;
 
-      documentation.dev.enable = true;
+      # Disabled to avoid pulling in large amounts of development documentation
+      # and man pages for every package in the system profile.
+      documentation.dev.enable = false;
 
       nixpkgs.config.allowUnfree = true;
       nixpkgs.config.android_sdk.accept_license = true;
