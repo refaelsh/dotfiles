@@ -4,7 +4,7 @@
     { pkgs, ... }:
     {
       users = {
-        # defaultUserShell = pkgs.zsh;
+        defaultUserShell = pkgs.bash;
         users.refaelsh = {
           isNormalUser = true;
           extraGroups = [

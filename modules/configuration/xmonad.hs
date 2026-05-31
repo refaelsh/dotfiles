@@ -9,14 +9,12 @@ import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.WindowSwallowing
 import XMonad.Layout.NoBorders
-import XMonad.Layout.OneBig
 import XMonad.Layout.ToggleLayouts
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig
 import XMonad.Util.Hacks qualified as Hacks
-import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce
 
 myTerminal :: String
@@ -99,12 +97,13 @@ myConfig =
                         ("M-<F11>", spawn "amixer set Master 5%-"),
                         ("M-<F12>", spawn "amixer set Master 5%+")
                       ]
-    `removeKeysP` ["M-S-<Return>"]
-    `removeKeysP` ["M-p"]
-    `removeKeysP` ["M-S-c"]
-    `removeKeysP` ["M-<Tab>"]
-    `removeKeysP` ["M-S-<Tab>"]
-    `removeKeysP` ["M-j"]
-    `removeKeysP` ["M-k"]
-    `removeKeysP` ["M-m"]
-    `removeKeysP` ["M-l"]
+    `removeKeysP` [ "M-S-<Return>"
+                  , "M-p"
+                  , "M-S-c"
+                  , "M-<Tab>"
+                  , "M-S-<Tab>"
+                  , "M-j"
+                  , "M-k"
+                  , "M-m"
+                  , "M-l"
+                  ]
