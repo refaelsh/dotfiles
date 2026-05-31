@@ -16,5 +16,16 @@
         # providing better sustained responsiveness on laptops.
         cpuFreqGovernor = "schedutil";
       };
+
+      # Use compressed RAM as swap (zram) instead of (or in addition to) the
+      # disk swap partition. This avoids slow disk I/O during memory pressure.
+      #
+      # Using 30% of RAM as the zram limit + lz4 algorithm for minimal CPU
+      # overhead on compression/decompression.
+      zramSwap = {
+        enable = true;
+        memoryPercent = 30;
+        algorithm = "lz4";
+      };
     };
 }
