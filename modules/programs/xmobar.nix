@@ -29,7 +29,9 @@
             [ Run XMonadLog
             , Run DiskU [("/", "<fc=#bd93f9><fn=1>\xf0a0</fn></fc> <free>")] [] 50
             , Run DiskIO [("/", "<read><fc=#bd93f9> R</fc> <fc=#bd93f9>W</fc> <write>")] ["-t", "", "-w", "4"] 50
-            , Run DynNetwork ["-t", "<fc=#bd93f9><fn=1>\x2193</fn></fc><rx>KB/s <fc=#bd93f9><fn=1>\x2191</fn></fc><tx>KB/s", "-w", "5"] 50
+            -- Using filled black arrows (⬇ ⬆) instead of thin arrows (↓ ↑) for
+            -- download/upload. These have thicker stems and heads for better visibility.
+            , Run DynNetwork ["-t", "<fc=#bd93f9><fn=1>\x2b07</fn></fc><rx>KB/s <fc=#bd93f9><fn=1>\x2b06</fn></fc><tx>KB/s", "-w", "5"] 50
             , Run Memory ["-t", "<fc=#bd93f9><fn=1>\xE266</fn></fc><usedratio>%"] 50
             , Run Swap ["-t", "<fc=#bd93f9>S</fc><usedratio>%"] 50
             , Run Kbd []
