@@ -24,7 +24,13 @@
             support32Bit = true;
           };
           pulse.enable = true;
-          jack.enable = true;
+
+          # JACK is disabled. It starts an additional real-time capable daemon
+          # (and requires rtkit privileges) that is only needed for low-latency
+          # professional audio production. Normal desktop use, gaming (Steam),
+          # and general multimedia do not benefit from it and pay a small
+          # constant overhead in processes and scheduling.
+          jack.enable = false;
         };
 
         displayManager = {
