@@ -9,8 +9,13 @@
       system.activationScripts.xmobarrc = lib.stringAfter [ "users" ] ''
         cat > /home/refaelsh/.xmobarrc << 'EOF'
         Config {
-          font            = "Fira Code 14"
-        , additionalFonts = ["Fira Code 22"]
+          -- Use the monospaced variant of the patched Nerd Font with explicit
+          -- xft syntax. The previous names ("Fira Code") did not match any
+          -- installed font on the system, causing xmobar to fall back to a
+          -- proportional font for the %kbd% indicator. This made the status
+          -- bar shift slightly when switching keyboard layouts (e.g. "us" vs "il").
+          font            = "xft:FiraCode Nerd Font Mono:size=14"
+        , additionalFonts = ["xft:FiraCode Nerd Font Mono:size=22"]
         , bgColor         = "#282A36"
         , fgColor         = "#F8F8F2"
         , textOffset      = 2
