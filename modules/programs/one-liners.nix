@@ -19,7 +19,6 @@
         bash.completion.enable = true;
       };
       environment.systemPackages = with pkgs; [
-        fzf
         kbd
         neovide
         dmenu
