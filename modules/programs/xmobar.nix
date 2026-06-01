@@ -9,8 +9,8 @@
       system.activationScripts.xmobarrc = lib.stringAfter [ "users" ] ''
         cat > /home/refaelsh/.xmobarrc << 'EOF'
         Config {
-          font            = "Fira Code 14"
-        , additionalFonts = ["Fira Code 22"]
+          font            = "FiraCode Nerd Font:size=14"
+        , additionalFonts = ["FiraCode Nerd Font:size=17"]
         , bgColor         = "#282A36"
         , fgColor         = "#F8F8F2"
         , textOffset      = 2
