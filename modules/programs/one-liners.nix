@@ -13,6 +13,10 @@
         # adb.enable = true;
         xwayland.enable = true;
         # bat.enable = true;
+
+        # Rich tab completion framework + many built-in completions for bash.
+        # Complements the readline settings we activate inside bash init.
+        bash.completion.enable = true;
       };
       environment.systemPackages = with pkgs; [
         fzf

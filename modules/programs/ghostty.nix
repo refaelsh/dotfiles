@@ -42,10 +42,9 @@
             mouse-scroll-multiplier = 0.5;
 
             # Disable Ghostty's built-in shell integration.
-            # We are running a complex custom prompt stack (ble.sh + Starship
-            # driven by the wrapper). Ghostty's integration injects its own
-            # prompt hooks which easily cause double (or triple) rendering of
-            # the prompt, especially the directory module.
+            # Our Starship prompt (initialized from bash) manages the full
+            # prompt; the terminal integration can inject conflicting hooks
+            # that cause duplicate or broken rendering.
             shell-integration = "none";
 
             # Convenient for mouse-driven selection workflows (pairs well with Grok).

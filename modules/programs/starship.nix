@@ -71,7 +71,8 @@
       programs.starship.enable = false;
 
       # The wrapped binary (config is forced via STARSHIP_CONFIG in the wrapper).
-      # Actual `eval "$(starship init ...)"` lives in bash.nix because of blesh.
+      # The eval of the init script lives in bash.nix so we control ordering
+      # and avoid any duplicate prompt hooks.
       environment.systemPackages = [ starship-wrapped ];
     };
 }
