@@ -12,6 +12,11 @@
         udisks2.enable = true;
         devmon.enable = true;
 
+        # Enable periodic TRIM on the SSD. The NVMe drive maintains better
+        # long-term write performance when the firmware can regularly discard
+        # unused blocks instead of running out of clean flash for new writes.
+        fstrim.enable = true;
+
         pipewire = {
           enable = true;
           alsa = {

@@ -11,7 +11,6 @@
         dconf.enable = true;
         gamemode.enable = true;
         # adb.enable = true;
-        xwayland.enable = true;
         # bat.enable = true;
 
         # Rich tab completion framework + many built-in completions for bash.
@@ -126,8 +125,6 @@
         # netflix
         iw
         udiskie
-        udisks
-        udisks2
         alsa-utils
         # popcorntime
         trayer
@@ -151,7 +148,6 @@
         file
         shotcut
         cachix
-        xwayland-satellite
         fuzzel
         # discord
         nyxt

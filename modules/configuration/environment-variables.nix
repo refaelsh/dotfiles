@@ -7,7 +7,6 @@
         EDITOR = "nvim";
         TERM = "ghostty";
         TERMINAL = "ghostty";
-        NIXOS_OZONE_WL = "1";
 
         # Beautifully colored man pages using bat + the Dracula theme.
         # Replaces what the "colored-man-pages" zsh plugin used to provide.
