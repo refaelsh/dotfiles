@@ -48,7 +48,7 @@ myXmobarPP =
       ppVisible = xmobarColor "#ff79c6" "", -- . clickable
       ppHidden = xmobarColor "#bd93f9" "", -- . wrap
       ppTitle = xmobarColor "#e6e6e6" "" . shorten 60,
-      ppSep = "<fc=#4d4d4d> | </fc>",
+      ppSep = "<fc=" ++ "#4d4d4d" ++ "> <fn=1>|</fn> </fc>",
       ppUrgent = xmobarColor "#ff5555" "" . wrap "!" "!",
       ppOrder = \(ws : l : t : ex) -> [ws]
     }
