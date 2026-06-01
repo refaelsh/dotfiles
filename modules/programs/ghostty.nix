@@ -38,6 +38,12 @@
             scrollback-limit = 64 * 1024 * 1024;  # 64 MiB
 
             window-decoration = false;
+            window-padding-x = 0;
+            window-padding-y = 0;
+            # Disable Adwaita styling. Even with window-decoration=false, GTK4/libadwaita
+            # can inject padding/outline via .solid-csd on X11, which appears as gray bars
+            # on the right and bottom under tiling WMs (known Ghostty + xmonad/i3 issue).
+            gtk-adwaita = false;
 
             # Mouse wheel (and trackpad) scrolling was feeling too fast/snappy.
             # Lower values scroll fewer lines per tick. 0.5 is a common starting
