@@ -36,9 +36,20 @@
     }
 
     {
+      # Format on save via LSP only when an attached server supports it.
+      # The old pattern "*>8" was invalid autocmd syntax and did nothing useful.
       event = [ "BufWritePre" ];
-      pattern = [ "*>8" ];
-      command = ":lua vim.lsp.buf.format()";
+      callback = /* lua */ ''
+        function()
+          local clients = vim.lsp.get_clients({ bufnr = 0 })
+          for _, client in ipairs(clients) do
+            if client.supports_method("textDocument/formatting") then
+              vim.lsp.buf.format({ async = false, timeout_ms = 2000 })
+              return
+            end
+          end
+        end
+      '';
     }
 
   ];
