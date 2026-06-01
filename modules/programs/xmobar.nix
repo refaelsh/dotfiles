@@ -9,14 +9,14 @@
       system.activationScripts.xmobarrc = lib.stringAfter [ "users" ] ''
         cat > /home/refaelsh/.xmobarrc << 'EOF'
         Config {
-          -- Main font is the monospaced Nerd Font variant so that text like
-          -- the keyboard layout (%kbd%) stays aligned and doesn't shift when
-          -- switching between "us" and "il".
-          -- The additional font (used for icons via <fn=1>) uses the regular
-          -- FiraCode Nerd Font at a slightly smaller size than before so the
-          -- glyphs render at a comfortable, visible size instead of appearing tiny.
-          font            = "FiraCode Nerd Font Mono-14"
-        , additionalFonts = ["FiraCode Nerd Font-20"]
+          -- Main font uses the explicit monospaced Nerd Font variant.
+          -- Additional font (for <fn=1> icons) uses the regular FiraCode Nerd Font
+          -- at a significantly larger size because Nerd Font glyphs often render
+          -- smaller than expected in status bars. This is an iterative fix after
+          -- size 20 was still too small and the previous Mono variant for icons
+          -- also produced tiny glyphs.
+          font            = "xft:FiraCode Nerd Font Mono:size=14"
+        , additionalFonts = ["xft:FiraCode Nerd Font:size=24"]
         , bgColor         = "#282A36"
         , fgColor         = "#F8F8F2"
         , textOffset      = 2
