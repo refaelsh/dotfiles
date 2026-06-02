@@ -27,7 +27,7 @@
         , position        = BottomH 26
         , alpha           = 200
         , alignSep        = "}{"
-        , template        = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc>%wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc>%cat0%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc>%kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc>%kernel_version%|%date%|%_XMONAD_TRAYPAD%"
+        , template        = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc> %wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc> %cat0%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc> %kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc> %kernel_version%|%date%|%_XMONAD_TRAYPAD%"
         , commands        = 
             -- DiskIO, DynNetwork, Memory and Swap updated every 5s (instead of 1s)
             -- to reduce background CPU wakeups and process spawning.
@@ -38,7 +38,7 @@
             -- Using filled black arrows (⬇ ⬆) instead of thin arrows (↓ ↑) for
             -- download/upload. These have thicker stems and heads for better visibility.
             , Run DynNetwork ["-t", "<fc=#bd93f9><fn=1>\x2b07</fn></fc><rx>KB/s <fc=#bd93f9><fn=1>\x2b06</fn></fc><tx>KB/s", "-w", "5"] 50
-            , Run Memory ["-t", "<fc=#bd93f9><fn=1>\xE266</fn></fc><usedratio>%"] 50
+            , Run Memory ["-t", "<fc=#bd93f9><fn=1>\xE266</fn></fc> <usedratio>%"] 50
             , Run Swap ["-t", "<fc=#bd93f9>S</fc><usedratio>%"] 50
             , Run Kbd [("us", "us"), ("il", "il")]
             , Run CpuFreq ["-t", "<avg>GHz"] 50
