@@ -3,25 +3,6 @@
   # Simple dendritic feature — exactly matches your old nixos/services.nix
   flake.nixosModules.services =
     { lib, pkgs, ... }:
-    let
-      # Structured definition of journal limits. This is the "newer" way to
-      # express the values (plain Nix attrset). We currently feed it into
-      # extraConfig because services.journald.settings does not exist in the
-      # nixpkgs revision this flake is locked to.
-      #
-      # Once a nixpkgs update brings in the native support, this can become:
-      #
-      #   services.journald.settings = {
-      #     Journal = journalLimits;
-      #   };
-      #
-      # (The module will then generate the [Journal] section automatically.)
-      journalLimits = {
-        SystemMaxUse = "500M";
-        SystemKeepFree = "1G";
-        MaxFileSec = "1month";
-      };
-    in
     {
       services = {
         # hledger-web.enable = true;
@@ -36,15 +17,19 @@
         # unused blocks instead of running out of clean flash for new writes.
         fstrim.enable = true;
 
-        # Limit persistent journal size. The values live in the structured
-        # journalLimits attrset above. We convert it to the key=value format
-        # that extraConfig expects (it gets appended under [Journal]).
+        # Limit persistent journal size using a structured attrset inside the
+        # generator call. This produces the key=value format expected by
+        # extraConfig (appended under the [Journal] section).
         #
         # This stops logs from the many GUI/Electron apps (Brave, Signal,
         # Zoom, Bitwarden, etc.) from growing without bound, which would
         # waste disk space and add unnecessary background I/O.
         journald.extraConfig = lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (name: value: "${name}=${value}") journalLimits
+          lib.mapAttrsToList (name: value: "${name}=${value}") {
+            SystemMaxUse = "500M";
+            SystemKeepFree = "1G";
+            MaxFileSec = "1month";
+          }
         );
 
         pipewire = {
