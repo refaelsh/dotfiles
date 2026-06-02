@@ -1,5 +1,35 @@
 {
   keymaps = [
+    # Ctrl+V is bound at the Ghostty level to paste_from_clipboard for
+    # consistent GUI paste behavior across the desktop. As a result it never
+    # reaches Neovim.
+    #
+    # Ctrl+Q is the conventional fallback for the two things Ctrl+V normally
+    # does inside Vim:
+    # - In normal/visual mode: start or extend visual block selection.
+    # - In insert mode: insert the next typed character literally (e.g. a
+    #   control character or special key).
+    #
+    # These mappings restore the original behavior under the new key.
+    {
+      mode = "n";
+      key = "<C-q>";
+      action = "<C-v>";
+      options.desc = "Visual block selection (Ctrl+V is terminal paste)";
+    }
+    {
+      mode = "v";
+      key = "<C-q>";
+      action = "<C-v>";
+      options.desc = "Visual block selection (Ctrl+V is terminal paste)";
+    }
+    {
+      mode = "i";
+      key = "<C-q>";
+      action = "<C-v>";
+      options.desc = "Insert next character literally (Ctrl+V is terminal paste)";
+    }
+
     {
       mode = "n";
       key = ":";

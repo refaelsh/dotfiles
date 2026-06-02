@@ -50,12 +50,27 @@
             # Convenient for mouse-driven selection workflows (pairs well with Grok).
             copy-on-select = "clipboard";
 
-            # Safe bindings that do not hijack the critical shell Ctrl+C (interrupt).
-            # Users coming from the old Kitty ctrl+c=copy_and_clear_or_interrupt mapping
-            # can adapt or add more advanced conditional keybinds later.
+            # Copy/paste bindings chosen for GUI-style muscle memory while preserving
+            # terminal semantics where it matters.
+            #
+            # - ctrl+v always pastes from the clipboard (what you asked for).
+            # - performable:ctrl+c copies only when there is a selection; otherwise the
+            #   key passes through unchanged. This means Ctrl+C still sends SIGINT to
+            #   interrupt a running program in the shell, or does whatever the app
+            #   expects when no text is selected.
+            # - The ctrl+shift variants are kept as well for discoverability and
+            #   anyone used to the classic terminal Shift bindings.
+            #
+            # Tradeoff: plain Ctrl+V no longer reaches the pty, so it cannot be used
+            # for readline's "literal next" or Vim's visual block selection. We
+            # provide Ctrl+Q as the fallback inside Neovim (see nixvim keymaps).
+            # Inserting a literal control character is rare enough that this is the
+            # usual compromise.
             keybind = [
               "ctrl+shift+c=copy_to_clipboard"
               "ctrl+shift+v=paste_from_clipboard"
+              "performable:ctrl+c=copy_to_clipboard"
+              "ctrl+v=paste_from_clipboard"
             ];
           };
         }).wrapper
