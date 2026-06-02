@@ -12,12 +12,11 @@
           -- Use xft: with "Family-Size" syntax (very common for xmobar + Nerd Fonts).
           -- Main font is the Mono variant to keep layout names monospaced (prevent
           -- bar shifting on "us" <-> "il").
-          -- Additional font is the regular variant at large size 28 because Nerd
-          -- Font icon glyphs are often drawn smaller; this should make the icons
-          -- ( etc) a reasonable size next to 14pt text. Previous attempts at
-          -- 20/24 or using Mono for icons resulted in tiny icons.
+          -- Additional font is the regular variant at size 22 (tuned down from 28
+          -- after 28 made icons huge; 20/24 were previously too small in earlier
+          -- tests). This should give icons a reasonable size next to 14pt text.
           font            = "xft:FiraCode Nerd Font Mono-14"
-        , additionalFonts = ["xft:FiraCode Nerd Font-28"]
+        , additionalFonts = ["xft:FiraCode Nerd Font-22"]
         , bgColor         = "#282A36"
         , fgColor         = "#F8F8F2"
         , textOffset      = 2
