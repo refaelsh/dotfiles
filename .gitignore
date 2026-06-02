@@ -1,0 +1,12 @@
+# Nix build results
+#
+# Commands like `nix build`, `nixos-rebuild build --flake`, etc. create
+# a `result` (or `result-N`) symlink in the current directory pointing
+# into the Nix store. These are build artifacts and must not be
+# committed.
+ /result
+ /result-*
+
+# direnv (commonly used together with nix-direnv for per-project
+# development shells based on flakes)
+ /.direnv/
