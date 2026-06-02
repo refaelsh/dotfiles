@@ -9,14 +9,15 @@
       system.activationScripts.xmobarrc = lib.stringAfter [ "users" ] ''
         cat > /home/refaelsh/.xmobarrc << 'EOF'
         Config {
-          -- Main font uses the explicit monospaced Nerd Font variant.
-          -- Additional font (for <fn=1> icons) uses the regular FiraCode Nerd Font
-          -- at a significantly larger size because Nerd Font glyphs often render
-          -- smaller than expected in status bars. This is an iterative fix after
-          -- size 20 was still too small and the previous Mono variant for icons
-          -- also produced tiny glyphs.
-          font            = "xft:FiraCode Nerd Font Mono:size=14"
-        , additionalFonts = ["xft:FiraCode Nerd Font:size=24"]
+          -- Use xft: with "Family-Size" syntax (very common for xmobar + Nerd Fonts).
+          -- Main font is the Mono variant to keep layout names monospaced (prevent
+          -- bar shifting on "us" <-> "il").
+          -- Additional font is the regular variant at large size 28 because Nerd
+          -- Font icon glyphs are often drawn smaller; this should make the icons
+          -- ( etc) a reasonable size next to 14pt text. Previous attempts at
+          -- 20/24 or using Mono for icons resulted in tiny icons.
+          font            = "xft:FiraCode Nerd Font Mono-14"
+        , additionalFonts = ["xft:FiraCode Nerd Font-28"]
         , bgColor         = "#282A36"
         , fgColor         = "#F8F8F2"
         , textOffset      = 2
@@ -40,7 +41,7 @@
             , Run DynNetwork ["-t", "<fc=#bd93f9><fn=1>\x2b07</fn></fc><rx>KB/s <fc=#bd93f9><fn=1>\x2b06</fn></fc><tx>KB/s", "-w", "5"] 50
             , Run Memory ["-t", "<fc=#bd93f9><fn=1>\xE266</fn></fc><usedratio>%"] 50
             , Run Swap ["-t", "<fc=#bd93f9>S</fc><usedratio>%"] 50
-            , Run Kbd []
+            , Run Kbd [("us", "us"), ("il", "il")]
             , Run CpuFreq ["-t", "<avg>GHz"] 50
             , Run MultiCoreTemp ["-t", "<fc=#bd93f9><fn=1>\xf2c9</fn></fc><avg>°", "-L", "60", "-H", "95", "-l", "white", "-n", "white", "-h", "red"] 50
             , Run CatInt 0 "/sys/class/hwmon/hwmon4/fan1_input" [] 50
