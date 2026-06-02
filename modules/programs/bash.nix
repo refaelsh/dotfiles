@@ -3,7 +3,9 @@
   # Dendritic bash feature – pure NixOS, no Home-Manager.
   # interactiveShellInit works because Ghostty (and most modern terminals)
   # launch interactive shells. This gives a fast, zsh-like interactive
-  # experience without the overhead of zsh or ble.sh.
+  # experience without the overhead of zsh or ble.sh. Atuin augments Ctrl-R
+  # with advanced history search, stats and context (while preserving Up/Down
+  # prefix search and the lightweight readline approach).
   flake.nixosModules.bash =
     { pkgs, ... }:
     {
@@ -22,6 +24,7 @@
           shopt -s \
             autocd \
             cdspell \
+            dirspell \
             checkwinsize \
             cmdhist \
             direxpand \
@@ -56,14 +59,24 @@
           # Shift-Tab walks the completion menu backward.
           bind '"\e[Z": menu-complete-backward'
 
-          # fzf keybindings (Ctrl-R = fuzzy history, Ctrl-T = insert file path,
-          # Alt-C = cd into dir) and programmable completion. This is the
-          # lightweight replacement for zsh autosuggest + fzf-tab.
-          if [ -r "${pkgs.fzf}/share/fzf/shell/key-bindings.bash" ]; then
-            source "${pkgs.fzf}/share/fzf/shell/key-bindings.bash"
+          # fzf keybindings (Ctrl-R history via atuin, Ctrl-T = insert file path,
+          # Alt-C = cd into dir) and programmable completion (including **<tab>).
+          # fzf supplies file/dir selection; atuin gives advanced history on Ctrl-R.
+          if command -v fzf-share >/dev/null 2>&1; then
+            FZF_SHARE_DIR="$(fzf-share)"
+            if [ -r "$FZF_SHARE_DIR/key-bindings.bash" ]; then
+              source "$FZF_SHARE_DIR/key-bindings.bash"
+            fi
+            if [ -r "$FZF_SHARE_DIR/completion.bash" ]; then
+              source "$FZF_SHARE_DIR/completion.bash"
+            fi
           fi
-          if [ -r "${pkgs.fzf}/share/fzf/shell/completion.bash" ]; then
-            source "${pkgs.fzf}/share/fzf/shell/completion.bash"
+
+          # Atuin: advanced history (fuzzy, stats, dir/host filtering, sync). Replaces/enhances Ctrl-R.
+          # We keep Up/Down as prefix search (the readline binds above) via --disable-up-arrow.
+          # Works alongside our PROMPT_COMMAND history sharing and Starship.
+          if command -v atuin >/dev/null 2>&1; then
+            eval "$(atuin init bash --disable-up-arrow)"
           fi
 
           # Starship prompt. Dracula colors and layout are defined in the

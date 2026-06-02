@@ -16,6 +16,10 @@
         # Rich tab completion framework + many built-in completions for bash.
         # Complements the readline settings we activate inside bash init.
         bash.completion.enable = true;
+
+        # Provides command-not-found hook that suggests packages from nixpkgs
+        # when an unknown command is typed (common behavior in Zsh Nix setups).
+        nix-index.enable = true;
       };
       environment.systemPackages = with pkgs; [
         kbd
@@ -63,6 +67,8 @@
         ripgrep
         coreutils
         fd
+        atuin
+        comma
         networkmanagerapplet
         gdb
         lm_sensors
