@@ -16,7 +16,7 @@
           -- after 28 made icons huge; 20/24 were previously too small in earlier
           -- tests). This should give icons a reasonable size next to 14pt text.
           font            = "xft:FiraCode Nerd Font Mono-14"
-        , additionalFonts = ["xft:FiraCode Nerd Font-22"]
+        , additionalFonts = ["xft:FiraCode Nerd Font-20"]
         , bgColor         = "#282A36"
         , fgColor         = "#F8F8F2"
         , textOffset      = 2
