@@ -72,17 +72,24 @@
             fi
           fi
 
+          # Starship prompt must initialize before atuin. Starship needs to claim
+          # PROMPT_COMMAND to render the prompt and to wrap/preserve the history
+          # PROMPT_COMMAND we set above. Atuin always populates precmd_functions
+          # and preexec_functions arrays (when the shell is interactive). Starship
+          # detects non-empty arrays and switches to array-based hooks instead of
+          # setting PROMPT_COMMAND. Without Ghostty shell-integration (disabled to
+          # avoid duplicate hooks) there is no bash-preexec driver to invoke the
+          # arrays before each prompt, so starship would never run and you'd get
+          # the plain "bash-5.3$" default prompt.
+          if [[ $TERM != "dumb" ]]; then
+            eval "$(starship init bash --print-full-init)"
+          fi
+
           # Atuin: advanced history (fuzzy, stats, dir/host filtering, sync). Replaces/enhances Ctrl-R.
           # We keep Up/Down as prefix search (the readline binds above) via --disable-up-arrow.
           # Works alongside our PROMPT_COMMAND history sharing and Starship.
           if command -v atuin >/dev/null 2>&1; then
             eval "$(atuin init bash --disable-up-arrow)"
-          fi
-
-          # Starship prompt. Dracula colors and layout are defined in the
-          # starship wrapper module; we only perform the init here.
-          if [[ $TERM != "dumb" ]]; then
-            eval "$(starship init bash --print-full-init)"
           fi
         '';
       };
