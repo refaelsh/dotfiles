@@ -3,9 +3,9 @@
   # Dendritic bash feature – pure NixOS, no Home-Manager.
   # interactiveShellInit works because Ghostty (and most modern terminals)
   # launch interactive shells. This gives a fast, zsh-like interactive
-  # experience without the overhead of zsh or ble.sh. Atuin augments Ctrl-R
-  # with advanced history search, stats and context (while preserving Up/Down
-  # prefix search and the lightweight readline approach).
+  # experience (lightweight readline + starship + atuin, no heavy line editor).
+  # Atuin augments Ctrl-R with advanced history search, stats and context (while
+  # preserving Up/Down prefix search).
   flake.nixosModules.bash =
     { pkgs, ... }:
     {
@@ -38,6 +38,19 @@
           export HISTFILESIZE=200000
           export HISTCONTROL=ignoreboth:erasedups
           export HISTIGNORE="ls:ll:cd:cd -:pwd:exit:date:clear:history"
+
+          # Zsh-like autosuggest accept on right-arrow: appends the top matching
+          # entry from history for the current prefix. Complements up/down prefix
+          # search and Ctrl-R (atuin). Accepts the top prefix match from history
+          # with right-arrow. (Lightweight approximation only; true inline gray
+          # preview as you type is not provided by plain readline.)
+          __atuin_autosuggest_accept() {
+            local prefix="$READLINE_LINE"
+            local suggestion
+            suggestion=$(HISTTIMEFORMAT= history | tac | cut -c 8- | grep -i "^$prefix" | head -1)
+            [[ -n $suggestion && $suggestion != "$prefix" ]] && READLINE_LINE=$suggestion && READLINE_POINT=''${#READLINE_LINE}
+          }
+          bind -x '"\e[C": __atuin_autosuggest_accept'
 
           # Propagate history to other shells immediately (zsh-like behavior).
           PROMPT_COMMAND="history -a; history -n''${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
