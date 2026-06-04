@@ -6,9 +6,8 @@
   # experience (lightweight readline + starship + atuin, no heavy line editor).
   # Atuin augments Ctrl-R with advanced history search, stats and context (while
   # preserving Up/Down prefix search). Timestamped history, additional shopt
-  # safety options (histverify, lithist, etc.), the extract command, and the
-  # gray-history approximation via explicit accept provide further parity with
-  # prior Zsh ergonomics.
+  # safety options (histverify, lithist, etc.), and the extract command provide
+  # further parity with prior Zsh ergonomics.
   flake.nixosModules.bash =
     { pkgs, ... }:
     {
@@ -61,9 +60,7 @@
           export HISTIGNORE="ls:ll:cd:cd -:pwd:exit:date:clear:history"
 
           # Timestamped history output, matching the default behavior of `history`
-          # in Zsh when extended history is enabled. The autosuggest lookup forces
-          # an empty HISTTIMEFORMAT locally so its parsing of the numbered output
-          # remains unaffected.
+          # in Zsh when extended history is enabled.
           export HISTTIMEFORMAT='%F %T '
 
           # extract: unpack common archive formats (tar.*, zip, 7z, gz, bz2, xz, ...).
@@ -142,36 +139,6 @@
           if command -v atuin >/dev/null 2>&1; then
             eval "$(atuin init bash --disable-up-arrow)"
           fi
-
-          # Zsh-like autosuggest accept on right-arrow (and safe movement otherwise):
-          # appends the top matching history entry for the current prefix when the
-          # cursor is at the end of the line. Otherwise right-arrow performs normal
-          # single-char movement. Complements up/down prefix search and Ctrl-R (atuin).
-          # Lightweight approximation only; true inline gray preview as you type is
-          # not provided by plain readline.
-          __atuin_autosuggest_accept() {
-            local prefix="$READLINE_LINE"
-            local suggestion
-            suggestion=$(HISTTIMEFORMAT= history | tac | cut -c 8- | grep -i "^$prefix" | head -1)
-            if [[ -n $suggestion && $suggestion != "$prefix" && $READLINE_POINT -eq ''${#READLINE_LINE} ]]; then
-              READLINE_LINE=$suggestion
-              READLINE_POINT=''${#READLINE_LINE}
-            else
-              if (( READLINE_POINT < ''${#READLINE_LINE} )); then
-                READLINE_POINT=$((READLINE_POINT + 1))
-              fi
-            fi
-          }
-          bind -x '"\e[C": __atuin_autosuggest_accept'
-
-          # Gray history text (inline preview as you type): fulfills the request
-          # for grayed-out history suggestion visible while typing. True live
-          # dim-gray text that updates on every keystroke requires a full line
-          # editor replacement (explicitly ruled out). The right-arrow (EOL-only
-          # accept) plus Ctrl-g below give the functional preview-then-commit
-          # flow using atuin history. This is the closest lightweight
-          # approximation possible.
-          bind -x '"\C-g": __atuin_autosuggest_accept'
         '';
       };
     };
