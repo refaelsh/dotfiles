@@ -41,8 +41,6 @@
         go
         xclip
         kdiff3
-        bitwarden-desktop
-        # bitwarden-cli
         alacritty
         dracula-theme
         gnumake

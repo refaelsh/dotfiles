@@ -22,7 +22,7 @@
         # extraConfig (appended under the [Journal] section).
         #
         # This stops logs from the many GUI/Electron apps (Brave, Signal,
-        # Zoom, Bitwarden, etc.) from growing without bound, which would
+        # Zoom, etc.) from growing without bound, which would
         # waste disk space and add unnecessary background I/O.
         journald.extraConfig = lib.concatStringsSep "\n" (
           lib.mapAttrsToList (name: value: "${name}=${value}") {
