@@ -60,7 +60,8 @@
           export HISTIGNORE="ls:ll:cd:cd -:pwd:exit:date:clear:history"
 
           # Timestamped history output, matching the default behavior of `history`
-          # in Zsh when extended history is enabled.
+          # in Zsh when extended history is enabled. The right-arrow history accept
+          # (below) forces an empty HISTTIMEFORMAT locally so its lookup stays clean.
           export HISTTIMEFORMAT='%F %T '
 
           # extract: unpack common archive formats (tar.*, zip, 7z, gz, bz2, xz, ...).
@@ -139,6 +140,25 @@
           if command -v atuin >/dev/null 2>&1; then
             eval "$(atuin init bash --disable-up-arrow)"
           fi
+
+          # Right-arrow accepts the top matching history prefix when at end of line
+          # (otherwise normal cursor movement). Complements Up/Down prefix search
+          # and Ctrl-R (atuin). The lookup temporarily clears HISTTIMEFORMAT for
+          # clean parsing of the history output.
+          __atuin_autosuggest_accept() {
+            local prefix="$READLINE_LINE"
+            local suggestion
+            suggestion=$(HISTTIMEFORMAT= history | tac | cut -c 8- | grep -i "^$prefix" | head -1)
+            if [[ -n $suggestion && $suggestion != "$prefix" && $READLINE_POINT -eq ''${#READLINE_LINE} ]]; then
+              READLINE_LINE=$suggestion
+              READLINE_POINT=''${#READLINE_LINE}
+            else
+              if (( READLINE_POINT < ''${#READLINE_LINE} )); then
+                READLINE_POINT=$((READLINE_POINT + 1))
+              fi
+            fi
+          }
+          bind -x '"\e[C": __atuin_autosuggest_accept'
         '';
       };
     };
