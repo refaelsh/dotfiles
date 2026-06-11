@@ -105,7 +105,6 @@
         aspellDicts.en
         aspellDicts.he
         languagetool
-        silver-searcher
         nil
         pciutils
         steam-run
