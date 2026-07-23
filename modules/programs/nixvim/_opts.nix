@@ -5,7 +5,9 @@
     cursorline = true;
     mouse = "a";
     undofile = true;
-    undodir = "/home/refaelsh/.config/nvim";
+    # Keep undo history out of the nvim config directory. A dedicated state
+    # path avoids polluting ~/.config/nvim with one undo file per edited path.
+    undodir = "/home/refaelsh/.local/state/nvim/undo";
     swapfile = false;
     foldmethod = "marker";
     hlsearch = true;

@@ -25,34 +25,22 @@
       };
       snippet.expand = # lua
         "function(args) require('luasnip').lsp_expand(args.body) end";
+      # Insert-mode sources only. cmdline/cmdline-history belong in separate
+      # cmp.setup.cmdline configurations, not here. friendly-snippets is a
+      # LuaSnip snippet pack (loaded via luasnip), not a cmp source. zsh was
+      # leftover from the old shell setup and does nothing under bash.
       sources = [
         {
           name = "buffer";
           priority = 500;
         }
-        # {
-        #   name = "calc";
-        #   priority = 150;
-        # }
         {
           name = "conventionalcommits";
           priority = 300;
         }
         {
-          name = "cmdline";
-          priority = 300;
-        }
-        {
-          name = "cmdline-history";
-          priority = 300;
-        }
-        {
           name = "dictionary";
           priority = 300;
-        }
-        {
-          name = "friendly-snippets";
-          priority = 750;
         }
         {
           name = "fuzzy-buffer";
@@ -74,10 +62,6 @@
           name = "nvim_lsp";
           priority = 1000;
         }
-        # {
-        #   name = "nvim_lsp_document_symbol";
-        #   priority = 1000;
-        # }
         {
           name = "nvim_lsp_signature_help";
           priority = 1000;
@@ -94,20 +78,12 @@
           name = "rg";
           priority = 300;
         }
-        # {
-        #   name = "spell";
-        #   priority = 300;
-        # }
         {
           name = "treesitter";
           priority = 850;
         }
         {
           name = "yanky";
-          priority = 250;
-        }
-        {
-          name = "zsh";
           priority = 250;
         }
         {

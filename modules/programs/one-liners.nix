@@ -10,7 +10,6 @@
         nm-applet.enable = true;
         dconf.enable = true;
         gamemode.enable = true;
-        # adb.enable = true;
         # bat.enable = true;
 
         # Rich tab completion framework + many built-in completions for bash.
@@ -109,7 +108,6 @@
         pciutils
         steam-run
         nixpkgs-fmt
-        microcode-intel
         lshw
         transmission_4
         transmission_4-gtk
@@ -127,7 +125,6 @@
         rclone
         # netflix
         iw
-        udiskie
         alsa-utils
         # popcorntime
         trayer

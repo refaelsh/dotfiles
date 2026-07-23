@@ -19,6 +19,11 @@
           ./_plugins
         ];
 
+        # Reuse the host NixOS pkgs set for plugins and tools so neovim does
+        # not pull a second full nixpkgs evaluation. Prefer this over forcing
+        # inputs.nixvim.inputs.nixpkgs.follows (which nixvim explicitly warns against).
+        nixpkgs.useGlobalPackages = true;
+
         enable = true;
         defaultEditor = true;
         vimAlias = true;
@@ -46,6 +51,9 @@
 
         extraConfigLua = # lua
           ''
+            -- Ensure undodir exists; Neovim will not create it automatically.
+            vim.fn.mkdir(vim.o.undodir, "p")
+
             -- require('org-bullets').setup()
             -- require('colorizer').setup({
             --   -- mode = 'background'

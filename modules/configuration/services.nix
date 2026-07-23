@@ -2,7 +2,7 @@
 {
   # Simple dendritic feature — exactly matches your old nixos/services.nix
   flake.nixosModules.services =
-    { lib, pkgs, ... }:
+    { ... }:
     {
       services = {
         # hledger-web.enable = true;
@@ -17,20 +17,14 @@
         # unused blocks instead of running out of clean flash for new writes.
         fstrim.enable = true;
 
-        # Limit persistent journal size using a structured attrset inside the
-        # generator call. This produces the key=value format expected by
-        # extraConfig (appended under the [Journal] section).
-        #
-        # This stops logs from the many GUI/Electron apps (Brave, Signal,
-        # Zoom, etc.) from growing without bound, which would
-        # waste disk space and add unnecessary background I/O.
-        journald.extraConfig = lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (name: value: "${name}=${value}") {
-            SystemMaxUse = "500M";
-            SystemKeepFree = "1G";
-            MaxFileSec = "1month";
-          }
-        );
+        # Cap persistent journal growth from GUI/Electron apps (Brave, Signal,
+        # Zoom, etc.) so logs do not fill disk or add constant background I/O.
+        # Written as plain journald.conf keys under [Journal].
+        journald.extraConfig = ''
+          SystemMaxUse=500M
+          SystemKeepFree=1G
+          MaxFileSec=1month
+        '';
 
         pipewire = {
           enable = true;

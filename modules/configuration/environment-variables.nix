@@ -5,7 +5,9 @@
     {
       environment.variables = {
         EDITOR = "nvim";
-        TERM = "ghostty";
+        # Only set TERMINAL (which app to spawn), not TERM. TERM must come from
+        # the actual terminal emulator so outbound SSH and non-Ghostty sessions
+        # do not advertise a terminfo remote hosts usually lack.
         TERMINAL = "ghostty";
 
         # Beautifully colored man pages using bat + the Dracula theme.

@@ -27,7 +27,7 @@
         , position        = BottomH 26
         , alpha           = 200
         , alignSep        = "}{"
-        , template        = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc> %wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc> %cat0%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc> %kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc> %kernel_version%|%date%|%_XMONAD_TRAYPAD%"
+        , template        = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc> %wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc> %fan_rpm%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc> %kbd%|%memory% %swap%|%battery%|%alsa:default:Master%|<fc=#bd93f9><fn=1></fn></fc> %kernel_version%|%date%|%_XMONAD_TRAYPAD%"
         , commands        = 
             -- DiskIO, DynNetwork, Memory and Swap updated every 5s (instead of 1s)
             -- to reduce background CPU wakeups and process spawning.
@@ -43,7 +43,9 @@
             , Run Kbd [("us", "us"), ("il", "il")]
             , Run CpuFreq ["-t", "<avg>GHz"] 50
             , Run MultiCoreTemp ["-t", "<fc=#bd93f9><fn=1>\xf2c9</fn></fc><avg>°", "-L", "60", "-H", "95", "-l", "white", "-n", "white", "-h", "red"] 50
-            , Run CatInt 0 "/sys/class/hwmon/hwmon4/fan1_input" [] 50
+            -- Resolve the Dell SMM fan via the platform device + glob so this
+            -- survives /sys/class/hwmon/hwmonN renumbering across boots/kernels.
+            , Run ComX "sh" ["-c", "cat /sys/devices/platform/dell_smm_hwmon/hwmon/hwmon*/fan1_input 2>/dev/null | head -n1"] "N/A" "fan_rpm" 50
             , Run MultiCpu ["-t", "<fc=#bd93f9><fn=1>\xf4bc</fn></fc> <vbar0><vbar1><vbar2><vbar3><vbar4><vbar5><vbar6><vbar7>", "-w", "99", "-L", "3", "-H", "50", "--normal", "green", "--high", "red"] 10
             , Run BatteryP ["BAT0"] ["-t", "<fc=#bd93f9><fn=1>󱊣</fn></fc><left>%", "-L", "10", "-H", "80", "-p", "3", "--", "-O", "<fc=green>On</fc> - ", "-i", "", "-L", "-15", "-H", "-5", "-l", "red", "-m", "blue", "-h", "green", "-a", "notify-send -u critical 'Battery running out!!'", "-A", "3"] 600
             , Run Alsa "default" "Master" ["-t", "<fc=#bd93f9><fn=1>\xf028</fn></fc> <volume>%"]
