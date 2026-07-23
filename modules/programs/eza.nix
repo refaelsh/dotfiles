@@ -19,16 +19,7 @@
     in
     {
       environment = {
-        # Clear any prior ls alias so the wrapped binary wins for plain ls.
-        shellAliases = {
-          ls = null;
-          # Long/tree variants are shell aliases so plain `ls` stays a short
-          # listing. Shared base flags (icons/color/git) come from the wrapper.
-          ll = "eza --long --header --extended";
-          la = "eza --long --all --header --extended";
-          l = "eza --long --header";
-          lt = "eza --tree --level=2";
-        };
+        shellAliases.ls = null;
 
         systemPackages = [
           (inputs.wrappers.lib.wrapPackage {
@@ -40,14 +31,22 @@
               "--icons" = "auto";
               "--color" = "auto";
               "--git" = true;
+              "-a" = true;
               "-F" = true;
+              "--long" = true;
+              "--extended" = true;
+              "--header" = true;
             };
 
             env.EZA_CONFIG_DIR = ezaConfigDir;
 
-            # Only short-name `ls` is a full wrapper alias. Long forms use
-            # shellAliases above so they are not forced into --long always.
-            aliases = [ "ls" ];
+            aliases = [
+              "ls"
+              "ll"
+              "la"
+              "l"
+              "lt"
+            ];
           })
         ];
       };
