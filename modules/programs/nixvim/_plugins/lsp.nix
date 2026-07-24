@@ -26,6 +26,18 @@
       lua_ls.enable = true;
       typos_lsp.enable = true;
       beancount.enable = true;
+      # Hover docs, completions, and diagnostics for NASM/GAS/GO assembly.
+      # Prefer a project-local .asm-lsp.toml (or ~/.config/asm-lsp/) to pin
+      # assembler + ISA; without it, diagnostics fall back to gcc/clang.
+      asm_lsp = {
+        enable = true;
+        # Default is only asm/vmasm; include nasm so .nasm buffers get LSP too.
+        filetypes = [
+          "asm"
+          "vmasm"
+          "nasm"
+        ];
+      };
       hls = {
         enable = true;
         installGhc = false;

@@ -52,5 +52,16 @@
       '';
     }
 
+    {
+      # Assembly mnemonics and registers trip English spellcheck constantly.
+      event = [ "FileType" ];
+      pattern = [
+        "asm"
+        "nasm"
+        "vmasm"
+      ];
+      command = "setlocal nospell";
+    }
+
   ];
 }

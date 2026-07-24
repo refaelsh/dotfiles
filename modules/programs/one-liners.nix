@@ -33,6 +33,12 @@
         yaml-language-server
         bash-language-server
         taplo
+        # Assembler toolchain for learning (GAS comes with binutils/gcc already).
+        # nasm: Intel-syntax assembler commonly used in tutorials
+        # asm-lsp: also pulled in by nixvim's asm_lsp server package; listing it
+        # here keeps the binary available outside Neovim (e.g. gen-config).
+        nasm
+        asm-lsp
         wget
         google-chrome
         glib
