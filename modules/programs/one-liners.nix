@@ -47,7 +47,7 @@
         xclip
         kdiff3
         alacritty
-        dracula-theme
+        # dracula-theme
         gnumake
         cmake
         tree-sitter
