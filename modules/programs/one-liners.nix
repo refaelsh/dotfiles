@@ -55,7 +55,6 @@
         zip
         unzip
         openssh
-        flameshot
         signal-desktop
         kbdd
         setxkbmap

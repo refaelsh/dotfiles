@@ -31,14 +31,15 @@
         ];
       };
 
-      # Disk swap is intentionally deprioritized now that zram is active.
-      # zram (in RAM) will be used first. The disk swap only becomes a last-resort
-      # fallback if zram is completely exhausted. This greatly reduces the chance
-      # of the system hitting slow disk I/O during memory pressure.
+      # Disk swap is a last-resort safety net only. zram (higher priority, in
+      # compressed RAM) is preferred; once the kernel starts writing meaningful
+      # amounts here, interactive latency collapses (tab/desktop switches hitch).
+      # Keep it mounted so OOM is delayed under extreme pressure, but treat any
+      # sustained use as a signal to free RAM (close Steam / cull Brave tabs).
       swapDevices = [
         {
           device = "/dev/disk/by-uuid/6edb503d-8105-4483-9d00-edf430bba983";
-          priority = -1;   # Very low priority → zram is strongly preferred
+          priority = -1; # Very low priority → zram is strongly preferred
         }
       ];
 
