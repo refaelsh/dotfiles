@@ -31,7 +31,7 @@
         -- Alsa plugin opens the mixer once at startup; if PipeWire is not ready
         -- yet (common right after login), it stays stuck on N/A until xmobar is
         -- restarted. Polling wpctl retries every second and fills in once audio is up.
-        , template        = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc> %wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc> %fan_rpm%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc> %kbd%|%memory% %swap%|%battery%|<fc=#bd93f9><fn=1>\xf028</fn></fc> %volume%|<fc=#bd93f9><fn=1></fn></fc> %kernel_version%|%date%|%_XMONAD_TRAYPAD%"
+        , template        = "<hspace=8/>%XMonadLog% }{ %load%|%disku%|%diskio%|<fc=#bd93f9><fn=1></fn></fc> %wifi_signal%|%dynnetwork%|<fc=#bd93f9><fn=1>󰈐</fn></fc> %fan_rpm%|%multicoretemp%|%cpufreq%|%multicpu%|<fc=#bd93f9><fn=1></fn></fc> %kbd%|%memory% %swap%|%battery%|<fc=#bd93f9><fn=1></fn></fc> %volume%|<fc=#bd93f9><fn=1></fn></fc> %kernel_version%|%date%|%_XMONAD_TRAYPAD%"
         , commands        = 
             -- DiskIO, DynNetwork, Memory and Swap updated every 5s (instead of 1s)
             -- to reduce background CPU wakeups and process spawning.
