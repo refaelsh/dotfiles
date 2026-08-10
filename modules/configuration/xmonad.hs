@@ -95,8 +95,12 @@ myConfig =
                         ("M-S-<Down>", windowSwap D False),
                         ("<Print>", spawn "flameshot gui"),
                         ("M1-c", spawn "clipmenu -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10'"),
-                        ("M-<F11>", spawn "amixer set Master 5%-"),
-                        ("M-<F12>", spawn "amixer set Master 5%+")
+                        -- Use wpctl (PipeWire/WirePlumber) instead of amixer on the
+                        -- ALSA "Master" softvol control. amixer can leave L/R channels
+                        -- out of balance and then further steps look like a no-op when
+                        -- one channel is already at the limit. -l 1.0 caps boost at 100%.
+                        ("M-<F11>", spawn "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%-"),
+                        ("M-<F12>", spawn "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+")
                       ]
     `removeKeysP` [ "M-S-<Return>"
                   , "M-p"
