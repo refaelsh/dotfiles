@@ -12,6 +12,11 @@
   # (xdg.portal.enable / extraPortals) and drop the legacy flag. Prefer that
   # if we need portals for Flatpak, browser screen-share, or a Wayland move;
   # on pure X11 it is extra always-on D-Bus machinery for the same capture.
+  #
+  # Flameshot 14 also prompts to pick a monitor on multi-monitor setups
+  # (overlay across all screens is no longer the default). captureActiveMonitor
+  # skips that dialog and captures the monitor under the cursor instead —
+  # closest to the old single-step gui workflow on X11.
   flake.nixosModules.flameshot =
     { lib, pkgs, ... }:
     {
@@ -22,6 +27,7 @@
         cat > /home/refaelsh/.config/flameshot/flameshot.ini << 'EOF'
         [General]
         useX11LegacyScreenshot=true
+        captureActiveMonitor=true
         EOF
 
         chown -R refaelsh:users /home/refaelsh/.config/flameshot
