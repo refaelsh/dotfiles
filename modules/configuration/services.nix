@@ -17,6 +17,14 @@
         # unused blocks instead of running out of clean flash for new writes.
         fstrim.enable = true;
 
+        # SMART monitoring for the SK hynix BC501. This OEM NVMe has a
+        # modest endurance rating; warn on the console if the drive reports
+        # failing attributes instead of discovering wear only after I/O errors.
+        smartd = {
+          enable = true;
+          notifications.wall.enable = true;
+        };
+
         # Cap persistent journal growth from GUI/Electron apps (Brave, Signal,
         # Zoom, etc.) so logs do not fill disk or add constant background I/O.
         # Written as plain journald.conf keys under [Journal].
@@ -76,5 +84,15 @@
           };
         };
       };
+
+      # Keep crash dumps but bound their flash use. Chrome/Brave child
+      # processes have been writing cores here; unbounded Storage=external
+      # would keep growing /var/lib/systemd/coredump.
+      systemd.coredump.extraConfig = ''
+        Storage=external
+        ProcessSizeMax=32M
+        MaxUse=50M
+        KeepFree=1G
+      '';
     };
 }

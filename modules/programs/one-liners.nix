@@ -111,6 +111,8 @@
         languagetool
         nil
         pciutils
+        smartmontools
+        nvme-cli
         steam-run
         nixpkgs-fmt
         lshw

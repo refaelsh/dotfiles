@@ -13,6 +13,12 @@
       system.stateVersion = "26.05";
       # copySystemConfiguration = true;
 
+      # /tmp is on the root NVMe, not a tmpfs. A RAM-backed /tmp would compete
+      # with zram on this 8 GiB machine and push reclaim onto the disk swap
+      # partition. Still delete leftover temp files at boot so they do not
+      # accumulate as flash writes across sessions.
+      boot.tmp.cleanOnBoot = true;
+
       # Disabled to avoid pulling in large amounts of development documentation
       # and man pages for every package in the system profile.
       documentation.dev.enable = false;

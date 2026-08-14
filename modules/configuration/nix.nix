@@ -8,8 +8,9 @@
         daemonIOSchedClass = "idle";
 
         # Automatic garbage collection keeps the Nix store from growing
-        # without bound. The current 88 GB store and 31 GB system closure
-        # make nix commands slower and use more disk space over time.
+        # without bound on the 256 GB NVMe. Weekly GC plus a free-space
+        # floor prevent rebuilds from filling the disk, which makes this
+        # class of drive slower and increases write amplification.
         gc = {
           automatic = true;
           dates = "weekly";
@@ -25,6 +26,12 @@
           # Disabled because we use the scheduled optimise timer above.
           # Synchronous optimisation during builds slows down the machine.
           auto-optimise-store = false;
+
+          # If free space drops below 2 GiB during a Nix operation, delete
+          # unused store paths until 10 GiB is free. Avoids running the
+          # NVMe nearly full.
+          min-free = 2147483648; # 2 GiB
+          max-free = 10737418240; # 10 GiB
 
           experimental-features = [
             "nix-command"
