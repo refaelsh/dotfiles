@@ -8,6 +8,11 @@
         # hledger-web.enable = true;
         libinput.enable = true;
         thermald.enable = true;
+
+        # Pull Dell BIOS, ME, and NVMe firmware from LVFS. This laptop has
+        # no other firmware-update path; without fwupd those updates never
+        # reach the machine.
+        fwupd.enable = true;
         gvfs.enable = true;
         udisks2.enable = true;
         devmon.enable = true;

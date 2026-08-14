@@ -54,7 +54,6 @@
         nodejs
         zip
         unzip
-        openssh
         signal-desktop
         kbdd
         setxkbmap
@@ -67,11 +66,9 @@
         pkg-config
         htop
         ripgrep
-        coreutils
         fd
         atuin
         comma
-        networkmanagerapplet
         gdb
         lm_sensors
         python3Packages.psutil
@@ -87,7 +84,6 @@
         xdotool
         killall
         nitrogen
-        nix-index
         acpi
         wally-cli
         asciidoctor-with-extensions
