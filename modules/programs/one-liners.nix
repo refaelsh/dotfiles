@@ -54,6 +54,9 @@
         nodejs
         zip
         unzip
+        # SSH client (scp/sftp/ssh). Not the sshd server; that stays off.
+        # NixOS does not put these on PATH unless the package is listed.
+        openssh
         signal-desktop
         kbdd
         setxkbmap
