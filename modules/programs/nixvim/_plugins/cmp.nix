@@ -67,10 +67,6 @@
           priority = 1000;
         }
         {
-          name = "orgmode";
-          priority = 250;
-        }
-        {
           name = "path";
           priority = 300;
         }
@@ -81,10 +77,6 @@
         {
           name = "treesitter";
           priority = 850;
-        }
-        {
-          name = "yanky";
-          priority = 250;
         }
         {
           name = "beancount";

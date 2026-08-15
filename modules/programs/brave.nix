@@ -27,6 +27,18 @@ in
 
         # Brave (and many Chromium-based browsers) expect --flag=value syntax
         flagSeparator = "=";
+
+        # wrapPackage already rewrites share/applications/*.desktop so Exec=
+        # points at this wrapper (not the unwrapped store brave). Also install
+        # brave.desktop as an alias of brave-browser.desktop so older MIME
+        # names and "brave.desktop" refs still launch the same flagged binary.
+        patchHook = ''
+          if [[ -e $out/share/applications/brave-browser.desktop ]]; then
+            cp -L --remove-destination \
+              $out/share/applications/brave-browser.desktop \
+              $out/share/applications/brave.desktop
+          fi
+        '';
       };
     in
     {

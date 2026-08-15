@@ -108,12 +108,10 @@
         aspellDicts.en
         aspellDicts.he
         languagetool
-        nil
         pciutils
         smartmontools
         nvme-cli
         steam-run
-        nixpkgs-fmt
         lshw
         transmission_4
         transmission_4-gtk
@@ -178,7 +176,7 @@
         # }))
         proton-pass
         # notepadqq
-        widelands
+        # widelands
         beancount
         fava
         android-tools
