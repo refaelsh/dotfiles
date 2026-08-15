@@ -28,14 +28,15 @@
             (official "https://st.suckless.org/patches/csi_22_23/st-csi_22_23-0.8.5.diff" "0w0zfymq5xy0b6cb8dnqvlzfax43l5dfdy806v40ganwfxwbxh09")
             (official "https://st.suckless.org/patches/sync/st-appsync-20200618-b27a383.diff" "1x2qb65p0jj6f5gb49xildry0aqkls4ayazyr99z7824bvkivz94")
             (official "https://st.suckless.org/patches/dynamic-cursor-color/st-dynamic-cursor-color-0.9.diff" "1hpyk30a5mkj3lplmxhp8j61y3yxmsg8sx5wjfbvcriv43fcdb5a")
+            (official "https://st.suckless.org/patches/workingdir/st-workingdir-20200317-51e19ea.diff" "1pwx6gppqbx0gkyw62i1qwpigr9nw0chnzr0f3jylv9gzxyvxfhy")
           ];
         }).overrideAttrs
           (old: {
             # Official diffs own config.def.h. These substitutes only change
             # appearance and policy. allowwindowops=1 enables OSC 52 clipboard
             # (nvim, remote); a hostile host can then also set the clipboard.
-            # Single-line replaces only: a multiline colorname[] blob does not
-            # survive nixfmt's reindent of indented strings.
+            # Official workingdir calls chdir(opt_dir) even when -d was not
+            # given (opt_dir is NULL); the guard avoids that.
             postPatch = (old.postPatch or "") + ''
               substituteInPlace config.def.h \
                 --replace-fail 'static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";' \
@@ -81,6 +82,10 @@
               substituteInPlace st.h \
                 --replace-fail '#define HISTSIZE            2000' \
                                '#define HISTSIZE            20000'
+
+              substituteInPlace x.c \
+                --replace-fail 'chdir(opt_dir);' \
+                               'if (opt_dir) chdir(opt_dir);'
             '';
           });
     in
