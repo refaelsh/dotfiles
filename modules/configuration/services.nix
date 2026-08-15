@@ -93,11 +93,11 @@
       # Keep crash dumps but bound their flash use. Chrome/Brave child
       # processes have been writing cores here; unbounded Storage=external
       # would keep growing /var/lib/systemd/coredump.
-      systemd.coredump.extraConfig = ''
-        Storage=external
-        ProcessSizeMax=32M
-        MaxUse=50M
-        KeepFree=1G
-      '';
+      systemd.coredump.settings.Coredump = {
+        Storage = "external";
+        ProcessSizeMax = "32M";
+        MaxUse = "50M";
+        KeepFree = "1G";
+      };
     };
 }
