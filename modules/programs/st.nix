@@ -16,18 +16,31 @@
         (pkgs.st.override {
           extraLibs = [ pkgs.harfbuzz ];
           patches = [
+            # Shift+PageUp/Down scrolls through output history.
             (official "https://st.suckless.org/patches/scrollback/st-scrollback-ringbuffer-0.9.2.diff" "1r23q4mi5bkam49ld5c3ccwaa1li7bbjx0ndjgm207p02az9h4cn")
+            # Font ligatures (fi, !=, =>). Combined file: standalone ligatures does not apply on scrollback.
             (official "https://st.suckless.org/patches/ligatures/0.9.3/st-ligatures-scrollback-ringbuffer-20251007-0.9.3.diff" "0c2w1p0siafiyarfx6skdighwzw29d1mydpjfrwgrvdsywwyq2di")
+            # Shift+mouse-wheel scrolls the same history.
             (official "https://st.suckless.org/patches/scrollback/st-scrollback-mouse-0.9.2.diff" "068s5rjvvw2174y34i5xxvpw4jvjy58akd1kgf025h1153hmf7jy")
+            # Wheel without Shift: apps on the alt screen (less, vim) get the wheel; otherwise scroll history.
             (official "https://st.suckless.org/patches/scrollback/st-scrollback-mouse-altscreen-20220127-2c5edf2.diff" "078hk7k5i0vc2x4dyb65dxd5ykr32pz4f4j6h0f7pm8j7xl1fbwg")
+            # Selecting text also writes CLIPBOARD (browser/Ctrl+V paste), not only PRIMARY.
             (official "https://st.suckless.org/patches/clipboard/st-clipboard-0.8.3.diff" "1h1nwilwws02h2lnxzmrzr69lyh6pwsym21hvalp9kmbacwy6p0g")
+            # Bold is a weight only; do not also switch to the bright colour of that slot.
             (official "https://st.suckless.org/patches/bold-is-not-bright/st-bold-is-not-bright-20190127-3be4cf1.diff" "1cpap2jz80n90izhq5fdv2cvg29hj6bhhvjxk40zkskwmjn6k49j")
+            # Fallback fonts (font2[]) for glyphs missing from the main font (emoji, icons).
             (official "https://st.suckless.org/patches/font2/st-font2-0.8.5.diff" "1wd4lxl0fmv78ibnf4yksribxhg3jzpqnjxhp0jyjbkz7a48m89f")
+            # Resize to any pixel size so a tiling WM does not leave cell-size gaps.
             (official "https://st.suckless.org/patches/anysize/st-expected-anysize-0.9.diff" "04gvkf80lhaiwyv3m7fdkf81msf8al1kfb7inx1bf02ygx9152v2")
+            # Install st.desktop so launchers can find st.
             (official "https://st.suckless.org/patches/desktopentry/st-desktopentry-0.8.5.diff" "1nhr56j2jw7llpiig8j65iwsjxkl2h96rar4nlnwrqv4mgmgsncw")
+            # CSI 22/23: save and restore the window title (nvim sets one on enter).
             (official "https://st.suckless.org/patches/csi_22_23/st-csi_22_23-0.8.5.diff" "0w0zfymq5xy0b6cb8dnqvlzfax43l5dfdy806v40ganwfxwbxh09")
+            # Application-synchronized updates: less flicker when tmux/nvim redraw a full frame.
             (official "https://st.suckless.org/patches/sync/st-appsync-20200618-b27a383.diff" "1x2qb65p0jj6f5gb49xildry0aqkls4ayazyr99z7824bvkivz94")
+            # Cursor cell is drawn with fg/bg swapped so the glyph under it stays readable.
             (official "https://st.suckless.org/patches/dynamic-cursor-color/st-dynamic-cursor-color-0.9.diff" "1hpyk30a5mkj3lplmxhp8j61y3yxmsg8sx5wjfbvcriv43fcdb5a")
+            # `st -d DIR` starts in that working directory.
             (official "https://st.suckless.org/patches/workingdir/st-workingdir-20200317-51e19ea.diff" "1pwx6gppqbx0gkyw62i1qwpigr9nw0chnzr0f3jylv9gzxyvxfhy")
           ];
         }).overrideAttrs

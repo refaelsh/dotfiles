@@ -17,12 +17,19 @@
       dwm-patched =
         (pkgs.dwm.override {
           patches = [
+            # Center every floating window (dialogs, Steam popups).
             (official "https://dwm.suckless.org/patches/alwayscenter/dwm-alwayscenter-20200625-f04cac6.diff" "1hzq9crj13vxy4720xn2g0398fgwr12n7gd8j8wm6i45b56w34aw")
+            # New windows attach in the stack, not as the new master.
             (official "https://dwm.suckless.org/patches/attachaside/dwm-attachaside-6.6.diff" "0c1frbyzmsi80msc6ci64z0bsihh4kia368d9h1jfy9wnzac20bv")
+            # Real fullscreen: cover the monitor and hide the bar (togglefullscr).
             (official "https://dwm.suckless.org/patches/actualfullscreen/dwm-actualfullscreen-6.8.diff" "0sqdvaw93xg1vdiqqqqi88fx4nhplllg8y3fp429w8fgwawpwlkb")
+            # Ignore bogus Steam ConfigureNotify coords so the window does not walk across the screen.
             (official "https://dwm.suckless.org/patches/steam/dwm-steam-6.2.diff" "1ld1z3fh6p5f8gr62zknx3axsinraayzxw3rz1qwg73mx2zk5y1f")
+            # Remember layout, mfact and nmaster per tag.
             (official "https://dwm.suckless.org/patches/pertag/dwm-pertag-6.2.diff" "042bp41sn8dvjkxnw1bclc268ik6g7cg5qalvx89xpmz5pqs0p85")
+            # Publish EWMH desktop properties so pagers/trayer can see tags as workspaces.
             (official "https://dwm.suckless.org/patches/ewmhtags/dwm-ewmhtags-6.8.diff" "09bgin8aic6khc0970zgivaacw95zz3yyhh7i6gjmg1aj51pj2x8")
+            # No border when only one tiled window is visible.
             (official "https://dwm.suckless.org/patches/noborder/dwm-noborder-6.2.diff" "1q7g4ig120my7xlbybasf7jmsqd8g70z0cc79fp26bas7sb5zgwv")
           ];
         }).overrideAttrs
