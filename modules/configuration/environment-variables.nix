@@ -6,9 +6,9 @@
       environment.variables = {
         EDITOR = "nvim";
         # Only set TERMINAL (which app to spawn), not TERM. TERM must come from
-        # the actual terminal emulator so outbound SSH and non-Ghostty sessions
+        # the actual terminal emulator so outbound SSH and other sessions
         # do not advertise a terminfo remote hosts usually lack.
-        TERMINAL = "ghostty";
+        TERMINAL = "st";
 
         # Beautifully colored man pages using bat + the Dracula theme.
         # Replaces what the "colored-man-pages" zsh plugin used to provide.
