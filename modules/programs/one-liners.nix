@@ -86,7 +86,6 @@
         graphviz
         xdotool
         killall
-        nitrogen
         acpi
         wally-cli
         asciidoctor-with-extensions
