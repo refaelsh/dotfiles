@@ -64,20 +64,33 @@
             # the same substituteInPlace; each --replace-fail is another pair.
             postPatch = (old.postPatch or "") + ''
               # Primary face is unpatched Fira Code (same 6.2 letters as
-              # Ghostty used). st cannot scale Nerd Font icons to the cell
-              # the way Ghostty does; if the main font already has those
-              # glyphs they stay tiny. Symbols Nerd Font Mono is the first
-              # font2 fallback and is a couple of points larger so icons in
-              # nvim-tree and the prompt fill the cell. Emoji and Font
-              # Awesome 7 (the family nixpkgs actually ships) cover the rest.
+              # Ghostty). Fira Code's cell at size 12 is ~15.4px tall;
+              # Symbols Nerd Font's em equals its pixelsize, so the same
+              # point size leaves icons short, and a bigger fallback drawn
+              # on the text baseline only sticks out the top. pixelsize=17
+              # is a bit over the cell so icon padding still fills it, like
+              # Ghostty's nerd-font scaler. hintnone/no autohint: the
+              # autohinter is for Latin text and muddies icon outlines.
+              # Emoji and Font Awesome 7 (the family nixpkgs ships) follow.
               substituteInPlace config.def.h \
                 --replace-fail 'static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";' \
                                'static char *font = "Fira Code:size=12:antialias=true:autohint=true";' \
                 --replace-fail '/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */' \
-                               '	"Symbols Nerd Font Mono:size=14:antialias=true:autohint=true",' \
+                               '	"Symbols Nerd Font Mono:pixelsize=17:antialias=true:autohint=false:hintstyle=hintnone",' \
                 --replace-fail '/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */' \
                                '	"Noto Color Emoji:size=12:antialias=true:autohint=true",
 	"Font Awesome 7 Free:size=12:antialias=true:autohint=true",'
+
+              # Center font2 / fontconfig fallback glyphs in the cell.
+              # Default y is the primary font's baseline, which clips a
+              # taller Symbols face at the top and leaves a gap at the
+              # bottom. Ghostty centers scaled nerd icons; this is that
+              # adjustment for Xft. Letters still use the Fira Code path.
+              substituteInPlace x.c \
+                --replace-fail '			specs[numspecs].x = (short)xp;
+			specs[numspecs].y = (short)yp;' \
+                               '			specs[numspecs].x = (short)xp;
+			specs[numspecs].y = (short)(winy + (win.ch + frc[f].font->ascent - frc[f].font->descent) / 2);'
 
               # borderpx 0: no inner padding. cursorshape 6: bar cursor ("|").
               # allowwindowops 1: OSC 52 so nvim/remote can set the clipboard;
