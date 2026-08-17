@@ -1,9 +1,10 @@
 { lib, ... }:
 {
   flake.nixosModules.grok-build =
-    { pkgs, inputs, ... }:
+    { config, pkgs, inputs, ... }:
     let
       grokRaw = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.grok;
+      home = config.users.users.refaelsh.home;
 
       # Wrap the grok binary so the entire agent process tree (main + subagents,
       # monitors, background commands, MCP node process) runs at lower CPU
@@ -26,5 +27,12 @@
       };
 
       environment.systemPackages = [ grokWrapped ];
+
+      # One copy of QRSPI skills lives in skills/ next to this module (git).
+      # Rebuild runs ln so a new machine does not need a manual step.
+      system.activationScripts.grok-skills = ''
+        mkdir -p ${home}/.grok
+        ln -sfn ${home}/repos/dotfiles/modules/programs/grok-build/skills ${home}/.grok/skills
+      '';
     };
 }

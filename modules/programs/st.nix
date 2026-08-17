@@ -64,13 +64,10 @@
             # the same substituteInPlace; each --replace-fail is another pair.
             postPatch = (old.postPatch or "") + ''
               # Primary face is unpatched Fira Code (same 6.2 letters as
-              # Ghostty). Fira Code's cell at size 12 is ~15.4px tall;
-              # Symbols Nerd Font's em equals its pixelsize, so the same
-              # point size leaves icons short, and a bigger fallback drawn
-              # on the text baseline only sticks out the top. pixelsize=17
-              # is a bit over the cell so icon padding still fills it, like
-              # Ghostty's nerd-font scaler. hintnone/no autohint: the
-              # autohinter is for Latin text and muddies icon outlines.
+              # Ghostty). Symbols is font2; its pixelsize here is a dummy
+              # because xloadsparefonts overwrites it from the cell height.
+              # hintnone / no autohint / rgba=none: the autohinter and
+              # subpixel filter are for Latin text and muddy icon outlines.
               # Emoji and Font Awesome 7 (the family nixpkgs ships) follow.
               substituteInPlace config.def.h \
                 --replace-fail 'static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";' \
@@ -111,7 +108,20 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
                 --replace-fail '			specs[numspecs].x = (short)xp;
 			specs[numspecs].y = (short)yp;' \
                                '			specs[numspecs].x = (short)xp;
-			specs[numspecs].y = (short)(winy + (win.ch + frc[f].font->ascent - frc[f].font->descent) / 2);'
+			specs[numspecs].y = (short)(winy + (win.ch + frc[f].font->ascent - frc[f].font->descent) / 2);' \
+                --replace-fail '		FcPatternAddBool(pattern, FC_SCALABLE, 1);' \
+                               '		/* st clips every glyph to the cell. Nerd icons only
+		   ink ~65-80% of the em, so a same-size Symbols face
+		   looks small (Ghostty scales ink to the cell instead).
+		   1.5x cell + clip + vertical center fills the cell.
+		   Only the first font2 entry (Symbols); leave emoji/FA. */
+		if (fp == font2) {
+			FcPatternDel(pattern, FC_PIXEL_SIZE);
+			FcPatternDel(pattern, FC_SIZE);
+			FcPatternAddDouble(pattern, FC_PIXEL_SIZE, win.ch * 1.5);
+		}
+
+		FcPatternAddBool(pattern, FC_SCALABLE, 1);'
 
               # borderpx 0: no inner padding. cursorshape 6: bar cursor ("|").
               # allowwindowops 1: OSC 52 so nvim/remote can set the clipboard;
