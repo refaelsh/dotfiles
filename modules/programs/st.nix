@@ -63,16 +63,21 @@
             # instead of shipping an unthemed terminal. A trailing \ continues
             # the same substituteInPlace; each --replace-fail is another pair.
             postPatch = (old.postPatch or "") + ''
-              # Same family/size as Ghostty. font2 ships commented out;
-              # uncomment so glyphs missing from Fira Code (emoji, some
-              # icons) come from fonts already in fonts.nix.
+              # Primary face is unpatched Fira Code (same 6.2 letters as
+              # Ghostty used). st cannot scale Nerd Font icons to the cell
+              # the way Ghostty does; if the main font already has those
+              # glyphs they stay tiny. Symbols Nerd Font Mono is the first
+              # font2 fallback and is a couple of points larger so icons in
+              # nvim-tree and the prompt fill the cell. Emoji and Font
+              # Awesome 7 (the family nixpkgs actually ships) cover the rest.
               substituteInPlace config.def.h \
                 --replace-fail 'static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";' \
-                               'static char *font = "FiraCode Nerd Font:size=12:antialias=true:autohint=true";' \
+                               'static char *font = "Fira Code:size=12:antialias=true:autohint=true";' \
                 --replace-fail '/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */' \
-                               '	"Noto Color Emoji:size=12:antialias=true:autohint=true",' \
+                               '	"Symbols Nerd Font Mono:size=14:antialias=true:autohint=true",' \
                 --replace-fail '/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */' \
-                               '	"Font Awesome 6 Free:size=12:antialias=true:autohint=true",'
+                               '	"Noto Color Emoji:size=12:antialias=true:autohint=true",
+	"Font Awesome 7 Free:size=12:antialias=true:autohint=true",'
 
               # borderpx 0: no inner padding. cursorshape 6: bar cursor ("|").
               # allowwindowops 1: OSC 52 so nvim/remote can set the clipboard;
