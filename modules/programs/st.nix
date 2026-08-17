@@ -76,17 +76,38 @@
                 --replace-fail 'static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";' \
                                'static char *font = "Fira Code:size=12:antialias=true:autohint=true";' \
                 --replace-fail '/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */' \
-                               '	"Symbols Nerd Font Mono:pixelsize=17:antialias=true:autohint=false:hintstyle=hintnone",' \
+                               '	"Symbols Nerd Font Mono:pixelsize=17:antialias=true:autohint=false:hintstyle=hintnone:rgba=none",' \
                 --replace-fail '/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */' \
                                '	"Noto Color Emoji:size=12:antialias=true:autohint=true",
 	"Font Awesome 7 Free:size=12:antialias=true:autohint=true",'
 
-              # Center font2 / fontconfig fallback glyphs in the cell.
-              # Default y is the primary font's baseline, which clips a
-              # taller Symbols face at the top and leaves a gap at the
-              # bottom. Ghostty centers scaled nerd icons; this is that
-              # adjustment for Xft. Letters still use the Fira Code path.
+              # Harfbuzz shapes the whole run with Fira Code. A non-zero
+              # glyph id (including .notdef-adjacent PUA that some faces
+              # expose) keeps nvim-tree folder icons on the text-sized
+              # primary font, so font2 never runs. Skip that path for Nerd
+              # icon ranges. Powerline U+E0A0-U+E0D4 stays on Fira Code so
+              # lualine separators still meet at the cell edge.
               substituteInPlace x.c \
+                --replace-fail 'int
+xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x, int y)
+{' \
+                               'int
+isnerdicon(Rune u)
+{
+	return (u >= 0xe200 && u <= 0xe3e3) ||
+	       (u >= 0xe5fa && u <= 0xe6b7) ||
+	       (u >= 0xe700 && u <= 0xe8ef) ||
+	       (u >= 0xea60 && u <= 0xec1e) ||
+	       (u >= 0xed00 && u <= 0xf2ff) ||
+	       (u >= 0xf300 && u <= 0xf533) ||
+	       (u >= 0xf0000 && u <= 0xf1af0);
+}
+
+int
+xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x, int y)
+{' \
+                --replace-fail '		if (shaped.glyphs[code_idx].codepoint != 0) {' \
+                               '		if (shaped.glyphs[code_idx].codepoint != 0 && !isnerdicon(glyphs[idx].u)) {' \
                 --replace-fail '			specs[numspecs].x = (short)xp;
 			specs[numspecs].y = (short)yp;' \
                                '			specs[numspecs].x = (short)xp;
