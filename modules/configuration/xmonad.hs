@@ -18,7 +18,7 @@ import XMonad.Util.Hacks qualified as Hacks
 import XMonad.Util.SpawnOnce
 
 myTerminal :: String
-myTerminal = "st"
+myTerminal = "ghostty"
 
 myStartupHook :: X ()
 myStartupHook = do

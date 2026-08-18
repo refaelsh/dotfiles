@@ -56,9 +56,11 @@
             # another pair.
             postPatch = (old.postPatch or "") + ''
                             # Super like xmonad. 2px borders; resizehints 0 so terminals
-                            # do not leave gaps. Fira Code matches st. Color slots feed
-                            # both the bar and dmenu_run.
+                            # do not leave gaps. Fira Code matches Ghostty. Color slots
+                            # feed both the bar and dmenu_run.
                             substituteInPlace config.def.h \
+                              --replace-fail 'static const char *termcmd[]  = { "st", NULL };' \
+                                             'static const char *termcmd[]  = { "ghostty", NULL };' \
                               --replace-fail '#define MODKEY Mod1Mask' \
                                              '#define MODKEY Mod4Mask' \
                               --replace-fail 'static const unsigned int borderpx  = 1;' \
@@ -86,7 +88,7 @@
                             # Super+Shift+q is kill in xmonad. Move dwm's quit off that
                             # binding first so the next replace can take Shift+q for kill.
                             # Super+d is dmenu (xmonad M-d); Super+o keeps incnmaster -1.
-                            # Super+Return launches st; Super+Shift+Return is zoom.
+                            # Super+Return launches ghostty; Super+Shift+Return is zoom.
                             # Super+f is actualfullscreen; the old float layout moves to
                             # Super+Shift+s so Shift+f is free.
                             substituteInPlace config.def.h \
@@ -139,7 +141,7 @@
           kbdd &
           brave &
           signal-desktop &
-          st &
+          ghostty &
           while true; do
             ${pkgs.xsetroot}/bin/xsetroot -name "$(date '+%Y-%m-%d %H:%M')"
             sleep 15
