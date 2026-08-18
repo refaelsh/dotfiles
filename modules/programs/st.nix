@@ -65,7 +65,7 @@
             postPatch = (old.postPatch or "") + ''
               # Primary face is unpatched Fira Code (same 6.2 letters as
               # Ghostty). Symbols is font2; its pixelsize here is a dummy
-              # because xloadsparefonts overwrites it from the cell height.
+              # because xloadsparefonts overwrites it from the cell width.
               # hintnone / no autohint / rgba=none: the autohinter and
               # subpixel filter are for Latin text and muddy icon outlines.
               # Emoji and Font Awesome 7 (the family nixpkgs ships) follow.
@@ -110,15 +110,15 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
                                '			specs[numspecs].x = (short)xp;
 			specs[numspecs].y = (short)(winy + (win.ch + frc[f].font->ascent - frc[f].font->descent) / 2);' \
                 --replace-fail '		FcPatternAddBool(pattern, FC_SCALABLE, 1);' \
-                               '		/* st clips every glyph to the cell. Nerd icons only
-		   ink ~65-80% of the em, so a same-size Symbols face
-		   looks small (Ghostty scales ink to the cell instead).
-		   1.5x cell + clip + vertical center fills the cell.
+                               '		/* Symbols glyphs are ~1em wide. Sizing from cell height
+		   (ch is ~2x cw for Fira Code) makes icons span several
+		   columns. 2*cw is a bit larger than the text face so
+		   nvim-tree icons read clearly without taking the line.
 		   Only the first font2 entry (Symbols); leave emoji/FA. */
 		if (fp == font2) {
 			FcPatternDel(pattern, FC_PIXEL_SIZE);
 			FcPatternDel(pattern, FC_SIZE);
-			FcPatternAddDouble(pattern, FC_PIXEL_SIZE, win.ch * 1.5);
+			FcPatternAddDouble(pattern, FC_PIXEL_SIZE, win.cw * 2.0);
 		}
 
 		FcPatternAddBool(pattern, FC_SCALABLE, 1);'
