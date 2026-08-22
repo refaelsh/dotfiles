@@ -18,6 +18,11 @@
 
     llm-agents.url = "github:numtide/llm-agents.nix";
     llm-agents.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Community packaging of the official amd64 Grok Bot .deb. Upstream does
+    # not ship a Linux desktop app; this flake is the NixOS install path.
+    grok-bot.url = "github:jordangarrison/grok-bot-flake";
+    grok-bot.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
