@@ -10,6 +10,8 @@
           extraGroups = [
             "networkmanager"
             "wheel"
+            # Required for GameMode to apply a negative nice value (renice).
+            "gamemode"
           ];
           useDefaultShell = true;
         };

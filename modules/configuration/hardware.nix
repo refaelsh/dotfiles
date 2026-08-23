@@ -22,6 +22,11 @@
         };
       };
 
+      # PSR on this Comet Lake eDP introduces frame-pacing stutter, worse when
+      # the 60 Hz panel is cloned with the 120 Hz HDMI monitor. Turning it off
+      # keeps scanout consistent; the cost is a bit more display power.
+      boot.kernelParams = [ "i915.enable_psr=0" ];
+
       # QCA9377 is a Wi-Fi+BT combo. bluetoothd is already off, but the
       # USB BT function (0cf3:e009) still binds btusb and keeps the BT
       # radio alive, which fights the 2.4 GHz side of the same chip.

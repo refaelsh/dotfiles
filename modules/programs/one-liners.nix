@@ -9,7 +9,20 @@
         # zsh.enable = true;
         nm-applet.enable = true;
         dconf.enable = true;
-        gamemode.enable = true;
+        # GameMode is opt-in per launch (`gamemoderun`). Keep intel_pstate on
+        # powersave even then: this Comet Lake U-series already hits RAPL/thermal
+        # limits under desktop load, and the performance governor makes sustained
+        # UPS worse, not better. Disable the iGPU power-ratio heuristic so a busy
+        # UHD 620 does not flip the governor around mid-game. renice needs the
+        # user in the gamemode group (and a new login).
+        gamemode = {
+          enable = true;
+          settings.general = {
+            desiredgov = "powersave";
+            igpu_power_threshold = -1;
+            renice = 10;
+          };
+        };
         # bat.enable = true;
 
         # Rich tab completion framework + many built-in completions for bash.
