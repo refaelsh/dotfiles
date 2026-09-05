@@ -32,12 +32,11 @@
 
         # Cap persistent journal growth from GUI/Electron apps (Brave, Signal,
         # Zoom, etc.) so logs do not fill disk or add constant background I/O.
-        # Written as plain journald.conf keys under [Journal].
-        journald.extraConfig = ''
-          SystemMaxUse=500M
-          SystemKeepFree=1G
-          MaxFileSec=1month
-        '';
+        journald.settings.Journal = {
+          SystemMaxUse = "500M";
+          SystemKeepFree = "1G";
+          MaxFileSec = "1month";
+        };
 
         pipewire = {
           enable = true;
