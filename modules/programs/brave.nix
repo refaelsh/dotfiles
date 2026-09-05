@@ -18,9 +18,12 @@ in
 
         package = pkgs.brave;
 
-        # Exact equivalent of your original commandLineArgs
+        # Do not pass --disable-background-networking. That Chromium switch is
+        # for benchmark/test runs: it turns off the extension updater, GCM, and
+        # other background network services. Manifest V3 extensions such as
+        # Proton Pass then sit on a "reloading" screen until a later retry
+        # happens to succeed.
         flags = {
-          "--disable-background-networking" = true;
           "--disable-default-apps" = true;
           "--disable-features" = "TranslateUI";
         };
