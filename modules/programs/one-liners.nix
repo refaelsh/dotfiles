@@ -77,6 +77,7 @@
         jq
         nvd
         pandoc
+        markitdown
         gcc
         python3
         pkg-config
