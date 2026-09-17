@@ -101,11 +101,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789548149,
-        "narHash": "sha256-qg2IgLFxmQT0EhuNA85hPuaxg8vW60B7IESzcLPvOZI=",
+        "lastModified": 1789634754,
+        "narHash": "sha256-QG4jKaEy9y6alN9GfA/yCkl3+QwI1nOpdtmgaT2UNmc=",
         "owner": "jordangarrison",
         "repo": "grok-bot-flake",
-        "rev": "4a9beb3013287059d2a5ee5e78fb707dee7c34c9",
+        "rev": "2b354e1b1b08b2248ff6b57111bfe1b0a146a1b9",
         "type": "github"
       },
       "original": {
@@ -140,11 +140,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1789552626,
-        "narHash": "sha256-uLUOUASz1t+YvEu6e1l71d/5eTnWC7psI+rRxTpj514=",
+        "lastModified": 1789643193,
+        "narHash": "sha256-Vd9M6YDpwLDTI2JgQxNdnx8xvWJ8mVI5tehu/yFvoMA=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "cbfe11b1e27e0bfde1ce9f221fcc9c88940f0602",
+        "rev": "e07b7ec56fcbb9d93383319aae2d3aedcd4631d1",
         "type": "github"
       },
       "original": {
@@ -155,11 +155,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1789426278,
-        "narHash": "sha256-GnotcvKtbTMnoVx6G4E7ZdUX6487Dky74dqq3pU7iRk=",
+        "lastModified": 1789546076,
+        "narHash": "sha256-zVxLZiSnmaaPLwnhj7pwmqe3axBg/C6nG5JZsJMh2g4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "efe6f071ede9d21c37462d2d6682d5e670099684",
+        "rev": "b1b875982b17dabde9b4a37f3e229e74913e6db3",
         "type": "github"
       },
       "original": {
