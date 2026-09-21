@@ -124,13 +124,14 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 		FcPatternAddBool(pattern, FC_SCALABLE, 1);'
 
               # borderpx 0: no inner padding. cursorshape 6: bar cursor ("|").
-              # allowwindowops 1: OSC 52 so nvim/remote can set the clipboard;
-              # a hostile host can then also set the clipboard.
+              # allowwindowops stays at st's default of 0. OSC 52 (case 52
+              # in st.c) writes the X selection only when that flag is on,
+              # so a program on the far side of the pty could replace the
+              # clipboard. Local select-to-copy is the clipboard patch
+              # below, not OSC 52. Neovim on this machine uses xclip.
               substituteInPlace config.def.h \
                 --replace-fail 'static int borderpx = 2;' \
                                'static int borderpx = 0;' \
-                --replace-fail 'int allowwindowops = 0;' \
-                               'int allowwindowops = 1;' \
                 --replace-fail 'static unsigned int cursorshape = 2;' \
                                'static unsigned int cursorshape = 6;'
 
