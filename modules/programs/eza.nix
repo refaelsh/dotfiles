@@ -19,7 +19,18 @@
     in
     {
       environment = {
-        shellAliases.ls = null;
+        # NixOS defaults `ls` to `ls --color=tty` (a GNU ls flag eza rejects)
+        # and `l` / `ll` to `ls -alh` / `ls -l`. Those have to be replaced,
+        # not stacked on the wrapper: wrapPackage aliases are symlinks to one
+        # binary, so baking --long/-a/--git into it made every name the same
+        # listing. -h is also eza's "header", not GNU ls "human-readable".
+        shellAliases = {
+          ls = null;
+          ll = "eza -l --git --header";
+          la = "eza -la --git --header";
+          l = "eza -l --header";
+          lt = "eza --tree";
+        };
 
         systemPackages = [
           (inputs.wrappers.lib.wrapPackage {
@@ -27,26 +38,21 @@
 
             package = pkgs.eza;
 
+            # Icons, colour, and file-type markers on every invocation,
+            # including the short `ls`. Git status and the long format are
+            # opt-in via the aliases above; on a big repo `ls` must not
+            # stat every file.
             flags = {
               "--icons" = "auto";
               "--color" = "auto";
-              "--git" = true;
-              "-a" = true;
               "-F" = true;
-              "--long" = true;
-              "--extended" = true;
-              "--header" = true;
             };
 
             env.EZA_CONFIG_DIR = ezaConfigDir;
 
-            aliases = [
-              "ls"
-              "ll"
-              "la"
-              "l"
-              "lt"
-            ];
+            # The wrapped executable is named eza. This name is what `ls`
+            # resolves to once the shell alias above is removed.
+            aliases = [ "ls" ];
           })
         ];
       };

@@ -4,7 +4,19 @@
   flake.nixosModules.nixmobar =
     { lib, pkgs, ... }:
     {
-      environment.systemPackages = [ pkgs.xmobar ];
+      environment.systemPackages = [
+        pkgs.xmobar
+        # BatteryP's critical action runs notify-send. dunst is the daemon
+        # that actually displays it; libnotify is the client binary.
+        pkgs.libnotify
+      ];
+
+      # X11 session. Wayland support would pull a second display stack for
+      # a notification daemon that only needs to talk to xmonad and dwm.
+      services.dunst = {
+        enable = true;
+        enableWayland = false;
+      };
 
       system.activationScripts.xmobarrc = lib.stringAfter [ "users" ] ''
         cat > /home/refaelsh/.xmobarrc << 'EOF'
@@ -58,7 +70,10 @@
             , Run ComX "sh" ["-c", "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null | awk '{printf \"%d%%\", $2 * 100 + 0.5}'"] "N/A" "volume" 10
             , Run Date "%a %_d %b %H:%M:%S" "date" 10
             , Run Load ["-t", "<fc=#bd93f9><fn=0>L</fn></fc><load1>", "-L", "1", "-H", "3", "-d", "2"] 300
-            , Run ComX "nmcli" ["-t", "-f", "SIGNAL", "dev", "wifi"] "N/A" "wifi_signal" 50
+            -- IN-USE is "*" on the associated BSS. Without that filter the
+            -- first row is whichever AP nmcli listed first, not the one in use.
+            -- --rescan no reads the cache; a rescan every 5s stalls the radio.
+            , Run ComX "sh" ["-c", "nmcli -t -f IN-USE,SIGNAL device wifi list --rescan no | awk -F: '$1==\"*\" {print $2; found=1; exit} END {exit !found}'"] "N/A" "wifi_signal" 50
             , Run Com "uname" ["-r"] "kernel_version" 3600
             , Run XPropertyLog "_XMONAD_TRAYPAD"
             ]

@@ -34,9 +34,13 @@
       settings = {
         git = {
           enable = true;
+          # Legacy key. nvim-tree still maps it to filters.git_ignored.
+          # false shows gitignored files instead of hiding them.
           ignore = false;
         };
-        actions.openFile.resizeWindow = true;
+        # actions.open_file.resize_window already defaults to true.
+        # The camelCase key actions.openFile is not a real option and
+        # nvim-tree prints "Unknown option" on every startup.
       };
     };
   };

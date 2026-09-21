@@ -136,6 +136,7 @@
           killall trayer 2>/dev/null || true
           trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282a36 &
           clipmenud &
+          dunst &
           numlockx on
           setxkbmap -layout us,il -option grp:alt_shift_toggle
           kbdd &

@@ -28,6 +28,8 @@ myStartupHook = do
   spawn "keyctl link @u @s 2>/dev/null || true"
   spawnOnce "killall trayer; trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282a36"
   spawnOnce "clipmenud"
+  -- Session bus name for notify-send (xmobar battery alert).
+  spawnOnce "dunst"
   spawnOnce "numlockx on"
   spawnOnce "setxkbmap -layout us,il -option grp:alt_shift_toggle"
   spawnOnce "kbdd"
