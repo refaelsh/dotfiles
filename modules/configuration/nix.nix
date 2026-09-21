@@ -4,8 +4,13 @@
     { ... }:
     {
       nix = {
-        daemonCPUSchedPolicy = "idle";
-        daemonIOSchedClass = "idle";
+        # batch still runs while Brave or a terminal wants CPU. idle runs
+        # only when nothing else does, so a rebuild looks stuck.
+        # best-effort priority 7 is the lowest I/O class that still gets
+        # disk time. idle waits until no other task is doing I/O.
+        daemonCPUSchedPolicy = "batch";
+        daemonIOSchedClass = "best-effort";
+        daemonIOSchedPriority = 7;
 
         # Automatic garbage collection keeps the Nix store from growing
         # without bound on the 256 GB NVMe. Weekly GC plus a free-space

@@ -56,7 +56,11 @@
           # Rich shared history (like zsh with share and ignore options).
           export HISTSIZE=100000
           export HISTFILESIZE=200000
-          export HISTCONTROL=ignoreboth:erasedups
+          # ignoreboth: skip a command that starts with a space, and skip a
+          # command that repeats the one just before it. erasedups was here
+          # too; it walks the whole in-memory list (HISTSIZE is 100000) on
+          # every command to delete older copies.
+          export HISTCONTROL=ignoreboth
           export HISTIGNORE="ls:ll:cd:cd -:pwd:exit:date:clear:history"
 
           # Timestamped history output, matching the default behavior of `history`
