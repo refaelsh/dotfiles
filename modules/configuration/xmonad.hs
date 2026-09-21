@@ -26,7 +26,9 @@ myStartupHook = do
   -- Important for ssh-agent and other keyring-dependent tools.
   -- "2>/dev/null || true" prevents failure if the link already exists.
   spawn "keyctl link @u @s 2>/dev/null || true"
-  spawnOnce "killall trayer; trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282a36"
+  -- primary, not monitor 1. trayer counts from 0, so 1 is the HDMI
+  -- output and the tray vanishes when that cable is unplugged.
+  spawnOnce "killall trayer; trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor primary --transparent true --alpha 0 --tint 0x282a36"
   spawnOnce "clipmenud"
   -- Session bus name for notify-send (xmobar battery alert).
   spawnOnce "dunst"

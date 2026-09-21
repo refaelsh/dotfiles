@@ -22,16 +22,31 @@
     {
       environment.systemPackages = [ pkgs.flameshot ];
 
+      # Set only the two keys this session needs. Replacing the whole ini
+      # on every switch threw away save path, UI, and anything else set
+      # from the Flameshot window.
       system.activationScripts.flameshot-config = lib.stringAfter [ "users" ] ''
+        ini=/home/refaelsh/.config/flameshot/flameshot.ini
         mkdir -p /home/refaelsh/.config/flameshot
-        cat > /home/refaelsh/.config/flameshot/flameshot.ini << 'EOF'
-        [General]
-        useX11LegacyScreenshot=true
-        captureActiveMonitor=true
-        EOF
-
-        chown -R refaelsh:users /home/refaelsh/.config/flameshot
-        chmod 644 /home/refaelsh/.config/flameshot/flameshot.ini
+        if [[ ! -f $ini ]]; then
+          printf '%s\n' '[General]' > "$ini"
+        fi
+        if ! grep -q '^\[General\]' "$ini"; then
+          printf '\n%s\n' '[General]' >> "$ini"
+        fi
+        set_flameshot_key() {
+          local key="$1" value="$2"
+          if grep -qE "^''${key}[[:space:]]*=" "$ini"; then
+            sed -i -E "s|^''${key}[[:space:]]*=.*|''${key}=''${value}|" "$ini"
+          else
+            sed -i "/^\[General\]/a ''${key}=''${value}" "$ini"
+          fi
+        }
+        set_flameshot_key useX11LegacyScreenshot true
+        set_flameshot_key captureActiveMonitor true
+        chown refaelsh:users /home/refaelsh/.config/flameshot "$ini"
+        chmod 755 /home/refaelsh/.config/flameshot
+        chmod 644 "$ini"
       '';
     };
 }

@@ -14,8 +14,9 @@
         # reach the machine.
         fwupd.enable = true;
         gvfs.enable = true;
+        # gvfs already turns udisks2 on and automounts removable disks.
+        # devmon/udevil does the same job and the two race on insert.
         udisks2.enable = true;
-        devmon.enable = true;
 
         # Enable periodic TRIM on the SSD. The NVMe drive maintains better
         # long-term write performance when the firmware can regularly discard

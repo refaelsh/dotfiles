@@ -3,8 +3,10 @@
 {
   # Simple dendritic feature — just plain packages (no wrappers)
   flake.nixosModules.one-liners =
-    { pkgs, ... }:
+    { pkgs, inputs, ... }:
     {
+      imports = [ inputs.nix-index-database.nixosModules.nix-index ];
+
       programs = {
         # zsh.enable = true;
         nm-applet.enable = true;
@@ -29,9 +31,14 @@
         # Complements the readline settings we activate inside bash init.
         bash.completion.enable = true;
 
-        # Provides command-not-found hook that suggests packages from nixpkgs
-        # when an unknown command is typed (common behavior in Zsh Nix setups).
+        # command-not-found and comma. The database module's default package
+        # is the full index (headers and libraries included). The small
+        # database is only /bin paths, which is what those two tools query,
+        # and it is replaced when this flake's nix-index-database input moves.
         nix-index.enable = true;
+        nix-index.package =
+          inputs.nix-index-database.packages.${pkgs.stdenv.hostPlatform.system}.nix-index-with-small-db;
+        nix-index-database.comma.enable = true;
       };
       environment.systemPackages = with pkgs; [
         kbd
@@ -85,7 +92,6 @@
         ripgrep
         fd
         atuin
-        comma
         gdb
         lm_sensors
         python3Packages.psutil

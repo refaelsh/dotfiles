@@ -23,6 +23,12 @@
     # not ship a Linux desktop app; this flake is the NixOS install path.
     grok-bot.url = "github:jordangarrison/grok-bot-flake";
     grok-bot.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Weekly prebuilt nix-index. A hand-run `nix-index` leaves
+    # ~/.cache/nix-index/files stale, so command-not-found and comma
+    # answer from an old nixpkgs.
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =

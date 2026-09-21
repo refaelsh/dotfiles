@@ -13,7 +13,9 @@
         # Bridge talks to the Secret Service through gnome-keyring. The
         # binary has to be on the unit PATH or it exits with "no keychain".
         path = [ pkgs.gnome-keyring ];
-        logLevel = "info";
+        # "info" records routine Bridge chatter. Failed IMAP commands are
+        # still logged at error, and those lines include the local username.
+        logLevel = "warn";
       };
 
       # xmonad + LightDM do not start a Secret Service on their own.
@@ -40,6 +42,19 @@
               # is what a oneshot needs. Do not pass --unlock: that form
               # keeps a second daemon in the foreground.
               /run/wrappers/bin/gnome-keyring-daemon --start --components=secrets
+              # --start can return before the name is on the session bus.
+              # Bridge then comes up with an empty account list and rejects
+              # every IMAP login as "no such user".
+              i=0
+              while [ "$i" -lt 50 ]; do
+                if ${pkgs.systemd}/bin/busctl --user status org.freedesktop.secrets >/dev/null 2>&1; then
+                  exit 0
+                fi
+                i=$((i + 1))
+                sleep 0.1
+              done
+              echo "gnome-keyring secrets service did not appear" >&2
+              exit 1
             '';
           };
         };
@@ -47,7 +62,17 @@
         protonmail-bridge = {
           after = [ "protonmail-bridge-keyring.service" ];
           wants = [ "protonmail-bridge-keyring.service" ];
-          serviceConfig.RestartSec = "5s";
+          # One Bridge process has grown to about 1.5 GiB and pinned the
+          # CPUs. Healthy runs stay under 150 MiB on this 8 GiB machine.
+          # Kill a runaway, and do not respawn it every few seconds.
+          unitConfig = {
+            StartLimitIntervalSec = "10min";
+            StartLimitBurst = 3;
+          };
+          serviceConfig = {
+            RestartSec = "30s";
+            MemoryMax = "768M";
+          };
         };
       };
     };

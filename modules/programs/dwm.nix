@@ -134,7 +134,8 @@
         extraSessionCommands = ''
           keyctl link @u @s 2>/dev/null || true
           killall trayer 2>/dev/null || true
-          trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282a36 &
+          # primary, not 1: trayer counts from 0, and 1 is the HDMI output.
+          trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor primary --transparent true --alpha 0 --tint 0x282a36 &
           clipmenud &
           dunst &
           numlockx on

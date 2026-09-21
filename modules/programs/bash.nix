@@ -141,14 +141,24 @@
             eval "$(atuin init bash --disable-up-arrow)"
           fi
 
-          # Right-arrow accepts the top matching history prefix when at end of line
-          # (otherwise normal cursor movement). Complements Up/Down prefix search
-          # and Ctrl-R (atuin). The lookup temporarily clears HISTTIMEFORMAT for
-          # clean parsing of the history output.
+          # Right-arrow accepts the newest history line with this prefix when the
+          # cursor is at the end of the line; otherwise it moves the cursor.
+          # fc -ln has no history numbers, so a 6-digit index cannot shift the
+          # command. The prefix is matched literally (awk index), not as a
+          # regex, so "." "*" and "[" in the typed text stay themselves.
           __atuin_autosuggest_accept() {
             local prefix="$READLINE_LINE"
             local suggestion
-            suggestion=$(HISTTIMEFORMAT= history | tac | cut -c 8- | grep -i "^$prefix" | head -1)
+            suggestion=$(HISTTIMEFORMAT= fc -ln 1 2>/dev/null | PREFIX="$prefix" awk '
+              BEGIN { prefix = ENVIRON["PREFIX"] }
+              {
+                line = $0
+                sub(/^[[:space:]]+/, "", line)
+                if (prefix == "" || index(tolower(line), tolower(prefix)) == 1)
+                  last = line
+              }
+              END { if (last != "") print last }
+            ')
             if [[ -n $suggestion && $suggestion != "$prefix" && $READLINE_POINT -eq ''${#READLINE_LINE} ]]; then
               READLINE_LINE=$suggestion
               READLINE_POINT=''${#READLINE_LINE}

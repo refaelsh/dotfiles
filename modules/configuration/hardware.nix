@@ -19,6 +19,11 @@
             intel-media-driver
             libvdpau-va-gl
           ];
+          # enable32Bit installs 32-bit Mesa only. Steam and Wine still need
+          # the 32-bit iHD driver or VA-API decode falls back to software.
+          extraPackages32 = with pkgs.pkgsi686Linux; [
+            intel-media-driver
+          ];
         };
       };
 
