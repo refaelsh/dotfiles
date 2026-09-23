@@ -4,12 +4,12 @@
   flake.nixosModules.system =
     { pkgs, ... }:
     {
-      # Bumped from 24.05 to 26.05 after reviewing that the configuration has no
-      # database servers, self-hosted web applications, or other services with
-      # schema or data directory migrations that are sensitive to stateVersion.
-      # The explicit package choices (such as transmission_4) further reduce risk.
-      # This allows the system to use current defaults and remove old compatibility
-      # shims while the machine continues to run NixOS 26.05.
+      # On-disk compatibility stamp, not the NixOS release that is running.
+      # Modules use it to keep old data directories and account defaults.
+      # It was 24.05 on the original install and is now 26.05. Do not change
+      # it again, including not setting it to whatever unstable currently
+      # reports: a newer value switches those modules to the new behavior
+      # and assumes the disk already matches.
       system.stateVersion = "26.05";
       # copySystemConfiguration = true;
 
