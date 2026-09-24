@@ -82,6 +82,32 @@
 
         chown refaelsh:users /home/refaelsh/.xmobarrc
         chmod 644 /home/refaelsh/.xmobarrc
+
+        # The Dell is a second Xinerama head at x=1920. xmonad puts an empty
+        # workspace there, and an empty workspace paints nothing, so the panel
+        # is black. This bar sits on that head and shows its workspace.
+        cat > /home/refaelsh/.xmobarrc-dell << 'EOF'
+        Config {
+          font            = "xft:FiraCode Nerd Font Mono-14"
+        , additionalFonts = ["xft:FiraCode Nerd Font-14"]
+        , bgColor         = "#282A36"
+        , fgColor         = "#F8F8F2"
+        , textOffset      = 2
+        , allDesktops     = True
+        , lowerOnStart    = True
+        , overrideRedirect = True
+        , position        = OnScreen 1 (BottomH 26)
+        , alpha           = 200
+        , alignSep        = "}{"
+        , template        = " %XMonadLog% }{ %date% "
+        , commands        =
+            [ Run XMonadLog
+            , Run Date "%a %_d %b %H:%M:%S" "date" 10
+            ]
+        }
+        EOF
+        chown refaelsh:users /home/refaelsh/.xmobarrc-dell
+        chmod 644 /home/refaelsh/.xmobarrc-dell
       '';
     };
 }
