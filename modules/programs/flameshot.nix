@@ -34,12 +34,13 @@
         if ! grep -q '^\[General\]' "$ini"; then
           printf '\n%s\n' '[General]' >> "$ini"
         fi
+        # Activation's PATH has grep and coreutils, not sed.
         set_flameshot_key() {
           local key="$1" value="$2"
           if grep -qE "^''${key}[[:space:]]*=" "$ini"; then
-            sed -i -E "s|^''${key}[[:space:]]*=.*|''${key}=''${value}|" "$ini"
+            ${pkgs.gnused}/bin/sed -i -E "s|^''${key}[[:space:]]*=.*|''${key}=''${value}|" "$ini"
           else
-            sed -i "/^\[General\]/a ''${key}=''${value}" "$ini"
+            ${pkgs.gnused}/bin/sed -i "/^\[General\]/a ''${key}=''${value}" "$ini"
           fi
         }
         set_flameshot_key useX11LegacyScreenshot true

@@ -2,7 +2,81 @@
 {
   # Simple dendritic feature — exactly matches your old nixos/services.nix
   flake.nixosModules.services =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
+    let
+      # Do not apply the laptop profile while the Dell cable is attached but
+      # HDMI-1 has no EDID yet. That profile only names eDP-1, so autorandr
+      # turns HDMI-1 off, and the output stays off after the link returns.
+      # Retry for a few seconds: load the Dell layout once it matches, and
+      # load the laptop layout only when no HDMI connector is coming up.
+      applyAutorandrLocked = pkgs.writeShellScript "apply-autorandr-locked" ''
+        set -eu
+        hdmi_live() {
+          local dir status
+          for dir in /sys/class/drm/card*-HDMI-A-*; do
+            [ -d "$dir" ] || continue
+            status=$(${pkgs.coreutils}/bin/cat "$dir/status" 2>/dev/null || true)
+            if [ "$status" = "connected" ] || [ "$status" = "unknown" ]; then
+              return 0
+            fi
+          done
+          return 1
+        }
+
+        if [ -n "''${DISPLAY:-}" ]; then
+          set -- ${pkgs.autorandr}/bin/autorandr
+        else
+          set -- ${pkgs.autorandr}/bin/autorandr --batch
+        fi
+
+        i=0
+        while [ "$i" -lt 16 ]; do
+          detected=$("$@" --detected --ignore-lid 2>/dev/null || true)
+          case "$detected" in
+            *dell-s2721hgf*)
+              "$@" --load dell-s2721hgf --ignore-lid || true
+              exit 0
+              ;;
+            *laptop*)
+              if ! hdmi_live; then
+                "$@" --load laptop --ignore-lid || true
+                exit 0
+              fi
+              ;;
+            "")
+              if ! hdmi_live; then
+                exit 0
+              fi
+              ;;
+          esac
+          i=$((i + 1))
+          ${pkgs.coreutils}/bin/sleep 0.5
+        done
+        exit 0
+      '';
+      applyAutorandr = pkgs.writeShellScript "apply-autorandr" ''
+        set -eu
+        exec ${pkgs.util-linux}/bin/flock /run/autorandr-apply.lock ${applyAutorandrLocked}
+      '';
+      # sleep.target pulls autorandr in before suspend. The process is frozen
+      # with the session and only reads xrandr after thaw, which is too early
+      # for the HDMI EDID. Skip that run. powerManagement.resumeCommands
+      # applies the layout once the monitor is actually back.
+      autorandrService = pkgs.writeShellScript "autorandr-service" ''
+        set -eu
+        state=$(${pkgs.systemd}/bin/systemctl show -p ActiveState --value sleep.target)
+        if [ "$state" = "active" ] || [ "$state" = "activating" ]; then
+          exit 0
+        fi
+        for unit in systemd-suspend systemd-hibernate systemd-hybrid-sleep systemd-suspend-then-hibernate; do
+          state=$(${pkgs.systemd}/bin/systemctl show -p ActiveState --value "$unit.service")
+          case "$state" in
+            active|activating|deactivating) exit 0 ;;
+          esac
+        done
+        exec ${applyAutorandr}
+      '';
+    in
     {
       services = {
         # hledger-web.enable = true;
@@ -70,7 +144,9 @@
         # its EDID is present, and leaves the laptop alone when it is not.
         # The lid switch reads closed even with the panel on, so matching
         # has to ignore the lid or the internal output disappears from the
-        # detected layout.
+        # detected layout. The apply script refuses the laptop profile while
+        # an HDMI connector is still linked but has no EDID, which is the
+        # usual state for a second or two after resume.
         autorandr = {
           enable = true;
           ignoreLid = true;
@@ -128,7 +204,7 @@
           # primary panel. Without --ignore-lid, autorandr drops that panel
           # whenever HDMI is attached and the two outputs stay cloned.
           displayManager.setupCommands = ''
-            ${pkgs.autorandr}/bin/autorandr --change --default laptop --ignore-lid || true
+            ${applyAutorandr} || true
           '';
           windowManager.xmonad = {
             enable = true;
@@ -142,6 +218,14 @@
           };
         };
       };
+
+      # The package unit is also WantedBy=sleep.target. Its ExecStart is
+      # replaced so that invocation does not modeset on the way into suspend.
+      # After resume, apply the layout once HDMI has an EDID again.
+      powerManagement.resumeCommands = ''
+        ${applyAutorandr} || true
+      '';
+      systemd.services.autorandr.serviceConfig.ExecStart = lib.mkForce "${autorandrService}";
 
       # Keep crash dumps but bound their flash use. Chrome/Brave child
       # processes have been writing cores here; unbounded Storage=external
