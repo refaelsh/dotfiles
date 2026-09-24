@@ -138,10 +138,9 @@
           # defaultSession = "niri";
         };
 
-        # The laptop panel is 60 Hz and the Dell HDMI monitor is 120 Hz.
-        # Leaving them both at +0+0 clones one desktop onto both timings and
-        # the picture judders. autorandr places the Dell to the right when
-        # its EDID is present, and leaves the laptop alone when it is not.
+        # Duplicate the laptop picture onto the Dell. Both outputs sit at
+        # 0x0. The internal panel cannot do 120 Hz, and cloning 60 Hz onto
+        # 120 Hz judders, so the Dell is set to 60 Hz while it is mirrored.
         # The lid switch reads closed even with the panel on, so matching
         # has to ignore the lid or the internal output disappears from the
         # detected layout. The apply script refuses the laptop profile while
@@ -178,9 +177,9 @@
                 "HDMI-1" = {
                   enable = true;
                   primary = false;
-                  position = "1920x0";
+                  position = "0x0";
                   mode = "1920x1080";
-                  rate = "120.00";
+                  rate = "60.00";
                 };
               };
             };

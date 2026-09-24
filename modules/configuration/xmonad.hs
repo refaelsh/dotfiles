@@ -29,10 +29,6 @@ myStartupHook = do
   -- primary, not monitor 1. trayer counts from 0, so 1 is the HDMI
   -- output and the tray vanishes when that cable is unplugged.
   spawnOnce "killall trayer; trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor primary --transparent true --alpha 0 --tint 0x282a36"
-  -- Dell is Xinerama head 1. Its workspace starts empty, which is a black
-  -- panel, so paint the root and put a bar on that head.
-  spawnOnce "xsetroot -solid '#282A36'"
-  spawnOnce "xmobar /home/refaelsh/.xmobarrc-dell"
   spawnOnce "clipmenud"
   -- Session bus name for notify-send (xmobar battery alert).
   spawnOnce "dunst"
