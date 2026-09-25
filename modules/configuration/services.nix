@@ -81,6 +81,10 @@
           # that output is connected. The modeline is the 120 Hz timing
           # the driver already probed. The sync ranges are the panel's
           # EDID limits, so that 120 Hz mode is not rejected.
+          # Fullscreen clients and the system tray follow the primary
+          # output. The internal panel is 60 Hz, so the Dell is primary
+          # while it is connected. With the cable unplugged this section
+          # is not used and the laptop panel remains the primary.
           extraConfig = ''
             Section "Monitor"
               Identifier "HDMI-1"
@@ -88,6 +92,7 @@
               VertRefresh 48-144
               Modeline "1920x1080_120" 297.00 1920 2008 2052 2200 1080 1084 1089 1125 +hsync +vsync
               Option "PreferredMode" "1920x1080_120"
+              Option "Primary" "true"
             EndSection
           '';
           xkb = {
