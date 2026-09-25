@@ -72,6 +72,24 @@
               y = 1080;
             }
           ];
+          # The Dell S2721HGF on HDMI-1 advertises a 144 Hz detailed
+          # timing, but the UHD 620 HDMI link only accepts modes up to
+          # 120 Hz. The Modes line above names 1920x1080 with no rate,
+          # and the server then keeps the 60 Hz timing it also uses for
+          # the internal panel. A monitor section whose identifier is
+          # the output name is applied only to HDMI-1, and only while
+          # that output is connected. The modeline is the 120 Hz timing
+          # the driver already probed. The sync ranges are the panel's
+          # EDID limits, so that 120 Hz mode is not rejected.
+          extraConfig = ''
+            Section "Monitor"
+              Identifier "HDMI-1"
+              HorizSync 30-170
+              VertRefresh 48-144
+              Modeline "1920x1080_120" 297.00 1920 2008 2052 2200 1080 1084 1089 1125 +hsync +vsync
+              Option "PreferredMode" "1920x1080_120"
+            EndSection
+          '';
           xkb = {
             variant = "";
             layout = "us";
