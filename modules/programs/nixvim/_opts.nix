@@ -1,6 +1,9 @@
 {
   opts = {
-    guifont = "FiraCode Nerd Font:h8.1";
+    # Neovide scales this by the primary output's DPI. 8.1pt matched
+    # Ghostty's 12pt while the internal panel (~142 DPI) was primary.
+    # The Dell S2721HGF is ~82 DPI, so 14pt restores that same size.
+    guifont = "FiraCode Nerd Font:h14";
     autoread = true;
     cursorline = true;
     mouse = "a";
