@@ -2,81 +2,7 @@
 {
   # Simple dendritic feature — exactly matches your old nixos/services.nix
   flake.nixosModules.services =
-    { pkgs, lib, ... }:
-    let
-      # Do not apply the laptop profile while the Dell cable is attached but
-      # HDMI-1 has no EDID yet. That profile only names eDP-1, so autorandr
-      # turns HDMI-1 off, and the output stays off after the link returns.
-      # Retry for a few seconds: load the Dell layout once it matches, and
-      # load the laptop layout only when no HDMI connector is coming up.
-      applyAutorandrLocked = pkgs.writeShellScript "apply-autorandr-locked" ''
-        set -eu
-        hdmi_live() {
-          local dir status
-          for dir in /sys/class/drm/card*-HDMI-A-*; do
-            [ -d "$dir" ] || continue
-            status=$(${pkgs.coreutils}/bin/cat "$dir/status" 2>/dev/null || true)
-            if [ "$status" = "connected" ] || [ "$status" = "unknown" ]; then
-              return 0
-            fi
-          done
-          return 1
-        }
-
-        if [ -n "''${DISPLAY:-}" ]; then
-          set -- ${pkgs.autorandr}/bin/autorandr
-        else
-          set -- ${pkgs.autorandr}/bin/autorandr --batch
-        fi
-
-        i=0
-        while [ "$i" -lt 16 ]; do
-          detected=$("$@" --detected --ignore-lid 2>/dev/null || true)
-          case "$detected" in
-            *dell-s2721hgf*)
-              "$@" --load dell-s2721hgf --ignore-lid || true
-              exit 0
-              ;;
-            *laptop*)
-              if ! hdmi_live; then
-                "$@" --load laptop --ignore-lid || true
-                exit 0
-              fi
-              ;;
-            "")
-              if ! hdmi_live; then
-                exit 0
-              fi
-              ;;
-          esac
-          i=$((i + 1))
-          ${pkgs.coreutils}/bin/sleep 0.5
-        done
-        exit 0
-      '';
-      applyAutorandr = pkgs.writeShellScript "apply-autorandr" ''
-        set -eu
-        exec ${pkgs.util-linux}/bin/flock /run/autorandr-apply.lock ${applyAutorandrLocked}
-      '';
-      # sleep.target pulls autorandr in before suspend. The process is frozen
-      # with the session and only reads xrandr after thaw, which is too early
-      # for the HDMI EDID. Skip that run. powerManagement.resumeCommands
-      # applies the layout once the monitor is actually back.
-      autorandrService = pkgs.writeShellScript "autorandr-service" ''
-        set -eu
-        state=$(${pkgs.systemd}/bin/systemctl show -p ActiveState --value sleep.target)
-        if [ "$state" = "active" ] || [ "$state" = "activating" ]; then
-          exit 0
-        fi
-        for unit in systemd-suspend systemd-hibernate systemd-hybrid-sleep systemd-suspend-then-hibernate; do
-          state=$(${pkgs.systemd}/bin/systemctl show -p ActiveState --value "$unit.service")
-          case "$state" in
-            active|activating|deactivating) exit 0 ;;
-          esac
-        done
-        exec ${applyAutorandr}
-      '';
-    in
+    { ... }:
     {
       services = {
         # hledger-web.enable = true;
@@ -138,54 +64,6 @@
           # defaultSession = "niri";
         };
 
-        # Duplicate the laptop picture onto the Dell. Both outputs sit at
-        # 0x0. The internal panel cannot do 120 Hz, and cloning 60 Hz onto
-        # 120 Hz judders, so the Dell is set to 60 Hz while it is mirrored.
-        # The lid switch reads closed even with the panel on, so matching
-        # has to ignore the lid or the internal output disappears from the
-        # detected layout. The apply script refuses the laptop profile while
-        # an HDMI connector is still linked but has no EDID, which is the
-        # usual state for a second or two after resume.
-        autorandr = {
-          enable = true;
-          ignoreLid = true;
-          defaultTarget = "laptop";
-          profiles = {
-            laptop = {
-              fingerprint."eDP-1" = "00ffffffffffff0009e5020800000000011c0104952213780a24109759548e271e5054000000010101010101010101010101010101019c3b8010713850403020360058c11000001a2e2c80de703814406464440558c11000001a000000fe004d39503734804e5431354e3431000000000000412196001000000a010a20200059";
-              config."eDP-1" = {
-                enable = true;
-                primary = true;
-                position = "0x0";
-                mode = "1920x1080";
-                rate = "60.01";
-              };
-            };
-            "dell-s2721hgf" = {
-              fingerprint = {
-                "eDP-1" = "00ffffffffffff0009e5020800000000011c0104952213780a24109759548e271e5054000000010101010101010101010101010101019c3b8010713850403020360058c11000001a2e2c80de703814406464440558c11000001a000000fe004d39503734804e5431354e3431000000000000412196001000000a010a20200059";
-                "HDMI-1" = "00ffffffffffff0010ace84157545a43041f0103803c22782aee95a3544c99260f5054a54b00d1c0b30081808100714f010101010101c484807870384d401c20350055502100001e000000ff00485a43574e38330a2020202020000000fc0044454c4c205332373231484746000000fd0030901eaa22000a202020202020017302032bf14a3f101f0413121103020123097f078301000065030c0020006d1a000002013090e60000000000c484807870384d401c20350055502100001e866f80a0703840403020350055502100001a662156aa51001e30468f330055502100001e0000000000000000000000000000000000000000000000000000000000006f";
-              };
-              config = {
-                "eDP-1" = {
-                  enable = true;
-                  primary = true;
-                  position = "0x0";
-                  mode = "1920x1080";
-                  rate = "60.01";
-                };
-                "HDMI-1" = {
-                  enable = true;
-                  primary = false;
-                  position = "0x0";
-                  mode = "1920x1080";
-                  rate = "60.00";
-                };
-              };
-            };
-          };
-        };
-
         xserver = {
           enable = true;
           resolutions = [
@@ -199,12 +77,6 @@
             layout = "us";
           };
           displayManager.lightdm.enable = true;
-          # ACPI reports the lid closed while eDP-1 is still the powered
-          # primary panel. Without --ignore-lid, autorandr drops that panel
-          # whenever HDMI is attached and the two outputs stay cloned.
-          displayManager.setupCommands = ''
-            ${applyAutorandr} || true
-          '';
           windowManager.xmonad = {
             enable = true;
             enableConfiguredRecompile = true;
@@ -217,14 +89,6 @@
           };
         };
       };
-
-      # The package unit is also WantedBy=sleep.target. Its ExecStart is
-      # replaced so that invocation does not modeset on the way into suspend.
-      # After resume, apply the layout once HDMI has an EDID again.
-      powerManagement.resumeCommands = ''
-        ${applyAutorandr} || true
-      '';
-      systemd.services.autorandr.serviceConfig.ExecStart = lib.mkForce "${autorandrService}";
 
       # Keep crash dumps but bound their flash use. Chrome/Brave child
       # processes have been writing cores here; unbounded Storage=external
