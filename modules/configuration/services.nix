@@ -72,19 +72,48 @@
               y = 1080;
             }
           ];
-          # The Dell S2721HGF on HDMI-1 advertises a 144 Hz detailed
-          # timing, but the UHD 620 HDMI link only accepts modes up to
-          # 120 Hz. The Modes line above names 1920x1080 with no rate,
-          # and the server then keeps the 60 Hz timing it also uses for
-          # the internal panel. A monitor section whose identifier is
-          # the output name is applied only to HDMI-1, and only while
-          # that output is connected. The modeline is the 120 Hz timing
-          # the driver already probed. The sync ranges are the panel's
-          # EDID limits, so that 120 Hz mode is not rejected.
-          # Fullscreen clients and the system tray follow the primary
-          # output. The internal panel is 60 Hz, so the Dell is primary
-          # while it is connected. With the cable unplugged this section
-          # is not used and the laptop panel remains the primary.
+          # Display choices for the Dell S2721HGF on this Vostro 3590's
+          # HDMI-1, driven by the UHD 620 (display version 9). When the
+          # laptop, the panel, or the port changes, re-check every line
+          # below against the new EDID and the new output name.
+          #
+          # Refresh and resolution are configured here. Native resolution
+          # is 1920x1080 on both panels. The Dell's EDID preferred timing
+          # is 144 Hz at 339.9 MHz. This HDMI 1.4b port stops at 300 MHz,
+          # so the fastest mode the driver offers is 120 Hz at 297 MHz.
+          # The modeline is that timing. The sync ranges are the panel's
+          # EDID limits, so the 120 Hz mode is kept. The Modes line names
+          # 1920x1080 with no rate; without a per-output preference the
+          # server keeps the 60 Hz timing it also uses for the internal
+          # panel. The section applies only while HDMI-1 is connected.
+          #
+          # The Dell is primary while connected, so fullscreen clients
+          # and the tray follow the 120 Hz output. The internal panel is
+          # 60 Hz. With the cable unplugged this section is unused and
+          # the laptop panel remains primary.
+          #
+          # These were checked and left unset:
+          # HDR. The EDID has no HDR metadata block, and this X11 session
+          # has no HDR switch.
+          # Color profile. The EDID primaries and gamma 2.2 match sRGB.
+          # No measured ICC is applied. The X gamma ramp stays at 1.0.
+          # A generic sRGB file would not move the picture.
+          # Brightness. The Dell stores its own slider and was already
+          # near a third of the scale (350 cd/m² panel, about 120 cd/m²).
+          # The laptop backlight is saved by systemd-backlight on this
+          # machine, at half of intel_backlight's maximum.
+          # Variable refresh. The EDID advertises FreeSync from 48 to
+          # 144 Hz. Display version 9 does not implement it; the driver
+          # only does so from version 11, and no connector exposes VRR.
+          # Response time. OSD only: Fast, Super Fast, Extreme, MPRT.
+          # Super Fast is the middle overdrive step. Extreme overshoots.
+          # MPRT strobes the backlight and needs 120 Hz or higher. DDC
+          # does not expose this control.
+          # Cable. This chassis has HDMI 1.4b and VGA, and no DisplayPort
+          # plug. The link is already at 297 MHz, which is the port's
+          # ceiling, so a faster cable cannot carry the 339.9 MHz timing.
+          # Calibration. No meter is attached. An EDID-derived ICC is
+          # not a measurement, so no profile is loaded.
           extraConfig = ''
             Section "Monitor"
               Identifier "HDMI-1"
