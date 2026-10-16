@@ -150,7 +150,6 @@
         iw
         alsa-utils
         # popcorntime
-        trayer
         # nawk
         lxappearance
         git-extras

@@ -26,9 +26,11 @@ myStartupHook = do
   -- Important for ssh-agent and other keyring-dependent tools.
   -- "2>/dev/null || true" prevents failure if the link already exists.
   spawn "keyctl link @u @s 2>/dev/null || true"
-  -- primary, not monitor 1. trayer counts from 0, so 1 is the HDMI
-  -- output and the tray vanishes when that cable is unplugged.
-  spawnOnce "killall trayer; trayer --height 26 --edge bottom --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor primary --transparent true --alpha 0 --tint 0x282a36"
+  -- tint2 reads the XRandR primary at startup. That is the Dell on
+  -- HDMI-1 while the cable is connected, and the internal panel when it
+  -- is not. A fixed monitor number is the HDMI port and the icon
+  -- disappears with the cable.
+  spawnOnce "killall tint2; tint2 -c /home/refaelsh/.config/tint2/tray.tint2rc"
   spawnOnce "clipmenud"
   -- Session bus name for notify-send (xmobar battery alert).
   spawnOnce "dunst"
@@ -78,7 +80,10 @@ myConfig =
       startupHook = myStartupHook,
       manageHook = insertPosition End Newer <> (manageSpawn <+> manageHook def),
       layoutHook = myLayoutHook,
-      handleEventHook = swallowEventHook (className =? "neovide") (return True) <> Hacks.trayerPaddingXmobarEventHook,
+      handleEventHook =
+        swallowEventHook (className =? "neovide") (return True)
+          <> Hacks.trayAbovePanelEventHook (className =? "Tint2") (appName =? "xmobar")
+          <> Hacks.trayPaddingXmobarEventHook (className =? "Tint2") "_XMONAD_TRAYPAD",
       borderWidth = 2,
       focusedBorderColor = "#bd93f9",
       normalBorderColor = "#44475a"
