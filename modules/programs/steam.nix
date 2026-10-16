@@ -18,5 +18,13 @@
         extraPackages = [ pkgs.gamemode ];
         # extraCompatPackages = with pkgs; [ proton-ge-bin ];
       };
+
+      # Proton Experimental here is Wine 11. Its wineserver opens /dev/ntsync
+      # when that device exists and prints "ntsync: up and running."
+      # PROTON_NO_NTSYNC=1 skips it. This kernel builds ntsync as a module
+      # and nothing loads it, so the device is missing and Wine stays on
+      # fsync. Eve Online is a Proton game and spends a lot of this 4-core
+      # CPU on Windows sync calls. Loading the module creates the device.
+      boot.kernelModules = [ "ntsync" ];
     };
 }
