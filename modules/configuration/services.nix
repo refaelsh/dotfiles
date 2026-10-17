@@ -114,6 +114,20 @@
           # ceiling, so a faster cable cannot carry the 339.9 MHz timing.
           # Calibration. No meter is attached. An EDID-derived ICC is
           # not a measurement, so no profile is loaded.
+          #
+          # BlankTime is the X screensaver. Grok Bot treats an active
+          # screensaver as a locked screen and then stops using this
+          # computer, so Proton Bridge looks down from the agents.
+          # 0 leaves the screensaver off. The DPMS times still power
+          # the panels off after 10 minutes with no keyboard or mouse
+          # input. SuspendTime is that monitor power level. Input
+          # wakes the picture.
+          serverFlagsSection = ''
+            Option "BlankTime" "0"
+            Option "StandbyTime" "10"
+            Option "SuspendTime" "10"
+            Option "OffTime" "10"
+          '';
           extraConfig = ''
             Section "Monitor"
               Identifier "HDMI-1"
