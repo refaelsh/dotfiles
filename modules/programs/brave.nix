@@ -10,13 +10,16 @@ in
       config,
       lib,
       pkgs,
+      inputs,
       ...
     }:
     let
       brave-wrapped = wrappers.lib.wrapPackage {
         inherit pkgs;
 
-        package = pkgs.brave;
+        # pkgs.brave is a throw in this nixpkgs. The derivation comes from the
+        # brave-browser flake input.
+        package = inputs.brave-browser.packages.${pkgs.stdenv.hostPlatform.system}.brave;
 
         # Do not pass --disable-background-networking. That Chromium switch is
         # for benchmark/test runs: it turns off the extension updater, GCM, and

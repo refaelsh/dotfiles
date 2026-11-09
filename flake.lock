@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "brave-browser": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794098541,
+        "narHash": "sha256-BcItUzUgcKeWxMr5ccY4Fyd26RnVPKCd/5DJAayhCgQ=",
+        "ref": "refs/heads/main",
+        "rev": "5a80e5bfadb4ba376038656f7dd840848a355b28",
+        "revCount": 6,
+        "type": "git",
+        "url": "https://codeberg.org/buckley310/brave-browser-nix"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/buckley310/brave-browser-nix"
+      }
+    },
     "bun2nix": {
       "inputs": {
         "flake-parts": [
@@ -101,11 +121,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794047153,
-        "narHash": "sha256-nkfePcQdbuqdFuutdLeZWXLa/0+I9N93OSkE14I2fLI=",
+        "lastModified": 1794224874,
+        "narHash": "sha256-5LpYkUij7Vq8Cz9+rEQTeyGG6UnQd9aULRipdNY2XqY=",
         "owner": "jordangarrison",
         "repo": "grok-bot-flake",
-        "rev": "be8d53af455861e93d0789147cecfe4bc8e1ca20",
+        "rev": "270ae8e11fd51a1d5cd10b552197feb418212a7d",
         "type": "github"
       },
       "original": {
@@ -140,11 +160,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1794178147,
-        "narHash": "sha256-RDWuueNfF5JxlTDQUpZfDmpsiG2kXvTW4Cw8COvKJmQ=",
+        "lastModified": 1794236353,
+        "narHash": "sha256-rcmzzR+kdb4yKL+NPfF/M0I6oXA9YfzVazBzWDlG2Xg=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "e7ec2cef4fda261e0f92e65ea55ac54948ca3a40",
+        "rev": "4c6c37495fc45a46cb6f86cc6b0865e363fb77f2",
         "type": "github"
       },
       "original": {
@@ -242,6 +262,7 @@
     },
     "root": {
       "inputs": {
+        "brave-browser": "brave-browser",
         "flake-parts": "flake-parts",
         "grok-bot": "grok-bot",
         "import-tree": "import-tree",

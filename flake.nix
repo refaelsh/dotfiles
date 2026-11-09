@@ -24,6 +24,13 @@
     grok-bot.url = "github:jordangarrison/grok-bot-flake";
     grok-bot.inputs.nixpkgs.follows = "nixpkgs";
 
+    # nixpkgs removed brave: a browser needs a committer among its maintainers,
+    # and brave had none. This flake is the same package, kept by its previous
+    # nixpkgs maintainer. It follows this nixpkgs so the wrapper links current
+    # system libraries. Drop the input once pkgs.brave is a real package again.
+    brave-browser.url = "git+https://codeberg.org/buckley310/brave-browser-nix";
+    brave-browser.inputs.nixpkgs.follows = "nixpkgs";
+
     # Weekly prebuilt nix-index. A hand-run `nix-index` leaves
     # ~/.cache/nix-index/files stale, so command-not-found and comma
     # answer from an old nixpkgs.
