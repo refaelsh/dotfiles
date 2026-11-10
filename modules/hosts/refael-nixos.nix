@@ -42,6 +42,22 @@
             asm-lsp = prev.asm-lsp.overrideAttrs (old: {
               buildInputs = (old.buildInputs or [ ]) ++ [ prev.zstd ];
             });
+
+            # markitdown's install checks depend on its optional extras.
+            # speechrecognition is one of them, and its OpenAI whisper tests
+            # open a real connection and fail with APIConnectionError when
+            # name resolution is blocked. pdfplumber in the same extra set
+            # also builds geopandas. The markitdown command on PATH does not
+            # ship those extras, so the checks are not part of the install.
+            pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+              (
+                pyFinal: pyPrev: {
+                  markitdown = pyPrev.markitdown.overridePythonAttrs (_old: {
+                    doCheck = false;
+                  });
+                }
+              )
+            ];
           })
         ];
       }
