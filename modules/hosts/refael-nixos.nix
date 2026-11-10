@@ -33,6 +33,15 @@
                 hash = "sha256-cbMcB6jgssfMUjemBOiE06zJK2TbzOWt1Rvt41V33Mo=";
               };
             });
+
+            # cargoSetupHook exports ZSTD_SYS_USE_PKG_CONFIG=1, so zstd-sys
+            # will not compile the copy shipped in the crate. asm-lsp 0.10.1
+            # only passes openssl, and the build stops in pkg-config with
+            # "The system library `libzstd` required by crate `zstd-sys` was
+            # not found." nixvim's asm_lsp server uses this same package.
+            asm-lsp = prev.asm-lsp.overrideAttrs (old: {
+              buildInputs = (old.buildInputs or [ ]) ++ [ prev.zstd ];
+            });
           })
         ];
       }
