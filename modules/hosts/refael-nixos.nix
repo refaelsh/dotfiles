@@ -29,20 +29,6 @@
             let
               lib = prev.lib;
 
-              drvName = d: d.pname or d.name or "";
-
-              hasPkg =
-                name: drvs:
-                lib.any (d: drvName d == name || lib.hasPrefix "${name}-" (drvName d)) drvs;
-
-              # cargoSetupHook exports ZSTD_SYS_USE_PKG_CONFIG=1, so zstd-sys
-              # will not compile the copy shipped in the crate. asm-lsp only
-              # passes openssl, and the build stops in pkg-config because
-              # libzstd is missing. nixvim's asm_lsp server uses this package.
-              # Once nixpkgs adds zstd, evaluation stops so this override is
-              # deleted instead of staying after the fix.
-              asmLspUpstreamHasZstd = hasPkg "zstd" (prev.asm-lsp.buildInputs or [ ]);
-
               # Read the nixpkgs expressions directly. Looking these facts up
               # on python3Packages from this overlay loops: that set is built
               # from pythonPackagesExtensions.
@@ -75,14 +61,6 @@
                   hash = "sha256-cbMcB6jgssfMUjemBOiE06zJK2TbzOWt1Rvt41V33Mo=";
                 };
               });
-
-              asm-lsp = lib.throwIf asmLspUpstreamHasZstd ''
-                nixpkgs asm-lsp already depends on zstd, so the libzstd
-                workaround is obsolete. Delete the asm-lsp override in
-                modules/hosts/refael-nixos.nix.
-              '' (prev.asm-lsp.overrideAttrs (old: {
-                buildInputs = (old.buildInputs or [ ]) ++ [ prev.zstd ];
-              }));
 
               pythonPackagesExtensions = lib.throwIf speechrecognitionTestsFixed ''
                 nixpkgs no longer needs the markitdown check skip. The
