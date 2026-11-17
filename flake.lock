@@ -121,11 +121,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794741093,
-        "narHash": "sha256-HwzIaTbSSkD4KseNg73JZM63YhPwfzFIP/JbGGPxyjs=",
+        "lastModified": 1794917006,
+        "narHash": "sha256-TfaaqyRl8y1ouLGHtqvgjY6Aj1AlKpmG7ELDNgsa3Kc=",
         "owner": "jordangarrison",
         "repo": "grok-bot-flake",
-        "rev": "69187bab9a546969adb06e1df52ef4621ae45355",
+        "rev": "9b599a09a0792e8a47c00beec6948ec7264df4ac",
         "type": "github"
       },
       "original": {
@@ -160,11 +160,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1794787251,
-        "narHash": "sha256-LHm/x1owamrkGb9am4LofA1jn8yJBQHPxfAUdEDDNfA=",
+        "lastModified": 1794922472,
+        "narHash": "sha256-1A3XeJeVx5X5W2yJsiWqeGJ0HG4EKzRygvT7ydX9JrI=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "8adf052a0006d9617a7d6c0fe5a628e1eb48a5dc",
+        "rev": "cc6255a8a195e622ee436fec4ff88a91cdf78044",
         "type": "github"
       },
       "original": {
