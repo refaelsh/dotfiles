@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794536218,
-        "narHash": "sha256-X7xhMfn/4STesAJUa/sWfL1xK8vV85YmoIxYdz2+0dA=",
+        "lastModified": 1795038981,
+        "narHash": "sha256-HhgGDM4KhaSZwT2VCz70PuTO3l4E4XINopsMfI5qHjg=",
         "ref": "refs/heads/main",
-        "rev": "539ce193b353aa022c9fcb7a7bc32b057d327807",
-        "revCount": 8,
+        "rev": "d5b908ff64703be2f07b420e2bac98148f95e8d8",
+        "revCount": 9,
         "type": "git",
         "url": "https://codeberg.org/buckley310/brave-browser-nix"
       },
@@ -160,11 +160,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1795011720,
-        "narHash": "sha256-XIDXK0NHeO9DUNVACLqGvsLB5K33zRg0xNoWYntSiHo=",
+        "lastModified": 1795136326,
+        "narHash": "sha256-SIQ2I5EZgbaTUyyMO8E/IeT+UQKkYMKQMPXh+kl49ZY=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "1bd66a577d1f975927ddfed1a30b2cb19dba1ddc",
+        "rev": "3e6e622935b31f805b3ef893d71b97c1469965e1",
         "type": "github"
       },
       "original": {
