@@ -1,0 +1,837 @@
+#!/usr/bin/env bash
+# Evaluate nixosConfigurations.myNixos and record the result.
+# This script never builds a derivation and never switches the booted system.
+# Activation is the user's update.sh. A successful run only proves evaluation.
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: verify-nixos <command>
+
+  launch
+  doctor
+  query <name>
+  assert-json --feature ID --artifact NAME <attr> --python EXPR
+  assert-raw --feature ID --artifact NAME <attr> [--contains TEXT ...] [--before TEXT --after TEXT]
+  assert-query --feature ID --artifact NAME <query> --python EXPR
+  assert-inactive --feature ID --artifact NAME
+  cleanup [RUN_ID]
+
+Queries: session, bash-init, shell-aliases, fzf-opts, nixvim, nixvim-keymaps,
+         xmonad-config, git-settings, starship-settings, ghostty-settings,
+         mime, interactive-packages
+
+Attr paths are under nixosConfigurations.myNixos.config.
+EOF
+}
+
+state_root() {
+  printf '%s\n' "${XDG_STATE_HOME:-$HOME/.local/state}/verify-nixos"
+}
+
+discover_flake() {
+  local script_dir
+  script_dir=$(cd "$(dirname "$(readlink -f "$0")")" && pwd)
+  (cd "$script_dir/../../../.." && pwd)
+}
+
+valid_run_id() {
+  [[ "$1" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9a-f]{6}$ ]]
+}
+
+remove_run_dirs() {
+  local run="$1" state cur
+  valid_run_id "$run" || {
+    echo "refuse run id: $run" >&2
+    exit 2
+  }
+  state=$(state_root)
+  # Evidence lives in $state/evidence/$run and is intentionally not removed.
+  rm -rf "/tmp/verify-nixos/$run" "$state/runs/$run"
+  cur="$state/current"
+  if [[ -f "$cur" && "$(<"$cur")" == "$run" ]]; then
+    rm -f "$cur"
+  fi
+}
+
+snapshot_results() {
+  local dest="$1"
+  (
+    shopt -s nullglob
+    local f
+    for f in "$VERIFY_NIXOS_FLAKE"/result "$VERIFY_NIXOS_FLAKE"/result-*; do
+      # The plain "result" path is not a glob, so nullglob does not drop it
+      # when the symlink is absent. Skip missing paths. Keep broken symlinks.
+      [[ -e "$f" || -L "$f" ]] || continue
+      if [[ -L "$f" ]]; then
+        printf '%s -> %s\n' "$(basename "$f")" "$(readlink "$f")"
+      else
+        printf '%s not-a-symlink\n' "$(basename "$f")"
+      fi
+    done
+  ) | sort >"$dest"
+}
+
+booted_path() {
+  if [[ ! -e /run/current-system ]]; then
+    echo "no /run/current-system; run this on the NixOS machine that owns the flake" >&2
+    return 1
+  fi
+  readlink -f /run/current-system
+}
+
+lock_sha() {
+  sha256sum "$VERIFY_NIXOS_FLAKE/flake.lock" | awk '{print $1}'
+}
+
+nixpkgs_rev() {
+  local meta="$VERIFY_NIXOS_SCRATCH/metadata.json"
+  local err="$VERIFY_NIXOS_SCRATCH/metadata.stderr"
+  run_nix "$meta" "$err" nix flake metadata --json "$VERIFY_NIXOS_FLAKE" || return $?
+  python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["locks"]["nodes"]["nixpkgs"]["locked"]["rev"])' "$meta"
+}
+
+run_nix() {
+  local outfile="$1" stderrfile="$2"
+  shift 2
+  local status errexit=0
+  # Remember whether the caller had -e. A failing eval must surface to that
+  # caller; it must not flip -e on and abort capture_status before the status
+  # is stored.
+  case $- in
+    *e*) errexit=1 ;;
+  esac
+  mkdir -p "$(dirname "$outfile")" "$(dirname "$stderrfile")"
+  set +e
+  "$@" >"$outfile" 2>"$stderrfile"
+  status=$?
+  if [[ $errexit -eq 1 ]]; then
+    set -e
+  else
+    set +e
+  fi
+  if [[ $status -ne 0 ]]; then
+    cat "$stderrfile" >&2
+    return "$status"
+  fi
+  # Evaluation that starts a build is the wrong tool. update.sh is the user's.
+  if grep -E '^building ' "$stderrfile" >/dev/null 2>&1; then
+    echo "refusing: nix started a build" >&2
+    cat "$stderrfile" >&2
+    return 3
+  fi
+  return 0
+}
+
+# $? inside an if/then body is the if-test, not the command that failed.
+capture_status() {
+  set +e
+  "$@"
+  CAPTURED_STATUS=$?
+  set -e
+  return 0
+}
+
+session_apply() {
+  cat <<'NIX'
+c: {
+  hostName = c.networking.hostName;
+  defaultSession = c.services.displayManager.defaultSession;
+  autoLogin = c.services.displayManager.autoLogin.enable;
+  autoLoginUser = c.services.displayManager.autoLogin.user;
+  lightdm = c.services.xserver.displayManager.lightdm.enable;
+  xmonad = c.services.xserver.windowManager.xmonad.enable;
+  dwm = c.services.xserver.windowManager.dwm.enable;
+  user = c.users.users.refaelsh.isNormalUser;
+  bash = c.programs.bash.enable;
+  stateVersion = c.system.stateVersion;
+  system = c.nixpkgs.hostPlatform.system;
+}
+NIX
+}
+
+check_ready_py() {
+  cat <<'PY'
+import json, sys
+d = json.load(open(sys.argv[1]))
+expect = {
+    "hostName": "nixos",
+    "defaultSession": "none+xmonad",
+    "autoLogin": True,
+    "autoLoginUser": "refaelsh",
+    "lightdm": True,
+    "xmonad": True,
+    "user": True,
+    "bash": True,
+    "stateVersion": "26.05",
+    "system": "x86_64-linux",
+}
+bad = []
+for key, value in expect.items():
+    if d.get(key) != value:
+        bad.append(f"{key}={d.get(key)!r} expected {value!r}")
+if bad:
+    print("\n".join(bad), file=sys.stderr)
+    sys.exit(1)
+print(
+    "ready host={hostName} session={defaultSession} user={autoLoginUser} system={system} stateVersion={stateVersion}".format(**d)
+)
+PY
+}
+
+write_query() {
+  local name="$1" outfile="$2" stderrfile="$3"
+  local apply attr mode
+  case "$name" in
+    session)
+      apply=$(session_apply)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config" --apply "$apply" || return $?
+      ;;
+    bash-init)
+      run_nix "$outfile" "$stderrfile" nix eval --raw "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.programs.bash.interactiveShellInit" || return $?
+      ;;
+    shell-aliases)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.environment.shellAliases" || return $?
+      ;;
+    fzf-opts)
+      run_nix "$outfile" "$stderrfile" nix eval --raw "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.environment.variables.FZF_DEFAULT_OPTS" || return $?
+      ;;
+    xmonad-config)
+      run_nix "$outfile" "$stderrfile" nix eval --raw "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.services.xserver.windowManager.xmonad.config" || return $?
+      ;;
+    mime)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.xdg.mime.defaultApplications" || return $?
+      ;;
+    nixvim)
+      apply=$(cat <<'NIX'
+c: {
+  enable = c.programs.nixvim.enable;
+  defaultEditor = c.programs.nixvim.defaultEditor;
+  vimAlias = c.programs.nixvim.vimAlias;
+  viAlias = c.programs.nixvim.viAlias;
+  colorscheme = c.programs.nixvim.colorschemes.dracula-nvim.enable;
+  mapleader = c.programs.nixvim.globals.mapleader;
+  relativenumber = c.programs.nixvim.opts.relativenumber;
+  number = c.programs.nixvim.opts.number;
+  expandtab = c.programs.nixvim.opts.expandtab;
+  undodir = c.programs.nixvim.opts.undodir;
+}
+NIX
+)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config" --apply "$apply" || return $?
+      ;;
+    nixvim-keymaps)
+      apply=$(cat <<'NIX'
+c: map (k: { mode = k.mode; key = k.key; action = k.action; }) c.programs.nixvim.keymaps
+NIX
+)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config" --apply "$apply" || return $?
+      ;;
+    git-settings)
+      # Instantiates environment.systemPackages. Does not build the wrapper.
+      apply=$(cat <<'NIX'
+ps:
+let
+  gits = builtins.filter (p: p ? passthru && p.passthru ? configuration && p.passthru.configuration ? env && p.passthru.configuration.env ? GIT_CONFIG_GLOBAL) ps;
+  hasDelta = builtins.any (p: (p.pname or p.name) == "delta") ps;
+in
+if gits == [ ] then { count = 0; hasDelta = hasDelta; }
+else let s = (builtins.head gits).passthru.configuration.settings; in {
+  count = builtins.length gits;
+  hasDelta = hasDelta;
+  user = s.user;
+  alias = s.alias;
+  init = s.init;
+  core = s.core;
+  pull = s.pull;
+  delta = s.delta;
+}
+NIX
+)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.environment.systemPackages" --apply "$apply" || return $?
+      ;;
+    starship-settings)
+      apply=$(cat <<'NIX'
+ps:
+let
+  xs = builtins.filter (p: p ? passthru && p.passthru ? configuration && p.passthru.configuration ? env && p.passthru.configuration.env ? STARSHIP_CONFIG) ps;
+in
+if xs == [ ] then { count = 0; }
+else let s = (builtins.head xs).passthru.configuration.settings; in {
+  count = builtins.length xs;
+  character = s.character;
+  directory = s.directory;
+  username = s.username;
+  continuation_prompt = s.continuation_prompt;
+}
+NIX
+)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.environment.systemPackages" --apply "$apply" || return $?
+      ;;
+    ghostty-settings)
+      apply=$(cat <<'NIX'
+ps:
+let
+  xs = builtins.filter (p: p ? passthru && p.passthru ? configuration && p.passthru.configuration ? flags && p.passthru.configuration.flags ? "--config-file" && (p.pname or p.name) == "ghostty") ps;
+in
+if xs == [ ] then { count = 0; }
+else let c = (builtins.head xs).passthru.configuration; in {
+  count = builtins.length xs;
+  font-family = c.settings.font-family;
+  font-size = c.settings.font-size;
+  theme = c.settings.theme;
+  shell-integration = c.settings.shell-integration;
+  keybind = c.settings.keybind;
+}
+NIX
+)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.environment.systemPackages" --apply "$apply" || return $?
+      ;;
+    interactive-packages)
+      apply=$(cat <<'NIX'
+ps:
+let
+  named = name: builtins.filter (p: (p.pname or p.name) == name) ps;
+  ezaWrapped = builtins.filter (p: (p.pname or p.name) == "eza" && p ? passthru && p.passthru ? aliases) ps;
+  eza =
+    if ezaWrapped == [ ] then { count = 0; }
+    else {
+      count = builtins.length ezaWrapped;
+      aliases = (builtins.head ezaWrapped).passthru.aliases;
+      flags = (builtins.head ezaWrapped).passthru.flags;
+      envNames = builtins.attrNames ((builtins.head ezaWrapped).passthru.env or { });
+    };
+in {
+  eza = eza;
+  fzf = builtins.length (named "fzf");
+  atuin = builtins.length (named "atuin");
+}
+NIX
+)
+      run_nix "$outfile" "$stderrfile" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.environment.systemPackages" --apply "$apply" || return $?
+      ;;
+    *)
+      echo "unknown query: $name" >&2
+      echo "queries: session bash-init shell-aliases fzf-opts nixvim nixvim-keymaps xmonad-config git-settings starship-settings ghostty-settings mime interactive-packages" >&2
+      return 2
+      ;;
+  esac
+}
+
+load_instance() {
+  STATE=$(state_root)
+  local run="${VERIFY_NIXOS_RUN:-}"
+  if [[ -z "$run" && -f "$STATE/current" ]]; then
+    run=$(<"$STATE/current")
+  fi
+  local env="$STATE/runs/$run/instance.env"
+  if [[ -z "$run" || ! -f "$env" ]]; then
+    echo "no verify-nixos instance. Run: $0 launch" >&2
+    exit 1
+  fi
+  # shellcheck disable=SC1090
+  source "$env"
+  export TMPDIR="$VERIFY_NIXOS_SCRATCH/tmp"
+  mkdir -p "$TMPDIR"
+  RUN_DIR="$STATE/runs/$VERIFY_NIXOS_RUN"
+  if [[ "$VERIFY_NIXOS_RUN" != "$run" ]]; then
+    echo "instance env run mismatch" >&2
+    exit 1
+  fi
+  if [[ ! -f "$VERIFY_NIXOS_SCRATCH/marker" ]]; then
+    echo "scratch marker missing for $run" >&2
+    exit 1
+  fi
+  if ! grep -qx "run=$VERIFY_NIXOS_RUN" "$VERIFY_NIXOS_SCRATCH/marker"; then
+    echo "scratch marker is not run $VERIFY_NIXOS_RUN" >&2
+    exit 1
+  fi
+  local flake_now
+  flake_now=$(discover_flake)
+  if [[ "$VERIFY_NIXOS_FLAKE" != "$flake_now" ]]; then
+    echo "instance flake is $VERIFY_NIXOS_FLAKE, this script belongs to $flake_now" >&2
+    exit 1
+  fi
+  if [[ "$VERIFY_NIXOS_SCRATCH" != "/tmp/verify-nixos/$VERIFY_NIXOS_RUN" ]]; then
+    echo "scratch path does not belong to this run" >&2
+    exit 1
+  fi
+  if [[ "$VERIFY_NIXOS_EVIDENCE" != "$STATE/evidence/$VERIFY_NIXOS_RUN" ]]; then
+    echo "evidence path does not belong to this run" >&2
+    exit 1
+  fi
+  if [[ ! -f "$VERIFY_NIXOS_FLAKE/flake.nix" || ! -f "$VERIFY_NIXOS_FLAKE/modules/hosts/refael-nixos.nix" ]]; then
+    echo "flake is missing flake.nix or modules/hosts/refael-nixos.nix" >&2
+    exit 1
+  fi
+}
+
+parse_flags() {
+  FEATURE="${VERIFY_NIXOS_FEATURE:-}"
+  ARTIFACT=""
+  PYTHON=""
+  EQUALS_SET=0
+  EQUALS=""
+  BEFORE=""
+  AFTER=""
+  CONTAINS=()
+  POS=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --feature)
+        FEATURE=$2
+        shift 2
+        ;;
+      --artifact)
+        ARTIFACT=$2
+        shift 2
+        ;;
+      --python)
+        PYTHON=$2
+        shift 2
+        ;;
+      --equals)
+        EQUALS_SET=1
+        EQUALS=$2
+        shift 2
+        ;;
+      --contains)
+        CONTAINS+=("$2")
+        shift 2
+        ;;
+      --before)
+        BEFORE=$2
+        shift 2
+        ;;
+      --after)
+        AFTER=$2
+        shift 2
+        ;;
+      --)
+        shift
+        POS+=("$@")
+        break
+        ;;
+      --*)
+        echo "unknown flag: $1" >&2
+        exit 2
+        ;;
+      *)
+        POS+=("$1")
+        shift
+        ;;
+    esac
+  done
+}
+
+require_proof_args() {
+  [[ -n "$FEATURE" ]] || {
+    echo "pass --feature" >&2
+    exit 2
+  }
+  [[ -n "$ARTIFACT" ]] || {
+    echo "pass --artifact" >&2
+    exit 2
+  }
+  [[ "$FEATURE" =~ ^[a-z0-9-]+$ ]] || {
+    echo "feature id must be lowercase words and dashes: $FEATURE" >&2
+    exit 2
+  }
+  [[ "$ARTIFACT" =~ ^[a-z0-9-]+$ ]] || {
+    echo "artifact name must be lowercase words and dashes: $ARTIFACT" >&2
+    exit 2
+  }
+  [[ ${#POS[@]} -eq 1 ]] || {
+    echo "expected one attribute or query name" >&2
+    exit 2
+  }
+}
+
+proof_dir() {
+  mkdir -p "$VERIFY_NIXOS_EVIDENCE/$FEATURE"
+  OUTFILE="$VERIFY_NIXOS_EVIDENCE/$FEATURE/$ARTIFACT.out"
+  STDERRFILE="$VERIFY_NIXOS_EVIDENCE/$FEATURE/$ARTIFACT.stderr"
+}
+
+write_meta() {
+  local status="$1"
+  local dest="$VERIFY_NIXOS_EVIDENCE/$FEATURE/$ARTIFACT.meta"
+  {
+    echo "run_id=$VERIFY_NIXOS_RUN"
+    echo "feature=$FEATURE"
+    echo "artifact=$ARTIFACT"
+    echo "exit_code=$status"
+    echo "flake=$VERIFY_NIXOS_FLAKE"
+    echo "nixpkgs_rev=$(<"$RUN_DIR/nixpkgs.rev")"
+    echo "booted=$(<"$RUN_DIR/booted.path")"
+    if [[ -n "${ATTR:-}" ]]; then
+      echo "attr=$ATTR"
+    fi
+    if [[ -n "${QUERY:-}" ]]; then
+      echo "query=$QUERY"
+    fi
+    if [[ -n "${BEFORE_INDEX:-}" ]]; then
+      echo "before=$BEFORE"
+      echo "before_index=$BEFORE_INDEX"
+      echo "after=$AFTER"
+      echo "after_index=$AFTER_INDEX"
+    fi
+  } >"$dest"
+  printf '%s %s %s exit=%s\n' "$(date -u +%H:%M:%SZ)" "$FEATURE" "$ARTIFACT" "$status" >>"$VERIFY_NIXOS_EVIDENCE/$FEATURE/commands.log"
+}
+
+finish_proof() {
+  local status="$1"
+  write_meta "$status"
+  if [[ "$status" -eq 0 ]]; then
+    echo "ok $FEATURE $ARTIFACT"
+  else
+    echo "fail $FEATURE $ARTIFACT" >&2
+    exit "$status"
+  fi
+}
+
+python_assert() {
+  local outfile="$1"
+  VERIFY_EXPR=$PYTHON python3 -c 'import os, pathlib, sys
+d = __import__("json").loads(pathlib.Path(sys.argv[1]).read_text())
+expr = os.environ["VERIFY_EXPR"]
+try:
+    ok = eval(expr, {"__builtins__": {}}, {"d": d})
+except Exception as e:
+    sys.stderr.write("assert error: %s\n" % e)
+    sys.exit(2)
+if not ok:
+    sys.stderr.write("assert failed\n")
+    text = pathlib.Path(sys.argv[1]).read_text()
+    sys.stderr.write(text[:4000])
+    if not text.endswith("\n"):
+        sys.stderr.write("\n")
+    sys.exit(1)
+' "$outfile"
+}
+
+cmd_launch() {
+  local flake run_id state scratch evidence run_dir booted
+  flake=$(discover_flake)
+  if [[ ! -f "$flake/flake.nix" || ! -f "$flake/modules/hosts/refael-nixos.nix" ]]; then
+    echo "not the myNixos flake: $flake" >&2
+    exit 1
+  fi
+  command -v nix >/dev/null 2>&1 || {
+    echo "nix is not on PATH" >&2
+    exit 1
+  }
+  command -v python3 >/dev/null 2>&1 || {
+    echo "python3 is not on PATH" >&2
+    exit 1
+  }
+  booted=$(booted_path)
+  run_id="$(date -u +%Y%m%dT%H%M%SZ)-$(python3 -c 'import secrets; print(secrets.token_hex(3))')"
+  state=$(state_root)
+  scratch="/tmp/verify-nixos/$run_id"
+  evidence="$state/evidence/$run_id"
+  run_dir="$state/runs/$run_id"
+  mkdir -p "$scratch/tmp" "$evidence/launch" "$run_dir"
+  export TMPDIR="$scratch/tmp"
+  export VERIFY_NIXOS_RUN="$run_id"
+  export VERIFY_NIXOS_FLAKE="$flake"
+  export VERIFY_NIXOS_SCRATCH="$scratch"
+  export VERIFY_NIXOS_EVIDENCE="$evidence"
+  export VERIFY_NIXOS_STATE="$state"
+  RUN_DIR="$run_dir"
+  printf 'launched-by=verify-nixos\nrun=%s\n' "$run_id" >"$scratch/marker"
+  {
+    printf 'VERIFY_NIXOS_RUN=%q\n' "$run_id"
+    printf 'VERIFY_NIXOS_FLAKE=%q\n' "$flake"
+    printf 'VERIFY_NIXOS_SCRATCH=%q\n' "$scratch"
+    printf 'VERIFY_NIXOS_EVIDENCE=%q\n' "$evidence"
+    printf 'VERIFY_NIXOS_STATE=%q\n' "$state"
+  } >"$run_dir/instance.env"
+  printf '%s\n' "$booted" >"$run_dir/booted.path"
+  snapshot_results "$run_dir/result-links"
+  lock_sha >"$run_dir/flake.lock.sha256"
+  local apply ready_status
+  apply=$(session_apply)
+  if ! run_nix "$evidence/launch/ready.out" "$evidence/launch/ready.stderr" nix eval --json "$flake#nixosConfigurations.myNixos.config" --apply "$apply"; then
+    echo "launch: configuration did not evaluate" >&2
+    remove_run_dirs "$run_id"
+    echo "evidence kept at $evidence" >&2
+    exit 1
+  fi
+  check_ready_py >"$scratch/check_ready.py"
+  set +e
+  python3 "$scratch/check_ready.py" "$evidence/launch/ready.out"
+  ready_status=$?
+  set -e
+  if [[ $ready_status -ne 0 ]]; then
+    echo "launch: evaluated config is not the myNixos login session" >&2
+    remove_run_dirs "$run_id"
+    echo "evidence kept at $evidence" >&2
+    exit 1
+  fi
+  nixpkgs_rev >"$run_dir/nixpkgs.rev"
+  {
+    echo "run_id=$run_id"
+    echo "flake=$flake"
+    echo "nixpkgs_rev=$(<"$run_dir/nixpkgs.rev")"
+    echo "booted=$booted"
+    echo "lock_sha=$(<"$run_dir/flake.lock.sha256")"
+    echo "result_links:"
+    cat "$run_dir/result-links"
+  } >"$evidence/launch/ready.meta"
+  printf '%s\n' "$run_id" >"$state/current.tmp"
+  mv "$state/current.tmp" "$state/current"
+  echo "run=$run_id"
+  echo "evidence=$evidence"
+  echo "scratch=$scratch"
+  echo "instance=$run_dir/instance.env"
+}
+
+cmd_doctor() {
+  load_instance
+  local now_booted now_lock
+  now_booted=$(booted_path)
+  now_lock=$(lock_sha)
+  snapshot_results "$VERIFY_NIXOS_SCRATCH/result-links.now"
+  if [[ "$now_booted" != "$(<"$RUN_DIR/booted.path")" ]]; then
+    echo "doctor: booted system changed since launch" >&2
+    echo "launch=$(<"$RUN_DIR/booted.path")" >&2
+    echo "now=$now_booted" >&2
+    exit 1
+  fi
+  if [[ "$now_lock" != "$(<"$RUN_DIR/flake.lock.sha256")" ]]; then
+    echo "doctor: flake.lock changed since launch" >&2
+    exit 1
+  fi
+  if ! cmp -s "$RUN_DIR/result-links" "$VERIFY_NIXOS_SCRATCH/result-links.now"; then
+    echo "doctor: result symlink set changed since launch" >&2
+    exit 1
+  fi
+  local rev
+  rev=$(nixpkgs_rev)
+  if [[ "$rev" != "$(<"$RUN_DIR/nixpkgs.rev")" ]]; then
+    echo "doctor: nixpkgs rev changed since launch" >&2
+    exit 1
+  fi
+  check_ready_py >"$VERIFY_NIXOS_SCRATCH/check_ready.py"
+  local apply
+  apply=$(session_apply)
+  run_nix "$VERIFY_NIXOS_SCRATCH/doctor-ready.out" "$VERIFY_NIXOS_SCRATCH/doctor-ready.stderr" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config" --apply "$apply"
+  python3 "$VERIFY_NIXOS_SCRATCH/check_ready.py" "$VERIFY_NIXOS_SCRATCH/doctor-ready.out" >/dev/null
+  echo "doctor ok run=$VERIFY_NIXOS_RUN host=nixos session=none+xmonad user=refaelsh system=x86_64-linux stateVersion=26.05 nixpkgs=$rev booted=$now_booted activation=unchanged"
+}
+
+cmd_query() {
+  load_instance
+  local name="${1:-}"
+  [[ -n "$name" ]] || {
+    echo "usage: verify-nixos query NAME" >&2
+    exit 2
+  }
+  write_query "$name" "$VERIFY_NIXOS_SCRATCH/query.out" "$VERIFY_NIXOS_SCRATCH/query.stderr"
+  cat "$VERIFY_NIXOS_SCRATCH/query.out"
+  echo
+}
+
+cmd_assert_json() {
+  load_instance
+  parse_flags "$@"
+  require_proof_args
+  [[ -n "$PYTHON" ]] || {
+    echo "pass --python" >&2
+    exit 2
+  }
+  ATTR="${POS[0]}"
+  QUERY=""
+  BEFORE_INDEX=""
+  proof_dir
+  capture_status run_nix "$OUTFILE" "$STDERRFILE" nix eval --json "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.$ATTR"
+  if [[ "$CAPTURED_STATUS" -ne 0 ]]; then
+    finish_proof "$CAPTURED_STATUS"
+  fi
+  capture_status python_assert "$OUTFILE"
+  finish_proof "$CAPTURED_STATUS"
+}
+
+cmd_assert_raw() {
+  load_instance
+  parse_flags "$@"
+  require_proof_args
+  if [[ "$EQUALS_SET" == 1 && (${#CONTAINS[@]} -gt 0 || -n "$BEFORE" || -n "$AFTER") ]]; then
+    echo "--equals cannot be combined with --contains or --before" >&2
+    exit 2
+  fi
+  if [[ -n "$BEFORE" || -n "$AFTER" ]]; then
+    [[ -n "$BEFORE" && -n "$AFTER" ]] || {
+      echo "--before and --after are a pair" >&2
+      exit 2
+    }
+  fi
+  if [[ "$EQUALS_SET" != 1 && ${#CONTAINS[@]} -eq 0 && -z "$BEFORE" ]]; then
+    echo "assert-raw needs --equals, --contains, or --before/--after" >&2
+    exit 2
+  fi
+  ATTR="${POS[0]}"
+  QUERY=""
+  BEFORE_INDEX=""
+  AFTER_INDEX=""
+  proof_dir
+  local status=0
+  capture_status run_nix "$OUTFILE" "$STDERRFILE" nix eval --raw "$VERIFY_NIXOS_FLAKE#nixosConfigurations.myNixos.config.$ATTR"
+  if [[ "$CAPTURED_STATUS" -ne 0 ]]; then
+    finish_proof "$CAPTURED_STATUS"
+  fi
+  if [[ "$EQUALS_SET" == 1 ]]; then
+    printf '%s' "$EQUALS" >"$VERIFY_NIXOS_SCRATCH/expected-equals"
+    if ! cmp -s "$VERIFY_NIXOS_SCRATCH/expected-equals" "$OUTFILE"; then
+      echo "equals failed for $ATTR" >&2
+      status=1
+    fi
+  fi
+  if [[ ${#CONTAINS[@]} -gt 0 ]]; then
+    if ! python3 -c 'import pathlib, sys
+text = pathlib.Path(sys.argv[1]).read_text()
+missing = [s for s in sys.argv[2:] if s not in text]
+if missing:
+    sys.stderr.write("missing:\n")
+    for item in missing:
+        sys.stderr.write(item + "\n")
+    sys.exit(1)
+' "$OUTFILE" "${CONTAINS[@]}"; then
+      status=1
+    fi
+  fi
+  if [[ -n "$BEFORE" ]]; then
+    local indexes
+    if ! indexes=$(python3 -c 'import pathlib, sys
+text = pathlib.Path(sys.argv[1]).read_text()
+before, after = sys.argv[2], sys.argv[3]
+a, b = text.find(before), text.find(after)
+print("%s %s" % (a, b))
+sys.exit(0 if a >= 0 and b >= 0 and a < b else 1)
+' "$OUTFILE" "$BEFORE" "$AFTER"); then
+      echo "order failed: $BEFORE is not before $AFTER" >&2
+      if [[ -n "${indexes:-}" ]]; then
+        echo "indexes $indexes" >&2
+      fi
+      status=1
+    fi
+    if [[ -n "${indexes:-}" ]]; then
+      BEFORE_INDEX=${indexes%% *}
+      AFTER_INDEX=${indexes##* }
+    fi
+  fi
+  finish_proof "$status"
+}
+
+cmd_assert_query() {
+  load_instance
+  parse_flags "$@"
+  require_proof_args
+  [[ -n "$PYTHON" ]] || {
+    echo "pass --python" >&2
+    exit 2
+  }
+  QUERY="${POS[0]}"
+  ATTR=""
+  BEFORE_INDEX=""
+  proof_dir
+  capture_status write_query "$QUERY" "$OUTFILE" "$STDERRFILE"
+  if [[ "$CAPTURED_STATUS" -ne 0 ]]; then
+    finish_proof "$CAPTURED_STATUS"
+  fi
+  capture_status python_assert "$OUTFILE"
+  finish_proof "$CAPTURED_STATUS"
+}
+
+cmd_assert_inactive() {
+  load_instance
+  parse_flags "$@"
+  FEATURE="${FEATURE:-}"
+  [[ -n "$FEATURE" && -n "$ARTIFACT" ]] || {
+    echo "pass --feature and --artifact" >&2
+    exit 2
+  }
+  [[ "$FEATURE" =~ ^[a-z0-9-]+$ && "$ARTIFACT" =~ ^[a-z0-9-]+$ ]] || {
+    echo "bad feature or artifact id" >&2
+    exit 2
+  }
+  ATTR=""
+  QUERY=""
+  BEFORE_INDEX=""
+  proof_dir
+  local now_booted now_lock status=0
+  now_booted=$(booted_path)
+  now_lock=$(lock_sha)
+  snapshot_results "$VERIFY_NIXOS_SCRATCH/result-links.now"
+  {
+    echo "booted_at_launch=$(<"$RUN_DIR/booted.path")"
+    echo "booted_now=$now_booted"
+    echo "lock_at_launch=$(<"$RUN_DIR/flake.lock.sha256")"
+    echo "lock_now=$now_lock"
+    echo "nixpkgs_rev=$(<"$RUN_DIR/nixpkgs.rev")"
+    echo "result_links_at_launch:"
+    cat "$RUN_DIR/result-links"
+    echo "result_links_now:"
+    cat "$VERIFY_NIXOS_SCRATCH/result-links.now"
+  } >"$OUTFILE"
+  if [[ "$now_booted" != "$(<"$RUN_DIR/booted.path")" ]]; then
+    echo "booted system changed" >&2
+    status=1
+  fi
+  if [[ "$now_lock" != "$(<"$RUN_DIR/flake.lock.sha256")" ]]; then
+    echo "flake.lock changed" >&2
+    status=1
+  fi
+  if ! cmp -s "$RUN_DIR/result-links" "$VERIFY_NIXOS_SCRATCH/result-links.now"; then
+    echo "result symlink set changed" >&2
+    status=1
+  fi
+  : >"$STDERRFILE"
+  finish_proof "$status"
+}
+
+cmd_cleanup() {
+  local run="${1:-}" state evidence
+  state=$(state_root)
+  if [[ -z "$run" ]]; then
+    if [[ -n "${VERIFY_NIXOS_RUN:-}" ]]; then
+      run=$VERIFY_NIXOS_RUN
+    elif [[ -f "$state/current" ]]; then
+      run=$(<"$state/current")
+    fi
+  fi
+  if [[ -z "$run" ]]; then
+    echo "no run to clean" >&2
+    exit 1
+  fi
+  evidence="$state/evidence/$run"
+  remove_run_dirs "$run"
+  echo "cleaned $run evidence kept at $evidence"
+}
+
+main() {
+  local cmd="${1:-}"
+  if [[ $# -gt 0 ]]; then
+    shift
+  fi
+  case "$cmd" in
+    launch) cmd_launch "$@" ;;
+    doctor) cmd_doctor "$@" ;;
+    query) cmd_query "$@" ;;
+    assert-json) cmd_assert_json "$@" ;;
+    assert-raw) cmd_assert_raw "$@" ;;
+    assert-query) cmd_assert_query "$@" ;;
+    assert-inactive) cmd_assert_inactive "$@" ;;
+    cleanup) cmd_cleanup "$@" ;;
+    "" | -h | --help | help) usage ;;
+    *)
+      echo "unknown command: $cmd" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+}
+
+main "$@"
