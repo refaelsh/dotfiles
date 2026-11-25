@@ -1,9 +1,11 @@
 { ... }:
 {
-  # Cursor editor. nixpkgs calls the package code-cursor; the command is `cursor`.
+  # Cursor editor from the cursor flake input. The command is `cursor`.
   flake.nixosModules.cursor =
-    { pkgs, ... }:
+    { pkgs, inputs, ... }:
     {
-      environment.systemPackages = [ pkgs.code-cursor ];
+      environment.systemPackages = [
+        inputs.cursor.packages.${pkgs.stdenv.hostPlatform.system}.default
+      ];
     };
 }

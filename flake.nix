@@ -36,6 +36,15 @@
     # answer from an old nixpkgs.
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+
+    # nixpkgs code-cursor trails Cursor releases: its update bot lands a new
+    # version every week or two. This flake's Actions job commits a new
+    # AppImage URL and hash when Cursor publishes a build. It follows this
+    # nixpkgs so the wrapper uses the same libraries as the rest of the
+    # system. The package turns Cursor's built-in updater off; a newer
+    # version arrives with the next flake input update.
+    cursor.url = "github:omarcresp/cursor-flake";
+    cursor.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
